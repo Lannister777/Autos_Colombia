@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mockups de Figma - Parqueadero Autos Colombia (Iteración 1)</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            figma: {
+              bg: '#1e1e1e',
+              canvas: '#2c2c2c',
+              panel: '#252525',
+              border: '#383838',
+              hover: '#333333',
+              blue: '#0d99ff',
+              purple: '#7b61ff'
+            },
+            brand: {
+              blue: '#1E3A8A',
+              cobalt: '#2563EB',
+              emerald: '#10B981',
+              amber: '#F59E0B',
+              rose: '#EF4444'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Figma Dot Grid Pattern */
+    .figma-canvas-grid {
+      background-color: #242424;
+      background-image: radial-gradient(#3a3a3a 1.2px, transparent 1.2px);
+      background-size: 24px 24px;
+    }
+    /* Custom Scrollbars */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: #1e1e1e; }
+    ::-webkit-scrollbar-thumb { background: #3d3d3d; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #4f4f4f; }
+  </style>
+</head>
+<body class="bg-figma-bg text-gray-200 h-screen flex flex-col font-sans select-none overflow-hidden">
+
+  <!-- ================= FIGMA TOP NAVIGATION BAR ================= -->
+  <header class="h-12 bg-figma-panel border-b border-figma-border flex items-center justify-between px-3 z-30 shrink-0">
+    <!-- Left: Figma Logo & Document Title -->
+    <div class="flex items-center space-x-3">
+      <!-- Figma Logo Icon -->
+      <div class="flex items-center space-x-1 px-1 py-1 rounded hover:bg-figma-hover cursor-pointer" title="Menú de Figma">
+        <svg class="w-6 h-6" viewBox="0 0 38 57" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M19 28.5C19 23.2533 23.2533 19 28.5 19C33.7467 19 38 23.2533 38 28.5C38 33.7467 33.7467 38 28.5 38C23.2533 38 19 33.7467 19 28.5Z" fill="#1ABCFE"/>
+          <path d="M0 47.5C0 42.2533 4.25329 38 9.5 38H19V47.5C19 52.7467 14.7467 57 9.5 57C4.25329 57 0 52.7467 0 47.5Z" fill="#0ACF83"/>
+          <path d="M19 0V19H28.5C33.7467 19 38 14.7467 38 9.5C38 4.25329 33.7467 0 28.5 0H19Z" fill="#FF7262"/>
+          <path d="M0 9.5C0 14.7467 4.25329 19 9.5 19H19V0H9.5C4.25329 0 0 4.25329 0 9.5Z" fill="#F24E1E"/>
+          <path d="M0 28.5C0 33.7467 4.25329 38 9.5 38H19V19H9.5C4.25329 19 0 23.2533 0 28.5Z" fill="#A259FF"/>
+        </svg>
+      </div>
+
+      <!-- Breadcrumbs & Filename -->
+      <div class="flex items-center text-xs space-x-2">
+        <span class="text-gray-400 hover:text-white cursor-pointer">Drafts</span>
+        <span class="text-gray-600">/</span>
+        <span class="font-semibold text-white">Autos Colombia - Mockups Caseta (Iteración 1)</span>
+        <span class="bg-gray-700/60 text-gray-300 text-[10px] px-1.5 py-0.5 rounded font-mono">v1.2</span>
+        <span class="text-emerald-400 text-[11px] flex items-center space-x-1">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span>Guardado en Nube</span>
+        </span>
+      </div>
+    </div>
+
+    <!-- Center: Figma Tools (Frame, Shape, Pen, Text, Hand, Comment) -->
+    <div class="flex items-center space-x-1 bg-figma-bg px-2 py-1 rounded-md border border-figma-border text-xs text-gray-300">
+      <button class="px-2 py-1 rounded bg-figma-blue text-white" title="Selección (V)"><i class="fa-solid fa-arrow-pointer"></i></button>
+      <button class="px-2 py-1 rounded hover:bg-figma-hover" title="Frame (F)"><i class="fa-solid fa-hashtag"></i></button>
+      <button class="px-2 py-1 rounded hover:bg-figma-hover" title="Formas (R)"><i class="fa-regular fa-square"></i></button>
+      <button class="px-2 py-1 rounded hover:bg-figma-hover" title="Pluma (P)"><i class="fa-solid fa-pen-nib"></i></button>
+      <button class="px-2 py-1 rounded hover:bg-figma-hover" title="Texto (T)"><i class="fa-solid fa-font"></i></button>
+      <button class="px-2 py-1 rounded hover:bg-figma-hover" title="Mano (H)"><i class="fa-regular fa-hand"></i></button>
+      <button class="px-2 py-1 rounded hover:bg-figma-hover" title="Comentario (C)"><i class="fa-regular fa-comment"></i></button>
+    </div>
+
+    <!-- Right: Zoom, Share, Present & Screenshot Helper -->
+    <div class="flex items-center space-x-2 text-xs">
+      <button onclick="toggleCleanMode()" id="cleanModeBtn" class="flex items-center space-x-1 px-2.5 py-1.5 rounded bg-amber-600 hover:bg-amber-500 text-white font-medium transition" title="Ocultar paneles para capturar pantalla limpia">
+        <i class="fa-solid fa-camera"></i>
+        <span>Modo Captura</span>
+      </button>
+
+      <a href="/" target="_blank" class="flex items-center space-x-1 px-2.5 py-1.5 rounded bg-gray-700 hover:bg-gray-600 text-white transition">
+        <i class="fa-solid fa-desktop"></i>
+        <span>App en Vivo</span>
+      </a>
+
+      <!-- Figma Share Button -->
+      <button onclick="copyFigmaLink()" class="flex items-center space-x-1.5 px-3 py-1.5 rounded bg-figma-blue hover:bg-blue-600 text-white font-medium transition">
+        <i class="fa-solid fa-share-nodes"></i>
+        <span>Compartir Enlace</span>
+      </button>
+
+      <!-- User Avatar -->
+      <div class="w-7 h-7 rounded-full bg-indigo-600 border border-indigo-400 flex items-center justify-center font-bold text-[11px] text-white" title="Usuario: Lannister777">
+        L
+      </div>
+    </div>
+  </header>
+
+  <!-- ================= SUBHEADER / FRAME QUICK TABS ================= -->
+  <div id="subHeader" class="h-10 bg-figma-panel/90 border-b border-figma-border flex items-center justify-between px-4 text-xs z-20 shrink-0">
+    <!-- Frame Navigation Tabs -->
+    <div class="flex items-center space-x-2 overflow-x-auto py-1">
+      <span class="text-gray-400 font-semibold mr-1 flex items-center">
+        <i class="fa-solid fa-layer-group mr-1.5 text-figma-blue"></i> Lienzos:
+      </span>
+      <button onclick="switchView('all')" id="tab-all" class="frame-tab active px-3 py-1 rounded text-white bg-figma-blue font-medium transition">
+        Todos (Lienzo Figma)
+      </button>
+      <button onclick="switchView('frame1')" id="tab-frame1" class="frame-tab px-3 py-1 rounded text-gray-300 hover:bg-figma-hover transition">
+        1. Monitoreo Celdas (HU-03)
+      </button>
+      <button onclick="switchView('frame2')" id="tab-frame2" class="frame-tab px-3 py-1 rounded text-gray-300 hover:bg-figma-hover transition">
+        2. Registro Entrada (HU-01, 02)
+      </button>
+      <button onclick="switchView('frame3')" id="tab-frame3" class="frame-tab px-3 py-1 rounded text-gray-300 hover:bg-figma-hover transition">
+        3. Modal Novedades (HU-04)
+      </button>
+      <button onclick="switchView('frame4')" id="tab-frame4" class="frame-tab px-3 py-1 rounded text-gray-300 hover:bg-figma-hover transition">
+        4. Liquidación Salida (HU-05, 06)
+      </button>
+      <button onclick="switchView('frame5')" id="tab-frame5" class="frame-tab px-3 py-1 rounded text-gray-300 hover:bg-figma-hover transition">
+        5. Ticket Impreso
+      </button>
+    </div>
+
+    <!-- Zoom & Dimensions indicator -->
+    <div class="hidden md:flex items-center space-x-3 text-gray-400 text-[11px]">
+      <span>Resolución: <b class="text-white">Desktop 1440 × 900</b></span>
+      <span class="text-gray-600">|</span>
+      <span>Escala: <b class="text-white">100%</b></span>
+    </div>
+  </div>
+
+  <!-- ================= MAIN WORKSPACE (SIDEBAR + CANVAS) ================= -->
+  <div class="flex-1 flex overflow-hidden relative">
+
+    <!-- LEFT SIDEBAR: FIGMA LAYERS & DESIGN SYSTEM (COLLAPSIBLE) -->
+    <aside id="figmaSidebar" class="w-64 bg-figma-panel border-r border-figma-border flex flex-col shrink-0 text-xs transition-all duration-200 z-10">
+      <!-- Pages Section -->
+      <div class="p-3 border-b border-figma-border">
+        <div class="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-2 flex items-center justify-between">
+          <span>Páginas de Figma</span>
+          <i class="fa-solid fa-plus text-gray-400 hover:text-white cursor-pointer"></i>
+        </div>
+        <div class="flex items-center space-x-2 text-white bg-figma-hover px-2 py-1.5 rounded cursor-pointer">
+          <i class="fa-regular fa-file-code text-figma-blue"></i>
+          <span class="font-medium">Iteración 1 - Caseta & Celdas</span>
+        </div>
+        <div class="flex items-center space-x-2 text-gray-400 px-2 py-1.5 rounded hover:bg-figma-hover cursor-pointer mt-1">
+          <i class="fa-regular fa-file text-gray-500"></i>
+          <span>Iteración 2 - Mensualidades (WIP)</span>
+        </div>
+      </div>
+
+      <!-- Layers Tree -->
+      <div class="flex-1 overflow-y-auto p-3">
+        <div class="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-2">
+          Capas & Componentes
+        </div>
+        <ul class="space-y-1 text-gray-300">
+          <li onclick="switchView('frame1')" class="flex items-center justify-between px-2 py-1.5 rounded hover:bg-figma-hover cursor-pointer group">
+            <span class="flex items-center space-x-2">
+              <i class="fa-solid fa-hashtag text-purple-400"></i>
+              <span class="group-hover:text-white">Frame 1: Dashboard Celdas</span>
+            </span>
+            <i class="fa-regular fa-eye text-gray-500 group-hover:text-white"></i>
+          </li>
+          <li onclick="switchView('frame2')" class="flex items-center justify-between px-2 py-1.5 rounded hover:bg-figma-hover cursor-pointer group">
+            <span class="flex items-center space-x-2">
+              <i class="fa-solid fa-hashtag text-purple-400"></i>
+              <span class="group-hover:text-white">Frame 2: Registro Entrada</span>
+            </span>
+            <i class="fa-regular fa-eye text-gray-500 group-hover:text-white"></i>
+          </li>
+          <li onclick="switchView('frame3')" class="flex items-center justify-between px-2 py-1.5 rounded hover:bg-figma-hover cursor-pointer group">
+            <span class="flex items-center space-x-2">
+              <i class="fa-solid fa-hashtag text-purple-400"></i>
+              <span class="group-hover:text-white">Frame 3: Modal Novedades</span>
+            </span>
+            <i class="fa-regular fa-eye text-gray-500 group-hover:text-white"></i>
+          </li>
+          <li onclick="switchView('frame4')" class="flex items-center justify-between px-2 py-1.5 rounded hover:bg-figma-hover cursor-pointer group">
+            <span class="flex items-center space-x-2">
+              <i class="fa-solid fa-hashtag text-purple-400"></i>
+              <span class="group-hover:text-white">Frame 4: Liquidación Salida</span>
+            </span>
+            <i class="fa-regular fa-eye text-gray-500 group-hover:text-white"></i>
+          </li>
+          <li onclick="switchView('frame5')" class="flex items-center justify-between px-2 py-1.5 rounded hover:bg-figma-hover cursor-pointer group">
+            <span class="flex items-center space-x-2">
+              <i class="fa-solid fa-hashtag text-purple-400"></i>
+              <span class="group-hover:text-white">Frame 5: Ticket Térmico</span>
+            </span>
+            <i class="fa-regular fa-eye text-gray-500 group-hover:text-white"></i>
+          </li>
+        </ul>
+
+        <!-- Design System Tokens Quick View -->
+        <div class="mt-6 pt-4 border-t border-figma-border">
+          <div class="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-2">Design Tokens</div>
+          <div class="space-y-1.5 text-[11px]">
+            <div class="flex items-center space-x-2">
+              <span class="w-3.5 h-3.5 rounded bg-[#1E3A8A] border border-gray-600"></span>
+              <span class="text-gray-300 font-mono">#1E3A8A</span>
+              <span class="text-gray-500">Primary</span>
+            </div>
+            <div class="flex items-center space-x-2">
+              <span class="w-3.5 h-3.5 rounded bg-[#10B981] border border-gray-600"></span>
+              <span class="text-gray-300 font-mono">#10B981</span>
+              <span class="text-gray-500">Libre / OK</span>
+            </div>
+            <div class="flex items-center space-x-2">
+              <span class="w-3.5 h-3.5 rounded bg-[#EF4444] border border-gray-600"></span>
+              <span class="text-gray-300 font-mono">#EF4444</span>
+              <span class="text-gray-500">Ocupada</span>
+            </div>
+            <div class="flex items-center space-x-2">
+              <span class="w-3.5 h-3.5 rounded bg-[#F59E0B] border border-gray-600"></span>
+              <span class="text-gray-300 font-mono">#F59E0B</span>
+              <span class="text-gray-500">Novedad</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- CENTER CANVAS: FIGMA BOARD -->
+    <main class="flex-1 figma-canvas-grid overflow-auto p-8 relative flex flex-col items-center">
+
+      <!-- ================= FRAME 1: DASHBOARD & MONITOREO DE CELDAS ================= -->
+      <section id="frame1" class="figma-frame-card mb-16 w-full max-w-5xl transition-all">
+        <!-- Figma Frame Header Tag -->
+        <div class="flex items-center justify-between mb-2">
+          <div class="flex items-center space-x-2">
+            <span class="text-xs font-mono font-medium text-purple-400 bg-purple-950/80 px-2 py-0.5 rounded border border-purple-800/60">
+              # Frame 1: Dashboard y Monitoreo de Celdas (HU-03)
+            </span>
+            <span class="text-[11px] text-gray-400">1440 × 900 px</span>
+          </div>
+          <button onclick="downloadAsPNG('frame1-content', 'Mockup_01_Dashboard_Celdas')" class="text-xs text-gray-400 hover:text-white flex items-center space-x-1 bg-figma-panel px-2 py-1 rounded border border-figma-border">
+            <i class="fa-solid fa-download"></i><span>Exportar Frame</span>
+          </button>
+        </div>
+
+        <!-- Frame Screen Content -->
+        <div id="frame1-content" class="bg-slate-50 text-slate-800 rounded-xl shadow-2xl border border-slate-300 overflow-hidden font-sans">
+          <!-- Top App Bar -->
+          <div class="bg-blue-900 text-white px-6 py-3.5 flex items-center justify-between shadow-md">
+            <div class="flex items-center space-x-3">
+              <div class="w-9 h-9 rounded-lg bg-blue-600 flex items-center justify-center font-bold text-lg shadow">
+                🚗
+              </div>
+              <div>
+                <h1 class="text-base font-bold leading-tight tracking-wide">PARQUEADERO AUTOS COLOMBIA</h1>
+                <p class="text-xs text-blue-200">Módulo de Caseta y Operaciones • Turno Mañana</p>
+              </div>
+            </div>
+            <div class="flex items-center space-x-6 text-xs">
+              <div class="text-right">
+                <div class="font-bold text-sm text-amber-300">12:45:10 PM</div>
+                <div class="text-blue-200">Domingo, 25 Octubre 2026</div>
+              </div>
+              <div class="flex items-center space-x-2 bg-blue-800/80 px-3 py-1.5 rounded-lg border border-blue-700">
+                <div class="w-6 h-6 rounded-full bg-emerald-400 text-blue-950 font-bold flex items-center justify-center text-xs">
+                  CR
+                </div>
+                <span>Carlos Ramírez (Operador)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Secondary Toolbar / Breadcrumbs -->
+          <div class="bg-white border-b border-slate-200 px-6 py-2.5 flex items-center justify-between text-xs">
+            <div class="flex items-center space-x-2 text-slate-600">
+              <span class="font-semibold text-blue-900">Operaciones</span>
+              <span>/</span>
+              <span class="text-slate-800 font-medium">Control de Celdas y Parqueo</span>
+            </div>
+            <div class="flex items-center space-x-2">
+              <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800">
+                ● 13 Celdas Disponibles
+              </span>
+              <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-rose-100 text-rose-800">
+                ● 7 Ocupadas
+              </span>
+            </div>
+          </div>
+
+          <!-- KPI Cards Strip -->
+          <div class="p-6 bg-slate-100 border-b border-slate-200">
+            <div class="grid grid-cols-4 gap-4">
+              <!-- KPI 1 -->
+              <div class="bg-white p-4 rounded-lg shadow-sm border border-slate-200 flex items-center justify-between">
+                <div>
+                  <p class="text-xs text-slate-500 font-medium uppercase">Capacidad Total</p>
+                  <p class="text-2xl font-black text-slate-800 mt-1">20</p>
+                  <p class="text-[11px] text-slate-400 mt-0.5">Celdas habilitadas</p>
+                </div>
+                <div class="w-10 h-10 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center text-lg">
+                  <i class="fa-solid fa-warehouse"></i>
+                </div>
+              </div>
+              <!-- KPI 2 -->
+              <div class="bg-white p-4 rounded-lg shadow-sm border border-emerald-200 flex items-center justify-between">
+                <div>
+                  <p class="text-xs text-emerald-600 font-medium uppercase">Celdas Libres</p>
+                  <p class="text-2xl font-black text-emerald-600 mt-1">13</p>
+                  <p class="text-[11px] text-emerald-500 mt-0.5">65% de disponibilidad</p>
+                </div>
+                <div class="w-10 h-10 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center text-lg">
+                  <i class="fa-solid fa-square-check"></i>
+                </div>
+              </div>
+              <!-- KPI 3 -->
+              <div class="bg-white p-4 rounded-lg shadow-sm border border-rose-200 flex items-center justify-between">
+                <div>
+                  <p class="text-xs text-rose-600 font-medium uppercase">Celdas Ocupadas</p>
+                  <p class="text-2xl font-black text-rose-600 mt-1">7</p>
+                  <p class="text-[11px] text-rose-500 mt-0.5">35% ocupación actual</p>
+                </div>
+                <div class="w-10 h-10 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center text-lg">
+                  <i class="fa-solid fa-car-side"></i>
+                </div>
+              </div>
+              <!-- KPI 4 -->
+              <div class="bg-white p-4 rounded-lg shadow-sm border border-slate-200 flex items-center justify-between">
+                <div>
+                  <p class="text-xs text-slate-500 font-medium uppercase">Recaudo Turno</p>
+                  <p class="text-2xl font-black text-slate-800 mt-1">$ 142.000</p>
+                  <p class="text-[11px] text-emerald-600 font-medium mt-0.5"><i class="fa-solid fa-arrow-trend-up"></i> +18 vehículos hoy</p>
+                </div>
+                <div class="w-10 h-10 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center text-lg">
+                  <i class="fa-solid fa-cash-register"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Parking Grid & Live Status -->
+          <div class="p-6">
+            <!-- Filter Bar -->
+            <div class="flex items-center justify-between mb-4">
+              <div class="flex items-center space-x-2">
+                <span class="text-xs font-bold text-slate-700 uppercase tracking-wider">Filtrar por tipo:</span>
+                <button class="px-3 py-1 rounded-full text-xs font-semibold bg-blue-900 text-white shadow-sm">Todas (20)</button>
+                <button class="px-3 py-1 rounded-full text-xs font-medium bg-white text-slate-600 border border-slate-200 hover:bg-slate-50">Automóviles (10)</button>
+                <button class="px-3 py-1 rounded-full text-xs font-medium bg-white text-slate-600 border border-slate-200 hover:bg-slate-50">Motos (6)</button>
+                <button class="px-3 py-1 rounded-full text-xs font-medium bg-white text-slate-600 border border-slate-200 hover:bg-slate-50">Camionetas (4)</button>
+              </div>
+              <div class="text-xs text-slate-500">
+                Mostrando estado en tiempo real (Actualizado hace 2s)
+              </div>
+            </div>
+
+            <!-- Grid of Parking Slots -->
+            <div class="grid grid-cols-5 gap-3.5">
+              <!-- Slot A-01 (Ocupada) -->
+              <div class="bg-white border-2 border-rose-300 rounded-lg p-3 shadow-sm relative overflow-hidden">
+                <div class="absolute top-0 right-0 bg-rose-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-bl">OCUPADA</div>
+                <span class="text-xs font-black text-slate-700">CELDA A-01</span>
+                <div class="mt-2 text-center">
+                  <div class="text-rose-600 text-2xl mb-1"><i class="fa-solid fa-car"></i></div>
+                  <div class="font-mono font-bold text-sm bg-slate-100 text-slate-800 px-2 py-0.5 rounded border border-slate-200 inline-block">ABC-123</div>
+                  <div class="text-[11px] text-slate-500 mt-1">Estancia: <b>1h 45m</b></div>
+                </div>
+              </div>
+
+              <!-- Slot A-02 (Libre) -->
+              <div class="bg-emerald-50/60 border-2 border-dashed border-emerald-400 rounded-lg p-3 shadow-sm relative text-center flex flex-col justify-between">
+                <div class="flex justify-between items-center">
+                  <span class="text-xs font-black text-slate-700">CELDA A-02</span>
+                  <span class="bg-emerald-600 text-white text-[10px] font-bold px-2 py-0.5 rounded">LIBRE</span>
+                </div>
+                <div class="my-3">
+                  <div class="text-emerald-500 text-2xl mb-1"><i class="fa-solid fa-circle-check"></i></div>
+                  <div class="text-xs font-semibold text-emerald-800">Automóvil</div>
+                </div>
+                <button class="w-full py-1 text-[11px] bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded shadow-sm">
+                  + Asignar
+                </button>
+              </div>
+
+              <!-- Slot A-03 (Ocupada - Mensualidad) -->
+              <div class="bg-white border-2 border-indigo-300 rounded-lg p-3 shadow-sm relative overflow-hidden">
+                <div class="absolute top-0 right-0 bg-indigo-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-bl">MENSUAL</div>
+                <span class="text-xs font-black text-slate-700">CELDA A-03</span>
+                <div class="mt-2 text-center">
+                  <div class="text-indigo-600 text-2xl mb-1"><i class="fa-solid fa-car-side"></i></div>
+                  <div class="font-mono font-bold text-sm bg-slate-100 text-slate-800 px-2 py-0.5 rounded border border-slate-200 inline-block">QWE-789</div>
+                  <div class="text-[11px] text-indigo-700 font-medium mt-1">Santiago Morales</div>
+                </div>
+              </div>
+
+              <!-- Slot M-01 (Ocupada Moto) -->
+              <div class="bg-white border-2 border-rose-300 rounded-lg p-3 shadow-sm relative overflow-hidden">
+                <div class="absolute top-0 right-0 bg-rose-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-bl">OCUPADA</div>
+                <span class="text-xs font-black text-slate-700">CELDA M-01</span>
+                <div class="mt-2 text-center">
+                  <div class="text-rose-600 text-2xl mb-1"><i class="fa-solid fa-motorcycle"></i></div>
+                  <div class="font-mono font-bold text-sm bg-slate-100 text-slate-800 px-2 py-0.5 rounded border border-slate-200 inline-block">XYZ-45E</div>
+                  <div class="text-[11px] text-slate-500 mt-1">Estancia: <b>42 min</b></div>
+                </div>
+              </div>
+
+              <!-- Slot M-02 (Libre Moto) -->
+              <div class="bg-emerald-50/60 border-2 border-dashed border-emerald-400 rounded-lg p-3 shadow-sm relative text-center flex flex-col justify-between">
+                <div class="flex justify-between items-center">
+                  <span class="text-xs font-black text-slate-700">CELDA M-02</span>
+                  <span class="bg-emerald-600 text-white text-[10px] font-bold px-2 py-0.5 rounded">LIBRE</span>
+                </div>
+                <div class="my-3">
+                  <div class="text-emerald-500 text-2xl mb-1"><i class="fa-solid fa-motorcycle"></i></div>
+                  <div class="text-xs font-semibold text-emerald-800">Motocicleta</div>
+                </div>
+                <button class="w-full py-1 text-[11px] bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded shadow-sm">
+                  + Asignar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <!-- ================= FRAME 2: REGISTRO DE ENTRADA Y ASIGNACIÓN ================= -->
+      <section id="frame2" class="figma-frame-card mb-16 w-full max-w-5xl transition-all">
+        <!-- Figma Frame Header Tag -->
+        <div class="flex items-center justify-between mb-2">
+          <div class="flex items-center space-x-2">
+            <span class="text-xs font-mono font-medium text-purple-400 bg-purple-950/80 px-2 py-0.5 rounded border border-purple-800/60">
+              # Frame 2: Registro de Entrada de Vehículo (HU-01, HU-02)
+            </span>
+            <span class="text-[11px] text-gray-400">1440 × 900 px</span>
+          </div>
+          <button onclick="downloadAsPNG('frame2-content', 'Mockup_02_Registro_Entrada')" class="text-xs text-gray-400 hover:text-white flex items-center space-x-1 bg-figma-panel px-2 py-1 rounded border border-figma-border">
+            <i class="fa-solid fa-download"></i><span>Exportar Frame</span>
+          </button>
+        </div>
+
+        <!-- Frame Screen Content -->
+        <div id="frame2-content" class="bg-slate-50 text-slate-800 rounded-xl shadow-2xl border border-slate-300 overflow-hidden font-sans">
+          <!-- Form Header -->
+          <div class="bg-blue-900 text-white px-6 py-4 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+              <div class="w-8 h-8 rounded bg-blue-700 flex items-center justify-center font-bold text-white">
+                <i class="fa-solid fa-right-to-bracket"></i>
+              </div>
+              <div>
+                <h2 class="text-base font-bold">NUEVO REGISTRO DE ENTRADA VEHICULAR</h2>
+                <p class="text-xs text-blue-200">Asignación de celda, verificación de tarifa e inspección de estado</p>
+              </div>
+            </div>
+            <span class="bg-amber-400 text-blue-950 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
+              Atajo Rápido: F2
+            </span>
+          </div>
+
+          <div class="p-8 grid grid-cols-12 gap-8">
+            <!-- Left Column: Input Form (8 cols) -->
+            <div class="col-span-7 space-y-5">
+              <!-- Plate Input with Subscription Lookup Badge -->
+              <div>
+                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  Placa del Vehículo <span class="text-rose-500">*</span>
+                </label>
+                <div class="relative">
+                  <input type="text" value="ABC-123" readonly class="w-full bg-white border-2 border-blue-500 rounded-lg px-4 py-3 text-2xl font-mono font-black tracking-widest text-slate-900 shadow-sm focus:outline-none">
+                  <div class="absolute right-3 top-3 text-emerald-600 flex items-center space-x-1 text-xs font-bold bg-emerald-50 px-2.5 py-1 rounded border border-emerald-200">
+                    <i class="fa-solid fa-circle-check"></i>
+                    <span>PLACA VÁLIDA</span>
+                  </div>
+                </div>
+                <p class="text-[11px] text-slate-500 mt-1">Formato colombiano estándar: 3 letras y 3 números (o letra final para motos).</p>
+              </div>
+
+              <!-- Vehicle Type Selector Cards -->
+              <div>
+                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  Tipo de Vehículo <span class="text-rose-500">*</span>
+                </label>
+                <div class="grid grid-cols-3 gap-3">
+                  <div class="border-2 border-blue-600 bg-blue-50/50 rounded-lg p-3 text-center cursor-pointer shadow-sm">
+                    <div class="text-blue-700 text-2xl mb-1"><i class="fa-solid fa-car"></i></div>
+                    <div class="text-xs font-bold text-blue-900">Automóvil</div>
+                    <div class="text-[10px] text-blue-600 font-semibold mt-0.5">$4.000 / hora</div>
+                  </div>
+                  <div class="border border-slate-200 bg-white hover:bg-slate-50 rounded-lg p-3 text-center cursor-pointer">
+                    <div class="text-slate-400 text-2xl mb-1"><i class="fa-solid fa-motorcycle"></i></div>
+                    <div class="text-xs font-bold text-slate-700">Motocicleta</div>
+                    <div class="text-[10px] text-slate-500 mt-0.5">$2.000 / hora</div>
+                  </div>
+                  <div class="border border-slate-200 bg-white hover:bg-slate-50 rounded-lg p-3 text-center cursor-pointer">
+                    <div class="text-slate-400 text-2xl mb-1"><i class="fa-solid fa-truck-pickup"></i></div>
+                    <div class="text-xs font-bold text-slate-700">Camioneta</div>
+                    <div class="text-[10px] text-slate-500 mt-0.5">$6.000 / hora</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Available Cell Dropdown -->
+              <div>
+                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  Celda Asignada Disponible <span class="text-rose-500">*</span>
+                </label>
+                <div class="relative">
+                  <select class="w-full bg-white border border-slate-300 rounded-lg px-4 py-2.5 text-sm font-semibold text-slate-800 shadow-sm focus:border-blue-500 focus:outline-none appearance-none">
+                    <option>Celda A-02 — Sector Central (Automóvil) - [DISPONIBLE]</option>
+                    <option>Celda A-04 — Sector Norte (Automóvil) - [DISPONIBLE]</option>
+                    <option>Celda A-05 — Sector Norte (Automóvil) - [DISPONIBLE]</option>
+                  </select>
+                  <div class="absolute right-3.5 top-3 text-slate-400 pointer-events-none">
+                    <i class="fa-solid fa-chevron-down"></i>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Physical Inspection Trigger Pill -->
+              <div class="bg-amber-50 border border-amber-300 rounded-lg p-3.5 flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                  <div class="text-amber-600 text-xl"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                  <div>
+                    <h4 class="text-xs font-bold text-amber-900">¿El vehículo presenta rayones, golpes o novedades?</h4>
+                    <p class="text-[11px] text-amber-700">Registre el estado físico previo para evitar reclamos en la salida.</p>
+                  </div>
+                </div>
+                <button class="px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white text-xs font-semibold rounded shadow-sm whitespace-nowrap">
+                  + Registrar Novedad
+                </button>
+              </div>
+
+              <!-- Action Buttons -->
+              <div class="pt-3 flex items-center space-x-3">
+                <button class="flex-1 py-3 bg-blue-900 hover:bg-blue-800 text-white font-bold rounded-lg shadow-md flex items-center justify-center space-x-2 text-sm transition">
+                  <i class="fa-solid fa-print"></i>
+                  <span>REGISTRAR ENTRADA Y EMITIR TICKET</span>
+                </button>
+                <button class="px-5 py-3 bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold rounded-lg text-sm">
+                  Cancelar
+                </button>
+              </div>
+            </div>
+
+            <!-- Right Column: Live Ticket Preview (5 cols) -->
+            <div class="col-span-5 bg-white border border-slate-300 rounded-lg p-5 shadow-sm flex flex-col justify-between">
+              <div>
+                <div class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 flex items-center justify-between">
+                  <span>Vista Previa del Ticket</span>
+                  <i class="fa-solid fa-receipt text-slate-400"></i>
+                </div>
+
+                <!-- Ticket Card Simulation -->
+                <div class="bg-slate-50 border border-dashed border-slate-300 rounded-lg p-4 font-mono text-xs text-slate-700 space-y-2">
+                  <div class="text-center border-b border-dashed border-slate-300 pb-2">
+                    <p class="font-bold text-sm text-slate-900">PARQUEADERO AUTOS COLOMBIA</p>
+                    <p class="text-[10px] text-slate-500">NIT: 900.123.456-7 • Medellín, Colombia</p>
+                    <p class="text-[10px] text-slate-500">Tel: (604) 444-7890</p>
+                  </div>
+
+                  <div class="py-1 space-y-1">
+                    <div class="flex justify-between">
+                      <span class="text-slate-500">TICKET #:</span>
+                      <span class="font-bold text-slate-900">TCK-20261025-0042</span>
+                    </div>
+                    <div class="flex justify-between">
+                      <span class="text-slate-500">PLACA:</span>
+                      <span class="font-black text-slate-900 text-sm">ABC-123</span>
+                    </div>
+                    <div class="flex justify-between">
+                      <span class="text-slate-500">TIPO:</span>
+                      <span>AUTOMÓVIL</span>
+                    </div>
+                    <div class="flex justify-between">
+                      <span class="text-slate-500">CELDA ASIGNADA:</span>
+                      <span class="font-bold text-blue-900">CELDA A-02</span>
+                    </div>
+                    <div class="flex justify-between">
+                      <span class="text-slate-500">FECHA/HORA:</span>
+                      <span>25/10/2026 12:45 PM</span>
+                    </div>
+                    <div class="flex justify-between">
+                      <span class="text-slate-500">TARIFA:</span>
+                      <span>$4.000 / HORA</span>
+                    </div>
+                  </div>
+
+                  <!-- Mock Barcode -->
+                  <div class="border-t border-dashed border-slate-300 pt-2 text-center">
+                    <div class="h-10 bg-slate-800 rounded flex items-center justify-center text-white text-[10px] tracking-widest font-mono">
+                      ||| | ||||| || ||||||| ||| |||||
+                    </div>
+                    <p class="text-[9px] text-slate-400 mt-1">Conserve este ticket para la salida</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-4 text-[11px] text-slate-500 bg-slate-100 p-2.5 rounded text-center">
+                <i class="fa-solid fa-circle-info text-blue-500 mr-1"></i> El sistema valida si la placa cuenta con suscripción mensual activa antes de liquidar.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <!-- ================= FRAME 3: MODAL DE NOVEDADES E INSPECCIÓN FÍSICA ================= -->
+      <section id="frame3" class="figma-frame-card mb-16 w-full max-w-5xl transition-all">
+        <!-- Figma Frame Header Tag -->
+        <div class="flex items-center justify-between mb-2">
+          <div class="flex items-center space-x-2">
+            <span class="text-xs font-mono font-medium text-purple-400 bg-purple-950/80 px-2 py-0.5 rounded border border-purple-800/60">
+              # Frame 3: Modal de Registro de Novedades e Inspección Física (HU-04)
+            </span>
+            <span class="text-[11px] text-gray-400">1440 × 900 px (Modal Overlay)</span>
+          </div>
+          <button onclick="downloadAsPNG('frame3-content', 'Mockup_03_Modal_Novedades')" class="text-xs text-gray-400 hover:text-white flex items-center space-x-1 bg-figma-panel px-2 py-1 rounded border border-figma-border">
+            <i class="fa-solid fa-download"></i><span>Exportar Frame</span>
+          </button>
+        </div>
+
+        <!-- Frame Screen Content (Modal with Backdrop) -->
+        <div id="frame3-content" class="bg-slate-900/80 backdrop-blur-sm p-8 rounded-xl shadow-2xl border border-slate-700 flex items-center justify-center">
+          <div class="bg-white rounded-xl shadow-2xl max-w-2xl w-full overflow-hidden text-slate-800 border border-slate-200">
+            <!-- Modal Header -->
+            <div class="bg-amber-600 text-white px-6 py-4 flex items-center justify-between">
+              <div class="flex items-center space-x-3">
+                <div class="w-8 h-8 rounded-full bg-amber-500/80 flex items-center justify-center text-white">
+                  <i class="fa-solid fa-camera"></i>
+                </div>
+                <div>
+                  <h3 class="text-base font-bold">REGISTRO DE NOVEDAD / INSPECCIÓN FÍSICA</h3>
+                  <p class="text-xs text-amber-100">Vehículo: Placa <b class="font-mono underline">ABC-123</b> • Celda A-02</p>
+                </div>
+              </div>
+              <button class="text-white hover:text-amber-200 text-lg"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="p-6 space-y-4">
+              <!-- Grid: Incident Type & Severity -->
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                    Tipo de Novedad <span class="text-rose-500">*</span>
+                  </label>
+                  <select class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 text-xs font-semibold text-slate-800 focus:outline-none">
+                    <option>Rayón en Pintura / Carrocería</option>
+                    <option selected>Golpe o Abolladura Visible</option>
+                    <option>Espejo Retrovisor Roto / Flojo</option>
+                    <option>Vidrio Panorámico Fisurado</option>
+                    <option>Objeto de Valor Dejado en Cabina</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                    Severidad del Daño <span class="text-rose-500">*</span>
+                  </label>
+                  <div class="grid grid-cols-3 gap-2 text-xs">
+                    <label class="border border-slate-300 rounded p-2 text-center cursor-pointer hover:bg-slate-50">
+                      <span class="block text-slate-600 font-bold">Leve</span>
+                    </label>
+                    <label class="border-2 border-amber-500 bg-amber-50 rounded p-2 text-center cursor-pointer">
+                      <span class="block text-amber-800 font-bold">Moderado</span>
+                    </label>
+                    <label class="border border-slate-300 rounded p-2 text-center cursor-pointer hover:bg-slate-50">
+                      <span class="block text-rose-600 font-bold">Grave</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Zone Selection Blueprint -->
+              <div>
+                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  Zona Afectada del Vehículo
+                </label>
+                <div class="grid grid-cols-5 gap-2 text-center text-xs">
+                  <div class="p-2 border border-slate-200 rounded hover:border-blue-400 cursor-pointer">Frontal</div>
+                  <div class="p-2 border-2 border-amber-500 bg-amber-50 rounded font-bold text-amber-900 cursor-pointer">Lateral Der. ✓</div>
+                  <div class="p-2 border border-slate-200 rounded hover:border-blue-400 cursor-pointer">Lateral Izq.</div>
+                  <div class="p-2 border border-slate-200 rounded hover:border-blue-400 cursor-pointer">Posterior</div>
+                  <div class="p-2 border border-slate-200 rounded hover:border-blue-400 cursor-pointer">Techo</div>
+                </div>
+              </div>
+
+              <!-- Description -->
+              <div>
+                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  Descripción Detallada del Estado
+                </label>
+                <textarea rows="3" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-3 text-xs text-slate-800 focus:outline-none" placeholder="Describa la ubicación exacta, longitud aproximada y características del daño...">Presenta hendidura y raspón de aproximadamente 12 cm sobre la puerta delantera derecha. Se le informa al conductor en el momento de la entrada para constancia.</textarea>
+              </div>
+
+              <!-- Evidence Upload Simulation Box -->
+              <div class="border-2 border-dashed border-slate-300 rounded-lg p-4 text-center bg-slate-50">
+                <i class="fa-solid fa-cloud-arrow-up text-2xl text-slate-400 mb-1"></i>
+                <p class="text-xs font-semibold text-slate-700">Arrastre fotografía de evidencia o capture con la cámara</p>
+                <p class="text-[10px] text-slate-400">Formatos soportados: JPG, PNG (Máx 5MB)</p>
+              </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="bg-slate-100 px-6 py-3.5 border-t border-slate-200 flex justify-end space-x-3 text-xs">
+              <button class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold rounded">
+                Descartar
+              </button>
+              <button class="px-5 py-2 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded shadow flex items-center space-x-1.5">
+                <i class="fa-solid fa-check"></i>
+                <span>Guardar Novedad y Anexar al Ticket</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <!-- ================= FRAME 4: LIQUIDACIÓN Y SALIDA ================= -->
+      <section id="frame4" class="figma-frame-card mb-16 w-full max-w-5xl transition-all">
+        <!-- Figma Frame Header Tag -->
+        <div class="flex items-center justify-between mb-2">
+          <div class="flex items-center space-x-2">
+            <span class="text-xs font-mono font-medium text-purple-400 bg-purple-950/80 px-2 py-0.5 rounded border border-purple-800/60">
+              # Frame 4: Registro de Salida y Liquidación de Tarifa (HU-05, HU-06)
+            </span>
+            <span class="text-[11px] text-gray-400">1440 × 900 px</span>
+          </div>
+          <button onclick="downloadAsPNG('frame4-content', 'Mockup_04_Liquidacion_Salida')" class="text-xs text-gray-400 hover:text-white flex items-center space-x-1 bg-figma-panel px-2 py-1 rounded border border-figma-border">
+            <i class="fa-solid fa-download"></i><span>Exportar Frame</span>
+          </button>
+        </div>
+
+        <!-- Frame Screen Content -->
+        <div id="frame4-content" class="bg-slate-50 text-slate-800 rounded-xl shadow-2xl border border-slate-300 overflow-hidden font-sans">
+          <!-- Header -->
+          <div class="bg-emerald-800 text-white px-6 py-4 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+              <div class="w-8 h-8 rounded bg-emerald-700 flex items-center justify-center font-bold text-white">
+                <i class="fa-solid fa-right-from-bracket"></i>
+              </div>
+              <div>
+                <h2 class="text-base font-bold">REGISTRO DE SALIDA Y COBRO</h2>
+                <p class="text-xs text-emerald-200">Cálculo de permanencia, selección de medio de pago y liberación de celda</p>
+              </div>
+            </div>
+            <span class="bg-white text-emerald-900 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
+              Atajo: F3
+            </span>
+          </div>
+
+          <div class="p-8 grid grid-cols-12 gap-8">
+            <!-- Left: Search & Breakdown (7 cols) -->
+            <div class="col-span-7 space-y-5">
+              <!-- Search Input -->
+              <div>
+                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  Buscar por Placa o Folio de Ticket
+                </label>
+                <div class="flex space-x-2">
+                  <input type="text" value="ABC-123" readonly class="flex-1 bg-white border-2 border-emerald-600 rounded-lg px-4 py-2.5 font-mono text-lg font-bold text-slate-900 focus:outline-none">
+                  <button class="px-5 bg-emerald-700 hover:bg-emerald-800 text-white font-bold rounded-lg text-xs flex items-center space-x-1">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <span>CONSULTAR</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Breakdown Card -->
+              <div class="bg-white border border-slate-300 rounded-lg p-5 shadow-sm space-y-3">
+                <div class="flex justify-between items-center border-b border-slate-200 pb-2">
+                  <span class="text-xs font-bold text-slate-500 uppercase">Resumen de Estadía</span>
+                  <span class="text-xs font-mono font-bold text-blue-900 bg-blue-50 px-2 py-0.5 rounded">TCK-20261025-0042</span>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4 text-xs">
+                  <div>
+                    <span class="text-slate-400 block">Hora de Entrada:</span>
+                    <span class="font-bold text-slate-800 text-sm">10:15 AM</span>
+                  </div>
+                  <div>
+                    <span class="text-slate-400 block">Hora de Salida:</span>
+                    <span class="font-bold text-slate-800 text-sm">01:45 PM</span>
+                  </div>
+                  <div>
+                    <span class="text-slate-400 block">Tiempo Total:</span>
+                    <span class="font-bold text-slate-800 text-sm">3 horas 30 min</span>
+                  </div>
+                  <div>
+                    <span class="text-slate-400 block">Fracciones Computadas:</span>
+                    <span class="font-bold text-slate-800 text-sm">4 Horas</span>
+                  </div>
+                  <div>
+                    <span class="text-slate-400 block">Tarifa Aplicada:</span>
+                    <span class="font-semibold text-slate-700">$4.000 / hora</span>
+                  </div>
+                  <div>
+                    <span class="text-slate-400 block">Celda a Liberar:</span>
+                    <span class="font-bold text-emerald-600">Celda A-02</span>
+                  </div>
+                </div>
+
+                <!-- Incident attached notice -->
+                <div class="bg-amber-50 border border-amber-200 rounded p-2.5 flex items-center space-x-2 text-xs text-amber-800">
+                  <i class="fa-solid fa-triangle-exclamation text-amber-600"></i>
+                  <span><b>Novedad previa anexada:</b> Hendidura lateral derecha registrada a las 10:15 AM.</span>
+                </div>
+              </div>
+
+              <!-- Payment Method Selector -->
+              <div>
+                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+                  Método de Pago
+                </label>
+                <div class="grid grid-cols-4 gap-2.5 text-xs">
+                  <div class="border-2 border-emerald-600 bg-emerald-50 rounded-lg p-2.5 text-center cursor-pointer">
+                    <i class="fa-solid fa-money-bill-wave text-emerald-700 text-lg mb-1"></i>
+                    <div class="font-bold text-emerald-900">Efectivo</div>
+                  </div>
+                  <div class="border border-slate-200 bg-white hover:bg-slate-50 rounded-lg p-2.5 text-center cursor-pointer">
+                    <i class="fa-solid fa-mobile-screen-button text-purple-600 text-lg mb-1"></i>
+                    <div class="font-bold text-slate-700">Nequi</div>
+                  </div>
+                  <div class="border border-slate-200 bg-white hover:bg-slate-50 rounded-lg p-2.5 text-center cursor-pointer">
+                    <i class="fa-solid fa-qrcode text-red-600 text-lg mb-1"></i>
+                    <div class="font-bold text-slate-700">Daviplata</div>
+                  </div>
+                  <div class="border border-slate-200 bg-white hover:bg-slate-50 rounded-lg p-2.5 text-center cursor-pointer">
+                    <i class="fa-regular fa-credit-card text-blue-600 text-lg mb-1"></i>
+                    <div class="font-bold text-slate-700">Tarjeta</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right: Big Total Box & Confirm (5 cols) -->
+            <div class="col-span-5 flex flex-col justify-between space-y-4">
+              <!-- Big Total Price Card -->
+              <div class="bg-gradient-to-br from-slate-900 to-blue-950 text-white rounded-xl p-6 shadow-xl border border-blue-900 text-center">
+                <span class="text-xs uppercase font-bold text-blue-300 tracking-widest block mb-1">Total a Liquidar</span>
+                <div class="text-4xl font-black text-emerald-400 font-mono tracking-tight my-2">
+                  $ 16.000 <span class="text-sm font-sans font-normal text-slate-300">COP</span>
+                </div>
+                <p class="text-xs text-slate-300">4 horas a $4.000 COP cada una</p>
+
+                <div class="mt-4 pt-4 border-t border-blue-900/80 text-left text-xs space-y-2">
+                  <div class="flex justify-between text-slate-300">
+                    <span>Efectivo Recibido:</span>
+                    <span class="font-bold font-mono text-white">$ 20.000 COP</span>
+                  </div>
+                  <div class="flex justify-between text-emerald-300 font-bold text-sm">
+                    <span>Cambio / Vueltos:</span>
+                    <span class="font-mono">$ 4.000 COP</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Confirm Button -->
+              <div class="space-y-2">
+                <button class="w-full py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-black rounded-lg shadow-lg flex items-center justify-center space-x-2 text-sm transition">
+                  <i class="fa-solid fa-circle-check text-lg"></i>
+                  <span>CONFIRMAR PAGO Y LIBERAR CELDA</span>
+                </button>
+                <button class="w-full py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold rounded-lg text-xs">
+                  <i class="fa-solid fa-print mr-1"></i> Imprimir Comprobante de Salida
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <!-- ================= FRAME 5: TICKET TÉRMICO DE SALIDA ================= -->
+      <section id="frame5" class="figma-frame-card mb-16 w-full max-w-sm transition-all">
+        <!-- Figma Frame Header Tag -->
+        <div class="flex items-center justify-between mb-2">
+          <div class="flex items-center space-x-2">
+            <span class="text-xs font-mono font-medium text-purple-400 bg-purple-950/80 px-2 py-0.5 rounded border border-purple-800/60">
+              # Frame 5: Ticket Digital Térmico
+            </span>
+            <span class="text-[11px] text-gray-400">80mm Form Factor</span>
+          </div>
+          <button onclick="downloadAsPNG('frame5-content', 'Mockup_05_Ticket_Termico')" class="text-xs text-gray-400 hover:text-white flex items-center space-x-1 bg-figma-panel px-2 py-1 rounded border border-figma-border">
+            <i class="fa-solid fa-download"></i><span>Exportar</span>
+          </button>
+        </div>
+
+        <!-- Frame Screen Content (Thermal Receipt) -->
+        <div id="frame5-content" class="bg-white text-slate-900 p-6 rounded-lg shadow-2xl border border-slate-300 font-mono text-xs space-y-3">
+          <div class="text-center border-b-2 border-dashed border-slate-400 pb-3">
+            <div class="text-2xl mb-1">🚗</div>
+            <h4 class="font-bold text-sm tracking-wider">AUTOS COLOMBIA S.A.S.</h4>
+            <p class="text-[10px] text-slate-600">NIT: 900.123.456-7</p>
+            <p class="text-[10px] text-slate-600">Cra 43A # 12-45 • Medellín</p>
+            <p class="text-[10px] text-slate-600">Régimen Común • IVA Incluido</p>
+          </div>
+
+          <div class="space-y-1.5 py-1 text-[11px]">
+            <div class="flex justify-between"><span>FACTURA VENTA:</span><span class="font-bold">FAC-2026-0891</span></div>
+            <div class="flex justify-between"><span>FECHA:</span><span>25/10/2026 13:45</span></div>
+            <div class="flex justify-between"><span>OPERADOR:</span><span>Carlos Ramírez</span></div>
+            <div class="flex justify-between border-t border-slate-200 pt-1">
+              <span>PLACA:</span>
+              <span class="font-bold text-sm bg-slate-100 px-1">ABC-123</span>
+            </div>
+            <div class="flex justify-between"><span>TIPO:</span><span>AUTOMÓVIL</span></div>
+            <div class="flex justify-between"><span>CELDA OCUPADA:</span><span>A-02</span></div>
+            <div class="flex justify-between"><span>HORA ENTRADA:</span><span>10:15 AM</span></div>
+            <div class="flex justify-between"><span>HORA SALIDA:</span><span>01:45 PM</span></div>
+            <div class="flex justify-between"><span>TIEMPO:</span><span>3h 30m (4h liq.)</span></div>
+          </div>
+
+          <div class="border-t-2 border-b-2 border-dashed border-slate-400 py-2.5 text-center">
+            <span class="text-xs text-slate-600 block">TOTAL PAGADO</span>
+            <span class="text-2xl font-black text-slate-900">$ 16.000 COP</span>
+            <span class="text-[10px] text-slate-500 block mt-0.5">Medio de Pago: Efectivo</span>
+          </div>
+
+          <div class="text-[9px] text-slate-500 text-center space-y-1">
+            <p>El parqueadero no se hace responsable por objetos no declarados en la inspección física de ingreso.</p>
+            <p class="font-semibold">¡Gracias por preferir Autos Colombia!</p>
+          </div>
+
+          <!-- Barcode simulation -->
+          <div class="text-center pt-2">
+            <div class="h-8 bg-slate-900 text-white flex items-center justify-center text-[10px] tracking-widest">
+              ||| | ||||| || ||||||| |||
+            </div>
+            <span class="text-[9px] text-slate-400 tracking-wider">TCK-20261025-0042</span>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Notification Toast -->
+  <div id="toast" class="fixed bottom-5 right-5 bg-blue-600 text-white px-4 py-2.5 rounded-lg shadow-xl text-xs font-semibold flex items-center space-x-2 transform translate-y-20 opacity-0 transition-all duration-300 z-50">
+    <i class="fa-solid fa-circle-check"></i>
+    <span id="toastMsg">Enlace copiado al portapapeles</span>
+  </div>
+
+  <!-- HTML2Canvas CDN for frame screenshot export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+  <!-- Interactive Script -->
+  <script>
+    // Switch between all frames or an isolated frame
+    function switchView(viewId) {
+      const frames = ['frame1', 'frame2', 'frame3', 'frame4', 'frame5'];
+      const tabs = ['all', ...frames];
+
+      tabs.forEach(tab => {
+        const tabEl = document.getElementById('tab-' + tab);
+        if (tabEl) {
+          tabEl.classList.remove('bg-figma-blue', 'text-white', 'active');
+          tabEl.classList.add('text-gray-300');
+        }
+      });
+
+      const currentTab = document.getElementById('tab-' + viewId);
+      if (currentTab) {
+        currentTab.classList.add('bg-figma-blue', 'text-white', 'active');
+        currentTab.classList.remove('text-gray-300');
+      }
+
+      if (viewId === 'all') {
+        frames.forEach(f => {
+          const el = document.getElementById(f);
+          if (el) el.classList.remove('hidden');
+        });
+      } else {
+        frames.forEach(f => {
+          const el = document.getElementById(f);
+          if (el) {
+            if (f === viewId) {
+              el.classList.remove('hidden');
+              el.scrollIntoView({ behavior: 'smooth' });
+            } else {
+              el.classList.add('hidden');
+            }
+          }
+        });
+      }
+    }
+
+    // Toggle clean screenshot mode (hides toolbars so user can take clean captures)
+    let isClean = false;
+    function toggleCleanMode() {
+      isClean = !isClean;
+      const sidebar = document.getElementById('figmaSidebar');
+      const subHeader = document.getElementById('subHeader');
+      const cleanBtn = document.getElementById('cleanModeBtn');
+
+      if (isClean) {
+        sidebar.classList.add('hidden');
+        subHeader.classList.add('hidden');
+        cleanBtn.innerHTML = '<i class="fa-solid fa-expand"></i><span>Restaurar Figma</span>';
+        cleanBtn.classList.replace('bg-amber-600', 'bg-indigo-600');
+        showToast('Modo Captura activado: Paneles ocultados para capturas limpias.');
+      } else {
+        sidebar.classList.remove('hidden');
+        subHeader.classList.remove('hidden');
+        cleanBtn.innerHTML = '<i class="fa-solid fa-camera"></i><span>Modo Captura</span>';
+        cleanBtn.classList.replace('bg-indigo-600', 'bg-amber-600');
+      }
+    }
+
+    // Copy Figma link
+    function copyFigmaLink() {
+      const url = window.location.href;
+      navigator.clipboard.writeText(url).then(() => {
+        showToast('¡Enlace de los Mockups copiado con éxito!');
+      }).catch(() => {
+        showToast('URL: ' + url);
+      });
+    }
+
+    // Download frame as PNG image directly
+    function downloadAsPNG(elementId, filename) {
+      showToast('Generando captura PNG en alta resolución...');
+      const target = document.getElementById(elementId);
+      html2canvas(target, { scale: 2, useCORS: true }).then(canvas => {
+        const link = document.createElement('a');
+        link.download = filename + '.png';
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+        showToast('¡Captura descargada con éxito!');
+      });
+    }
+
+    // Toast helper
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      const toastMsg = document.getElementById('toastMsg');
+      toastMsg.textContent = msg;
+      toast.classList.remove('translate-y-20', 'opacity-0');
+      setTimeout(() => {
+        toast.classList.add('translate-y-20', 'opacity-0');
+      }, 3500);
+    }
+  </script>
+</body>
+</html>
