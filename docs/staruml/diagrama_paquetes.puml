@@ -1,0 +1,75 @@
+@startuml Diagrama_Paquetes_Autos_Colombia
+title Diagrama de Paquetes - Sistema Autos Colombia
+skinparam packageStyle folder
+skinparam roundcorner 8
+
+package "com.autoscolombia.presentation" as PKG_Pres {
+    package "controllers" {
+        [AccesoController]
+        [CeldaController]
+        [PagoController]
+        [NovedadController]
+    }
+    package "dtos" {
+        [EntradaRequestDTO]
+        [SalidaResponseDTO]
+        [LiquidacionDTO]
+    }
+    package "views_ui" {
+        [WebSPA]
+    }
+}
+
+package "com.autoscolombia.service" as PKG_Srv {
+    [AccesoService]
+    [CeldaService]
+    [TarifaService]
+    [MensualidadService]
+    [NovedadService]
+    [PagoService]
+}
+
+package "com.autoscolombia.domain" as PKG_Dom {
+    package "entities" {
+        [Vehiculo]
+        [Celda]
+        [RegistroAcceso]
+        [Novedad]
+        [Tarifa]
+        [Pago]
+    }
+    package "enums" {
+        [TipoVehiculo]
+        [EstadoCelda]
+        [MetodoPago]
+    }
+    package "exceptions" {
+        [CupoLlenoException]
+        [VehiculoYaDentroException]
+    }
+}
+
+package "com.autoscolombia.infrastructure" as PKG_Infra {
+    package "repositories" {
+        [VehiculoRepository]
+        [CeldaRepository]
+        [RegistroRepository]
+        [NovedadRepository]
+    }
+    package "database" {
+        [SQLiteConnectionPool]
+    }
+    package "hardware" {
+        [ThermalTicketPrinter]
+    }
+}
+
+PKG_Pres ..> PKG_Srv : <<use>>
+PKG_Pres ..> dtos : <<use>>
+PKG_Srv ..> PKG_Dom : <<use>>
+PKG_Srv ..> repositories : <<use>>
+PKG_Srv ..> hardware : <<use>>
+repositories ..> database : <<use>>
+repositories ..> PKG_Dom : <<map_to>>
+
+@enduml

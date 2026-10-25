@@ -1,0 +1,60 @@
+@startuml Arquitectura_Autos_Colombia
+title Arquitectura en Capas - Sistema de Parqueadero Autos Colombia
+skinparam monochrome false
+skinparam roundcorner 10
+skinparam componentStyle uml2
+
+package "Capa de Presentación (Front-End SPA)" #E0F2FE {
+    [Dashboard Operativo] as UI_Dash
+    [Módulo de Entrada] as UI_Entrada
+    [Módulo de Salida] as UI_Salida
+    [Visor de Celdas] as UI_Celdas
+    [Registro de Novedades] as UI_Novedades
+}
+
+package "Capa de Aplicación y API REST (Express.js)" #FEF3C7 {
+    [Router Central] as Router
+    [AccesoController] as C_Acceso
+    [CeldaController] as C_Celda
+    [PagoController] as C_Pago
+    [NovedadController] as C_Novedad
+}
+
+package "Capa de Servicios y Lógica de Negocio" #DCFCE7 {
+    [AccesoService] as S_Acceso
+    [MensualidadService] as S_Mensualidad
+    [CeldaService] as S_Celda
+    [TarifaService] as S_Tarifa
+    [NovedadService] as S_Novedad
+}
+
+package "Capa de Persistencia y Datos" #F3E8FF {
+    [DatabaseManager] as DB_Mgr
+    database "SQLite Persistente" as DB
+}
+
+UI_Entrada ..> Router : HTTP POST /api/accesos/entrada
+UI_Salida ..> Router : HTTP POST /api/accesos/salida
+UI_Celdas ..> Router : HTTP GET /api/celdas
+UI_Novedades ..> Router : HTTP POST /api/novedades
+
+Router --> C_Acceso
+Router --> C_Celda
+Router --> C_Pago
+Router --> C_Novedad
+
+C_Acceso --> S_Acceso
+C_Acceso --> S_Mensualidad
+C_Celda --> S_Celda
+C_Pago --> S_Tarifa
+C_Novedad --> S_Novedad
+
+S_Acceso --> DB_Mgr
+S_Mensualidad --> DB_Mgr
+S_Celda --> DB_Mgr
+S_Tarifa --> DB_Mgr
+S_Novedad --> DB_Mgr
+
+DB_Mgr --> DB
+
+@enduml

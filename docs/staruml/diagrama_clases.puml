@@ -1,0 +1,144 @@
+@startuml Diagrama_Clases_Autos_Colombia
+title Diagrama de Clases - Parqueadero Autos Colombia (Iteración 1)
+skinparam classAttributeIconSize 0
+skinparam roundcorner 5
+
+enum TipoVehiculo {
+    AUTOMOVIL
+    MOTO
+    CAMIONETA
+    BICICLETA
+}
+
+enum EstadoCelda {
+    LIBRE
+    OCUPADA
+    MANTENIMIENTO
+}
+
+enum ModalidadAcceso {
+    OCASIONAL
+    MENSUALIDAD
+}
+
+enum MetodoPago {
+    EFECTIVO
+    NEQUI
+    DAVIPLATA
+    TARJETA
+}
+
+class Usuario {
+    - idUsuario: Integer
+    - nombreCompleto: String
+    - username: String
+    - passwordHash: String
+    - rol: String
+    - activo: Boolean
+    + autenticar(pass: String): Boolean
+}
+
+class Operador {
+    - turno: String
+    + registrarEntrada(placa: String, tipo: TipoVehiculo): RegistroAcceso
+    + registrarSalida(placa: String): Pago
+    + registrarNovedad(n: Novedad): void
+}
+
+class Administrador {
+    + configurarTarifas(): void
+    + crearCeldas(): void
+}
+
+Usuario <|-- Operador
+Usuario <|-- Administrador
+
+class Cliente {
+    - idCliente: Integer
+    - documento: String
+    - nombreCompleto: String
+    - telefono: String
+    - email: String
+    + consultarMensualidades(): List<Mensualidad>
+}
+
+class Vehiculo {
+    - idVehiculo: Integer
+    - placa: String
+    - tipoVehiculo: TipoVehiculo
+    - marca: String
+    - color: String
+    + tieneMensualidadVigente(): Boolean
+}
+
+class Celda {
+    - idCelda: Integer
+    - codigoCelda: String
+    - tipoPermitido: TipoVehiculo
+    - estado: EstadoCelda
+    - sector: String
+    + asignar(): void
+    + liberar(): void
+    + estaLibre(): Boolean
+}
+
+class Mensualidad {
+    - idMensualidad: Integer
+    - fechaInicio: Date
+    - fechaFin: Date
+    - valorMensual: Decimal
+    - estado: String
+    + estaVigente(): Boolean
+}
+
+class RegistroAcceso {
+    - idRegistro: Integer
+    - folioTicket: String
+    - fechaHoraEntrada: DateTime
+    - fechaHoraSalida: DateTime
+    - modalidad: ModalidadAcceso
+    - minutosEstancia: Integer
+    - valorTotal: Decimal
+    - estado: String
+    + calcularMinutos(): Integer
+    + liquidarSalida(tarifa: Tarifa): Decimal
+}
+
+class Novedad {
+    - idNovedad: Integer
+    - momento: String
+    - tipoNovedad: String
+    - descripcion: String
+    - severidad: String
+    - fechaHora: DateTime
+}
+
+class Tarifa {
+    - idTarifa: Integer
+    - tipoVehiculo: TipoVehiculo
+    - valorHoraFraccion: Decimal
+    - valorDia: Decimal
+    - valorMensualidad: Decimal
+    - tiempoGraciaMinutos: Integer
+    + calcularCobro(minutos: Integer): Decimal
+}
+
+class Pago {
+    - idPago: Integer
+    - numeroComprobante: String
+    - montoPagado: Decimal
+    - metodoPago: MetodoPago
+    - fechaHoraPago: DateTime
+    + imprimirRecibo(): String
+}
+
+Cliente "1" o-- "0..*" Vehiculo
+Cliente "1" *-- "0..*" Mensualidad
+Vehiculo "1" -- "0..*" Mensualidad
+
+Vehiculo "1" <-- "0..*" RegistroAcceso
+Celda "1" <-- "0..*" RegistroAcceso
+RegistroAcceso "1" *-- "0..*" Novedad
+RegistroAcceso "1" --> "0..1" Pago
+Tarifa ..> RegistroAcceso : aplica
+@enduml

@@ -1,0 +1,25 @@
+{
+  "name": "autos_colombia",
+  "version": "1.0.0",
+  "description": "Sistema de Gestión Integral del Parqueadero Autos Colombia - Iteración 1",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node src/server.js",
+    "generate-uml": "node generate_staruml.js"
+  },
+  "keywords": [
+    "parqueadero",
+    "autos-colombia",
+    "staruml",
+    "gestion-accesos",
+    "mensualidades"
+  ],
+  "author": "Equipo de Desarrollo de Software Autos Colombia",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "sqlite3": "^5.1.7"
+  }
+}

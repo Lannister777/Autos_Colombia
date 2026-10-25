@@ -1,0 +1,48 @@
+@startuml Casos_De_Uso_Autos_Colombia
+left to right direction
+skinparam packageStyle rectangle
+skinparam actorStyle awesome
+
+actor "Operador de Caseta" as Operador
+actor "Administrador" as Admin
+actor "Cliente / Abonado" as Cliente
+
+rectangle "Sistema Autos Colombia - Iteración 1" {
+    usecase "CU-01: Registrar Entrada de Vehículo" as UC1
+    usecase "CU-02: Validar Mensualidad Activa" as UC2
+    usecase "CU-03: Asignar Celda Disponible" as UC3
+    usecase "CU-04: Registrar Novedad / Daño" as UC4
+    usecase "CU-05: Emitir Ticket de Ingreso" as UC5
+    
+    usecase "CU-06: Registrar Salida de Vehículo" as UC6
+    usecase "CU-07: Calcular Duración y Tarifa" as UC7
+    usecase "CU-08: Liberar Celda" as UC8
+    usecase "CU-09: Gestionar Cobro y Pago" as UC9
+    
+    usecase "CU-10: Monitorear Tablero de Celdas" as UC10
+    usecase "CU-11: Gestionar Tarifas y Celdas" as UC11
+}
+
+Operador --> UC1
+Operador --> UC6
+Operador --> UC10
+Operador --> UC4
+
+Admin --> UC10
+Admin --> UC11
+Admin --> UC4
+
+Cliente ..> UC1 : Solicita
+Cliente ..> UC6 : Solicita
+
+UC1 ..> UC2 : <<include>>
+UC1 ..> UC3 : <<include>>
+UC1 ..> UC5 : <<include>>
+UC4 ..> UC1 : <<extend>>
+
+UC6 ..> UC2 : <<include>>
+UC6 ..> UC7 : <<include>>
+UC6 ..> UC8 : <<include>>
+UC6 ..> UC9 : <<include>>
+
+@enduml
