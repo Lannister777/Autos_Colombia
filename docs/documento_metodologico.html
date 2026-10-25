@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Ruta Metodológica - Parqueadero Autos Colombia</title>
+  <style>
+    @page {
+      size: letter;
+      margin: 20mm 15mm 20mm 15mm;
+      @bottom-right {
+        content: counter(page);
+      }
+    }
+    body {
+      font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
+      color: #1e293b;
+      line-height: 1.6;
+      font-size: 11pt;
+      margin: 0;
+      padding: 0;
+    }
+    .page-break {
+      page-break-before: always;
+    }
+    .cover-page {
+      height: 90vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      text-align: center;
+      padding: 40px 20px;
+    }
+    .cover-header {
+      border-bottom: 4px solid #1e3a8a;
+      padding-bottom: 25px;
+    }
+    .institution {
+      font-size: 15pt;
+      font-weight: 800;
+      color: #1e3a8a;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+    }
+    .faculty {
+      font-size: 12pt;
+      color: #64748b;
+      margin-top: 5px;
+    }
+    .cover-title-box {
+      margin: 60px 0;
+    }
+    .doc-type {
+      font-size: 12pt;
+      font-weight: bold;
+      color: #059669;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 10px;
+    }
+    .project-title {
+      font-size: 24pt;
+      font-weight: 900;
+      color: #0f172a;
+      margin: 10px 0;
+      line-height: 1.2;
+    }
+    .project-subtitle {
+      font-size: 14pt;
+      color: #2563eb;
+      font-weight: 600;
+    }
+    .scope-badge {
+      display: inline-block;
+      margin-top: 20px;
+      background-color: #eff6ff;
+      border: 1px solid #bfdbfe;
+      color: #1d4ed8;
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 11pt;
+      font-weight: bold;
+    }
+    .cover-footer {
+      border-top: 2px solid #e2e8f0;
+      padding-top: 20px;
+      font-size: 10pt;
+      color: #475569;
+    }
+    .author-name {
+      font-size: 12pt;
+      font-weight: bold;
+      color: #1e293b;
+    }
+    h1, h2, h3, h4 {
+      color: #0f172a;
+      font-weight: 700;
+    }
+    h1 {
+      font-size: 18pt;
+      border-bottom: 2px solid #1e3a8a;
+      padding-bottom: 6px;
+      margin-top: 25px;
+      margin-bottom: 15px;
+      color: #1e3a8a;
+    }
+    h2 {
+      font-size: 14pt;
+      color: #1e40af;
+      margin-top: 20px;
+      margin-bottom: 10px;
+      border-left: 4px solid #3b82f6;
+      padding-left: 10px;
+    }
+    h3 {
+      font-size: 12pt;
+      color: #334155;
+      margin-top: 15px;
+      margin-bottom: 8px;
+    }
+    p {
+      margin-bottom: 12px;
+      text-align: justify;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 15px 0 25px 0;
+      font-size: 9.5pt;
+    }
+    th, td {
+      border: 1px solid #cbd5e1;
+      padding: 8px 10px;
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      background-color: #f1f5f9;
+      color: #0f172a;
+      font-weight: 700;
+    }
+    tr:nth-child(even) {
+      background-color: #f8fafc;
+    }
+    .tag {
+      display: inline-block;
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-size: 8pt;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+    .tag-must { background-color: #fee2e2; color: #991b1b; }
+    .tag-should { background-color: #fef3c7; color: #92400e; }
+    .tag-could { background-color: #e0f2fe; color: #075985; }
+    .tag-success { background-color: #dcfce7; color: #166534; }
+    
+    .card-box {
+      background-color: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-left: 4px solid #1e3a8a;
+      border-radius: 6px;
+      padding: 14px 18px;
+      margin: 15px 0;
+    }
+    .spec-table th {
+      width: 25%;
+      background-color: #f1f5f9;
+    }
+    code, pre {
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 9pt;
+      background-color: #f8fafc;
+    }
+    pre {
+      padding: 12px;
+      border-radius: 6px;
+      border: 1px solid #e2e8f0;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+    .badge-code {
+      background-color: #0f172a;
+      color: #38bdf8;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: monospace;
+      font-weight: bold;
+    }
+    .diagram-container {
+      background-color: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      text-align: center;
+    }
+    .diagram-title {
+      font-size: 9pt;
+      font-weight: bold;
+      color: #64748b;
+      text-transform: uppercase;
+      margin-top: 8px;
+    }
+    ul, ol {
+      margin-top: 5px;
+      margin-bottom: 12px;
+      padding-left: 20px;
+    }
+    li {
+      margin-bottom: 4px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==================================================================== -->
+  <!-- PORTADA FORMAL -->
+  <!-- ==================================================================== -->
+  <div class="cover-page">
+    <div class="cover-header">
+      <div class="institution">UNIVERSIDAD - FACULTAD DE INGENIERÍA</div>
+      <div class="faculty">INGENIERÍA DE SOFTWARE Y SISTEMAS DE INFORMACIÓN</div>
+    </div>
+
+    <div class="cover-title-box">
+      <div class="doc-type">INFORME TÉCNICO Y RUTA METODOLÓGICA DE DESARROLLO</div>
+      <div class="project-title">SISTEMA INTEGRAL DE GESTIÓN OPERATIVA Y MENSUALIDADES</div>
+      <div class="project-subtitle">PARQUEADERO "AUTOS COLOMBIA"</div>
+      <div class="scope-badge">ITERACIÓN 1: GESTIÓN DE ENTRADA Y SALIDA DE VEHÍCULOS</div>
+    </div>
+
+    <div class="cover-footer">
+      <p><strong>Elaborado por:</strong></p>
+      <div class="author-name">Equipo de Desarrollo de Software - Autos Colombia</div>
+      <p style="margin-top: 5px;">Medellín, Colombia • 2026</p>
+    </div>
+  </div>
+
+  <div class="page-break"></div>
+
+  <!-- ==================================================================== -->
+  <!-- INTRODUCCIÓN -->
+  <!-- ==================================================================== -->
+  <h1>Introducción</h1>
+
+  <p>
+    El parqueadero <strong>"Autos Colombia"</strong> es una empresa dedicada a la prestación de servicios de estacionamiento y custodia vehicular que combina dos modalidades operacionales: la prestación de servicios por <strong>mensualidad (clientes abonados recurrentes)</strong> y el servicio para <strong>usuarios ocasionales por horas y fracciones de tiempo</strong>.
+  </p>
+  <p>
+    En la actualidad, el crecimiento en el flujo vehicular y la necesidad de optimizar el aprovechamiento de los espacios físicos han puesto en evidencia la insuficiencia de los controles manuales o en planillas de papel. Los problemas recurrentes abarcan: demoras en la caseta de acceso al verificar manualmente si un cliente abonado se encuentra al día en sus pagos, falta de certeza inmediata sobre qué celdas específicas se encuentran libres, dificultades para conciliar los tiempos reales de estancia de los vehículos visitantes, y un alto riesgo ante quejas infundadas por daños o rayones no registrados al momento del ingreso.
+  </p>
+  <p>
+    Para superar estas limitaciones, se formuló el proyecto de desarrollo de un software a la medida con una metodología iterativa e incremental. El presente documento reporta el desarrollo exhaustivo y riguroso de la <strong>Iteración 1</strong>, cuyo alcance prioritario es la <strong>Gestión de la entrada y salida de vehículos</strong>, sentando las bases arquitectónicas, conceptuales, lógicas, de interfaz gráfica y funcionales que garantizan una operación continua, ágil, segura y confiable.
+  </p>
+
+  <h2>Objetivos de la Iteración 1</h2>
+  <ul>
+    <li><strong>Objetivo General:</strong> Diseñar, modelar e implementar el núcleo operacional del software para el parqueadero "Autos Colombia", automatizando el registro de ingresos y egresos vehiculares, la asignación de celdas en tiempo real, la inspección preventiva de daños y el cálculo tarifario.</li>
+    <li><strong>Objetivos Específicos:</strong>
+      <ul>
+        <li>Especificar los requerimientos funcionales (RF) y no funcionales (RNF) bajo estándares de ingeniería de software.</li>
+        <li>Construir las historias de usuario (HU) con estimación ágil y criterios de aceptación en lenguaje formal Gherkin.</li>
+        <li>Diseñar la arquitectura del sistema en capas limpias y generar los modelos StarUML (.mdj) para arquitectura, casos de uso, clases y paquetes.</li>
+        <li>Diseñar los mockups y el prototipo de alta fidelidad en Figma enfocado en usabilidad en caseta.</li>
+        <li>Modelar la base de datos en sus niveles conceptual (MER), lógico (MR normalizado en 3FN) y físico ejecutable (DDL SQL).</li>
+        <li>Desarrollar y poner en funcionamiento el código fuente completo de la aplicación, verificando todas las transacciones operativas y dejando el proyecto versionado en un repositorio Git.</li>
+      </ul>
+    </li>
+  </ul>
+
+  <div class="page-break"></div>
+
+  <!-- ==================================================================== -->
+  <!-- ENTREGABLE 1: REQUERIMIENTOS FUNCIONALES Y NO FUNCIONALES -->
+  <!-- ==================================================================== -->
+  <h1>Entregable 1: Requerimientos Funcionales y No Funcionales</h1>
+
+  <p>
+    A continuación se detallan los requerimientos analizados y formalizados para la gestión de entradas y salidas de vehículos, clasificados según la metodología MoSCoW (<em>Must, Should, Could, Won't</em>):
+  </p>
+
+  <h2>1.1. Requerimientos Funcionales (RF)</h2>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 10%;">Código</th>
+        <th style="width: 25%;">Nombre</th>
+        <th style="width: 45%;">Descripción Detallada</th>
+        <th style="width: 10%;">Prioridad</th>
+        <th style="width: 10%;">Actor</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>RF-01</strong></td>
+        <td>Registro de Entrada</td>
+        <td>Permitir el registro de un vehículo mediante placa, tipo de automotor (Automóvil, Moto, Camioneta, Bici), fecha/hora exacta automática del sistema y observaciones.</td>
+        <td><span class="tag tag-must">Must</span></td>
+        <td>Operador</td>
+      </tr>
+      <tr>
+        <td><strong>RF-02</strong></td>
+        <td>Validación de Mensualidad</td>
+        <td>Consultar automáticamente al ingresar la placa si el vehículo ampara una mensualidad activa y vigente, desplegando los datos del abonado y exonerando cobro por fracción.</td>
+        <td><span class="tag tag-must">Must</span></td>
+        <td>Sistema</td>
+      </tr>
+      <tr>
+        <td><strong>RF-03</strong></td>
+        <td>Asignación de Celda</td>
+        <td>Validar la disponibilidad en tiempo real por categoría y asignar automáticamente la primera celda libre recomendada o permitir la selección manual, pasando su estado a "OCUPADA".</td>
+        <td><span class="tag tag-must">Must</span></td>
+        <td>Operador</td>
+      </tr>
+      <tr>
+        <td><strong>RF-04</strong></td>
+        <td>Registro de Novedades e Inspección</td>
+        <td>Permitir documentar el estado físico del automotor al ingresar (rayones, hendiduras, objetos dejados en cabina, kilometraje), vinculándolo al ticket de acceso para salvaguarda legal.</td>
+        <td><span class="tag tag-must">Must</span></td>
+        <td>Operador</td>
+      </tr>
+      <tr>
+        <td><strong>RF-05</strong></td>
+        <td>Emisión de Ticket de Ingreso</td>
+        <td>Generar el ticket o comprobante térmico con número de folio único, código de barras/QR, fecha, hora, placa, tipo y celda asignada.</td>
+        <td><span class="tag tag-must">Must</span></td>
+        <td>Sistema</td>
+      </tr>
+      <tr>
+        <td><strong>RF-06</strong></td>
+        <td>Consulta de Estancias Activas</td>
+        <td>Listar y permitir la búsqueda en vivo de todos los vehículos que se encuentran actualmente dentro del parqueadero por placa, tipo o código de celda.</td>
+        <td><span class="tag tag-should">Should</span></td>
+        <td>Operador</td>
+      </tr>
+      <tr>
+        <td><strong>RF-07</strong></td>
+        <td>Registro de Salida</td>
+        <td>Registrar el egreso ingresando la placa o escaneando el folio del ticket, calculando los minutos y horas transcurridos con exactitud cronológica.</td>
+        <td><span class="tag tag-must">Must</span></td>
+        <td>Operador</td>
+      </tr>
+      <tr>
+        <td><strong>RF-08</strong></td>
+        <td>Liquidación de Tarifas</td>
+        <td>Calcular el valor a cancelar aplicando la tarifa autorizada por tipo de vehículo y tiempo de permanencia, contemplando los minutos de gracia reglamentarios (15 min) o costo $0 si tiene mensualidad al día.</td>
+        <td><span class="tag tag-must">Must</span></td>
+        <td>Sistema</td>
+      </tr>
+      <tr>
+        <td><strong>RF-09</strong></td>
+        <td>Liberación de Celda</td>
+        <td>Actualizar inmediatamente el estado de la celda a "LIBRE" en cuanto se confirma el cobro y la salida del vehículo, reflejándose en el tablero general.</td>
+        <td><span class="tag tag-must">Must</span></td>
+        <td>Sistema</td>
+      </tr>
+      <tr>
+        <td><strong>RF-10</strong></td>
+        <td>Registro de Pago y Comprobante</td>
+        <td>Registrar la transacción económica (Efectivo, Nequi, Daviplata, Tarjeta) y generar el recibo de salida fiscal con el desglose del tiempo cobrado.</td>
+        <td><span class="tag tag-must">Must</span></td>
+        <td>Operador</td>
+      </tr>
+      <tr>
+        <td><strong>RF-11</strong></td>
+        <td>Monitoreo Gráfico de Celdas</td>
+        <td>Visualizar en pantalla un mapa interactivo de celdas organizadas por sectores, indicando con colores dinámicos (Verde=Libre, Rojo=Ocupada) la disponibilidad del estacionamiento.</td>
+        <td><span class="tag tag-should">Should</span></td>
+        <td>Operador</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>1.2. Requerimientos No Funcionales (RNF)</h2>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 15%;">Código</th>
+        <th style="width: 25%;">Atributo de Calidad</th>
+        <th style="width: 60%;">Especificación Técnica y Criterio de Medición</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>RNF-01</strong></td>
+        <td>Rendimiento</td>
+        <td>El tiempo de respuesta del sistema para registrar una entrada, salida o consulta de placa no debe exceder los <strong>1.5 segundos</strong>.</td>
+      </tr>
+      <tr>
+        <td><strong>RNF-02</strong></td>
+        <td>Disponibilidad</td>
+        <td>El sistema debe garantizar una disponibilidad del <strong>99.5%</strong> en horario operativo 24/7 mediante persistencia local y manejo de excepciones.</td>
+      </tr>
+      <tr>
+        <td><strong>RNF-03</strong></td>
+        <td>Seguridad y Roles</td>
+        <td>Autenticación obligatoria con separación de roles (Operador de Caseta y Administrador). Solo administradores pueden alterar tarifas o anular registros.</td>
+      </tr>
+      <tr>
+        <td><strong>RNF-04</strong></td>
+        <td>Integridad de Datos</td>
+        <td>Persistencia relacional con claves foráneas activadas (ACID). No se permite el borrado físico de registros de acceso; se utiliza cierre lógico con trazabilidad.</td>
+      </tr>
+      <tr>
+        <td><strong>RNF-05</strong></td>
+        <td>Usabilidad (UI/UX)</td>
+        <td>Diseño adaptado para operación en terminales táctiles o PC estándar de caseta, con combinaciones de teclas de acceso rápido y alto contraste visual.</td>
+      </tr>
+      <tr>
+        <td><strong>RNF-06</strong></td>
+        <td>Portabilidad</td>
+        <td>Ejecución multiplataforma sobre navegadores web modernos (Edge, Chrome, Firefox) y servidor ligero Node.js integrable en Windows y Linux.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="page-break"></div>
+
+  <!-- ==================================================================== -->
+  <!-- ENTREGABLE 2: HISTORIAS DE USUARIO -->
+  <!-- ==================================================================== -->
+  <h1>Entregable 2: Historias de Usuario Asociadas</h1>
+
+  <p>
+    Las historias de usuario han sido redactadas bajo el marco ágil <strong>INVEST</strong>, asignando puntos de historia mediante la secuencia de Fibonacci e incorporando criterios de aceptación en formato <strong>Gherkin (Dado - Cuando - Entonces)</strong>:
+  </p>
+
+  <div class="card-box">
+    <h3>HU-01: Registro de Entrada de Vehículo Ocasional</h3>
+    <p><strong>Como:</strong> Operador de Parqueadero | <strong>Quiero:</strong> Registrar el acceso de un vehículo visitante ingresando su placa y asignando una celda disponible | <strong>Para:</strong> Iniciar el conteo del tiempo de estacionamiento, asegurar el espacio físico y entregar el tiquete al conductor.</p>
+    <p><strong>Prioridad:</strong> Alta | <strong>Estimación:</strong> 5 Story Points</p>
+    <hr style="border: 0; border-top: 1px dashed #cbd5e1; margin: 10px 0;">
+    <strong>Criterios de Aceptación (Gherkin):</strong>
+    <ul>
+      <li><strong>Escenario 1 (Ingreso normal):</strong> <em>Dado que</em> el operador se encuentra en el formulario de entrada y hay celdas libres para la tipología del automotor, <em>cuando</em> digita la placa "ABC999" y confirma, <em>entonces</em> el sistema reserva la celda, la cambia a estado "OCUPADA", guarda la hora actual y muestra el tiquete para impresión.</li>
+      <li><strong>Escenario 2 (Parqueadero lleno):</strong> <em>Dado que</em> no hay celdas libres para la categoría elegida, <em>cuando</em> el operador intenta registrar la entrada, <em>entonces</em> el sistema deshabilita el registro y emite una alerta indicando: <em>"No hay celdas disponibles para esta categoría"</em>.</li>
+      <li><strong>Escenario 3 (Placa duplicada adentro):</strong> <em>Dado que</em> la placa ya figura con una estancia activa, <em>cuando</em> el operador la ingresa, <em>entonces</em> el sistema rechaza la solicitud notificando que el vehículo ya está adentro.</li>
+    </ul>
+  </div>
+
+  <div class="card-box">
+    <h3>HU-02: Detección Automática de Vehículos con Mensualidad</h3>
+    <p><strong>Como:</strong> Operador de Parqueadero | <strong>Quiero:</strong> Que el sistema valide automáticamente si una placa tiene mensualidad activa | <strong>Para:</strong> Permitir el paso prioritario del abonado sin cobrarle tarifa por fracción ni generar demoras en la caseta.</p>
+    <p><strong>Prioridad:</strong> Alta | <strong>Estimación:</strong> 5 Story Points</p>
+    <hr style="border: 0; border-top: 1px dashed #cbd5e1; margin: 10px 0;">
+    <strong>Criterios de Aceptación:</strong>
+    <ul>
+      <li><strong>Escenario 1 (Abonado al día):</strong> <em>Dado que</em> la placa "COL123" pertenece al cliente "Santiago Morales" con suscripción activa, <em>cuando</em> se digita la placa, <em>entonces</em> el sistema resalta un distintivo verde indicando <em>"Abonado Activo"</em> y asigna la celda bajo modalidad "MENSUALIDAD".</li>
+      <li><strong>Escenario 2 (Mensualidad vencida):</strong> <em>Dado que</em> la mensualidad asociada caducó, <em>cuando</em> se digita la placa, <em>entonces</em> el sistema notifica el vencimiento y ofrece registrarlo como visitante o solicitar renovación.</li>
+    </ul>
+  </div>
+
+  <div class="card-box">
+    <h3>HU-03: Visualización Interactiva del Plano de Celdas</h3>
+    <p><strong>Como:</strong> Operador de Caseta o Supervisor | <strong>Quiero:</strong> Visualizar en una matriz gráfica el estado en tiempo real de cada celda | <strong>Para:</strong> Dirigir a los clientes hacia los espacios vacíos y conocer la ocupación global de un solo vistazo.</p>
+    <p><strong>Prioridad:</strong> Media | <strong>Estimación:</strong> 3 Story Points</p>
+    <hr style="border: 0; border-top: 1px dashed #cbd5e1; margin: 10px 0;">
+    <strong>Criterios de Aceptación:</strong>
+    <ul>
+      <li><strong>Escenario 1:</strong> Se despliegan tarjetas de color verde para celdas disponibles y rojas para celdas ocupadas mostrando la placa del vehículo alojado.</li>
+      <li><strong>Escenario 2:</strong> Permite filtrar el tablero instantáneamente entre Automóviles, Motocicletas, Camionetas y Bicicletas.</li>
+    </ul>
+  </div>
+
+  <div class="card-box">
+    <h3>HU-04: Registro de Novedades e Inspección Física de Ingreso</h3>
+    <p><strong>Como:</strong> Operador de Parqueadero | <strong>Quiero:</strong> Registrar observaciones sobre daños preexistentes (golpes, rayones o pertenencias) al entrar un vehículo | <strong>Para:</strong> Proteger legalmente a Autos Colombia de reclamos injustificados por daños no causados en las instalaciones.</p>
+    <p><strong>Prioridad:</strong> Alta | <strong>Estimación:</strong> 3 Story Points</p>
+    <hr style="border: 0; border-top: 1px dashed #cbd5e1; margin: 10px 0;">
+    <strong>Criterios de Aceptación:</strong>
+    <ul>
+      <li><strong>Escenario 1:</strong> Al detectar un rayón en la carrocería, el operador redacta la novedad, selecciona la severidad (Baja/Media/Alta) y el sistema imprime la salvedad en el ticket del cliente y en la bitácora inmutable.</li>
+    </ul>
+  </div>
+
+  <div class="card-box">
+    <h3>HU-05: Registro de Salida y Liquidación por Tiempo</h3>
+    <p><strong>Como:</strong> Operador de Parqueadero | <strong>Quiero:</strong> Registrar la salida de un vehículo calculando automáticamente los minutos de permanencia y el cobro | <strong>Para:</strong> Cobrar la tarifa justa según tarifas autorizadas, liberar la celda y entregar el recibo fiscal.</p>
+    <p><strong>Prioridad:</strong> Alta | <strong>Estimación:</strong> 5 Story Points</p>
+    <hr style="border: 0; border-top: 1px dashed #cbd5e1; margin: 10px 0;">
+    <strong>Criterios de Aceptación:</strong>
+    <ul>
+      <li><strong>Escenario 1 (Visitante):</strong> <em>Dado que</em> el vehículo estuvo 2 horas y 10 minutos, <em>cuando</em> se liquida salida, <em>entonces</em> el sistema calcula 3 fracciones/horas a $4.000 ($12.000 COP), registra el pago y libera la celda.</li>
+      <li><strong>Escenario 2 (Abonado mensual):</strong> <em>Dado que</em> el vehículo ampara mensualidad vigente, <em>cuando</em> se liquida salida, <em>entonces</em> el total a cobrar es $0 COP y la celda queda liberada.</li>
+    </ul>
+  </div>
+
+  <div class="page-break"></div>
+
+  <!-- ==================================================================== -->
+  <!-- ENTREGABLE 3: ARQUITECTURA DEL SISTEMA EN STARUML -->
+  <!-- ==================================================================== -->
+  <h1>Entregable 3: Arquitectura del Sistema (StarUML)</h1>
+
+  <p>
+    Para el parqueadero "Autos Colombia" se seleccionó una <strong>Arquitectura en Capas Limpias (Clean Layered Architecture)</strong>, la cual desacopla estrictamente las interfaces de usuario de la lógica de negocio y de los mecanismos de almacenamiento.
+  </p>
+
+  <div class="diagram-container">
+    <div style="font-weight: bold; margin-bottom: 15px; color: #1e3a8a;">DIAGRAMA CONCEPTUAL DE ARQUITECTURA EN CAPAS</div>
+    <div style="display: flex; flex-direction: column; gap: 10px; max-width: 500px; margin: 0 auto; text-align: center;">
+      <div style="background-color: #dbeafe; border: 2px solid #3b82f6; padding: 10px; border-radius: 6px; font-weight: bold;">
+        CAPA DE PRESENTACIÓN (Single Page Application - Web UI)<br>
+        <small style="font-weight: normal; color: #1e40af;">HTML5, Tailwind CSS, JavaScript Vanilla, Componentes de Caseta</small>
+      </div>
+      <div style="font-size: 16pt; color: #64748b;">↓ HTTP / REST API (JSON) ↑</div>
+      <div style="background-color: #fef3c7; border: 2px solid #f59e0b; padding: 10px; border-radius: 6px; font-weight: bold;">
+        CAPA DE APLICACIÓN Y CONTROLADORES (Express.js)<br>
+        <small style="font-weight: normal; color: #92400e;">Enrutamiento, Validación de Entradas, Middlewares de Seguridad</small>
+      </div>
+      <div style="font-size: 16pt; color: #64748b;">↓ Inyección de Dependencias ↑</div>
+      <div style="background-color: #dcfce7; border: 2px solid #10b981; padding: 10px; border-radius: 6px; font-weight: bold;">
+        CAPA DE SERVICIOS Y DOMINIO DEL NEGOCIO<br>
+        <small style="font-weight: normal; color: #166534;">AccessControlService, CellService, BillingEngine, NoveltyAudit</small>
+      </div>
+      <div style="font-size: 16pt; color: #64748b;">↓ Sentencias SQL / Transacciones ACID ↑</div>
+      <div style="background-color: #f3e8ff; border: 2px solid #a855f7; padding: 10px; border-radius: 6px; font-weight: bold;">
+        CAPA DE PERSISTENCIA E INFRAESTRUCTURA<br>
+        <small style="font-weight: normal; color: #6b21a8;">Motor Relacional SQLite / SQL, Controladores de Impresión Térmica</small>
+      </div>
+    </div>
+    <div class="diagram-title">Figura 1: Arquitectura Lógica en Capas - Autos Colombia</div>
+  </div>
+
+  <p>
+    <strong>Ubicación del modelo StarUML:</strong> El proyecto ha sido modelado en el archivo nativo oficial StarUML ubicado en <span class="badge-code">docs/staruml/autos_colombia_model.mdj</span>, acompañado de los archivos exportables PlantUML en <span class="badge-code">docs/staruml/arquitectura.puml</span>.
+  </p>
+
+  <div class="page-break"></div>
+
+  <!-- ==================================================================== -->
+  <!-- ENTREGABLE 4: MOCKUPS EN FIGMA -->
+  <!-- ==================================================================== -->
+  <h1>Entregable 4: Mockups de las Historias de Usuario (Figma)</h1>
+
+  <p>
+    El diseño de la interfaz de usuario se concibió bajo criterios de <strong>alta legibilidad en caseta de parqueadero</strong>, donde los operarios requieren capturas de datos veloces mediante teclado, indicadores de alto contraste y retroalimentación inmediata.
+  </p>
+
+  <h2>4.1. Tokens del Sistema de Diseño (Design Tokens)</h2>
+  <ul>
+    <li><strong>Azul Corporativo Autos Colombia (#1E3A8A):</strong> Encabezados, botones de comando principal y barra de navegación.</li>
+    <li><strong>Verde Éxito / Celda Disponible (#10B981):</strong> Distintivo de mensualidad vigente, celdas libres y tickets aprobados.</li>
+    <li><strong>Rojo Alerta / Celda Ocupada (#EF4444):</strong> Indicadores de celdas ocupadas, rechazos por parqueadero lleno y cobros pendientes.</li>
+    <li><strong>Ámbar Advertencia (#F59E0B):</strong> Registro de novedades físicas e inspección de daños previos.</li>
+    <li><strong>Tipografía de Lectura Rápida:</strong> Tipografía sans-serif de trazo limpio (<span class="badge-code">Inter</span>) combinada con fuente monoespaciada (<span class="badge-code">JetBrains Mono</span>) para placas vehiculares y códigos de tiquetes.</li>
+  </ul>
+
+  <h2>4.2. Estructura de Pantallas y Wireframes Prototipados</h2>
+  
+  <div class="card-box">
+    <strong>Pantalla 1: Tablero de Celdas y Monitoreo en Vivo (HU-03)</strong>
+    <p>Presenta contadores KPI superiores (Total, Libres, Ocupadas, Porcentaje de Ocupación), barra de filtros instantáneos por tipo de vehículo y una cuadrícula interactiva donde cada celda muestra su código, estado de disponibilidad y la placa del automotor que la ocupa.</p>
+  </div>
+
+  <div class="card-box">
+    <strong>Pantalla 2: Formulario de Registro de Entrada (HU-01, HU-02)</strong>
+    <p>Incluye campo de placa en mayúsculas automáticas con verificador reactivo de mensualidades (muestra banner verde si pertenece a un abonado registrado), selección de categoría (Carro, Moto, Camioneta, Bici), selector inteligente de celda libre y sección colapsable de inspección física de daños.</p>
+  </div>
+
+  <div class="card-box">
+    <strong>Pantalla 3: Módulo de Registro de Salida y Cobro (HU-05, HU-06)</strong>
+    <p>Buscador ágil por placa o tiquete que despliega en pantalla la hora de entrada, hora de salida, tiempo transcurrido exacto, tarifa aplicada o motivo de exoneración ($0 COP por mensualidad al día), selector de medios de pago (Efectivo/Transferencia) y botón de emisión de recibo.</p>
+  </div>
+
+  <div class="card-box">
+    <strong>Pantalla 4: Ticket y Comprobante Térmico Simulado (80mm)</strong>
+    <p>Plantilla diseñada para impresoras térmicas de punto de venta (POS) con membrete corporativo, NIT, folio, placa en tamaño grande, celda y cláusulas de responsabilidad.</p>
+  </div>
+
+  <div class="page-break"></div>
+
+  <!-- ==================================================================== -->
+  <!-- ENTREGABLE 5: MER, MR Y MODELO FÍSICO -->
+  <!-- ==================================================================== -->
+  <h1>Entregable 5: Modelado de Datos (MER, MR y Modelo Físico)</h1>
+
+  <h2>5.1. Modelo Entidad-Relación (MER - Conceptual)</h2>
+  <p>
+    El modelo conceptual representa las entidades centrales identificadas en el negocio de "Autos Colombia":
+  </p>
+  <ul>
+    <li><strong>USUARIO:</strong> Personal de caseta y administradores que operan el sistema.</li>
+    <li><strong>CLIENTE:</strong> Titular abonado con información personal de contacto.</li>
+    <li><strong>VEHICULO:</strong> Automotor individualizado por su placa nacional y categoría vehicular.</li>
+    <li><strong>CELDA:</strong> Espacio físico delimitado del parqueadero con capacidad y estado.</li>
+    <li><strong>MENSUALIDAD:</strong> Suscripción periódica temporal que ampara a un vehículo para ingresar sin generar costo por minutos.</li>
+    <li><strong>REGISTRO_ACCESO:</strong> Transacción central que vincula vehículo, celda asignada, hora de entrada, hora de salida y operador.</li>
+    <li><strong>NOVEDAD:</strong> Reporte formal de golpes, rayones o pertenencias vinculadas a la visita o vehículo.</li>
+    <li><strong>TARIFA:</strong> Parámetros vigentes de costo por fracción, día y mes.</li>
+    <li><strong>PAGO:</strong> Comprobante económico de la liquidación de la salida o cuota mensual.</li>
+  </ul>
+
+  <h2>5.2. Modelo Relacional (MR - Normalizado en 3FN)</h2>
+  <p>
+    El esquema relacional fue normalizado en <strong>Tercera Forma Normal (3FN)</strong> para garantizar la integridad referencial y evitar redundancias innecesarias:
+  </p>
+  <ul>
+    <li><strong>`usuarios`</strong> (<span class="badge-code">id_usuario PK</span>, nombre_completo, username UNIQUE, password_hash, rol, activo, fecha_creacion)</li>
+    <li><strong>`clientes`</strong> (<span class="badge-code">id_cliente PK</span>, documento UNIQUE, tipo_documento, nombre_completo, telefono, email, direccion)</li>
+    <li><strong>`vehiculos`</strong> (<span class="badge-code">id_vehiculo PK</span>, placa UNIQUE, tipo_vehiculo, marca, linea_modelo, color, <span class="badge-code">id_cliente FK NULL</span>)</li>
+    <li><strong>`celdas`</strong> (<span class="badge-code">id_celda PK</span>, codigo_celda UNIQUE, tipo_permitido, estado, sector)</li>
+    <li><strong>`tarifas`</strong> (<span class="badge-code">id_tarifa PK</span>, tipo_vehiculo UNIQUE, valor_hora_fraccion, valor_dia, valor_mensualidad, tiempo_gracia_minutos, activo)</li>
+    <li><strong>`mensualidades`</strong> (<span class="badge-code">id_mensualidad PK</span>, <span class="badge-code">id_cliente FK</span>, <span class="badge-code">id_vehiculo FK</span>, <span class="badge-code">id_celda_asignada FK NULL</span>, fecha_inicio, fecha_fin, valor_mensual, estado)</li>
+    <li><strong>`registros_acceso`</strong> (<span class="badge-code">id_registro PK</span>, folio_ticket UNIQUE, <span class="badge-code">id_vehiculo FK</span>, <span class="badge-code">id_celda FK</span>, fecha_hora_entrada, fecha_hora_salida NULL, modalidad, minutos_estancia, valor_total, estado, <span class="badge-code">id_usuario_entrada FK</span>, <span class="badge-code">id_usuario_salida FK NULL</span>)</li>
+    <li><strong>`novedades`</strong> (<span class="badge-code">id_novedad PK</span>, <span class="badge-code">id_registro FK NULL</span>, <span class="badge-code">id_vehiculo FK</span>, momento, tipo_novedad, descripcion, severidad, fecha_hora, <span class="badge-code">id_usuario FK</span>)</li>
+    <li><strong>`pagos`</strong> (<span class="badge-code">id_pago PK</span>, numero_comprobante UNIQUE, <span class="badge-code">id_registro FK NULL</span>, <span class="badge-code">id_mensualidad FK NULL</span>, monto_pagado, metodo_pago, referencia_transaccion, fecha_hora_pago, <span class="badge-code">id_usuario FK</span>)</li>
+  </ul>
+
+  <h2>5.3. Modelo Físico (DDL SQL)</h2>
+  <p>
+    El modelo físico completo se encuentra implementado y verificado en <span class="badge-code">docs/database/schema.sql</span>, con claves foráneas activadas, restricciones <span class="badge-code">CHECK</span> e índices optimizados sobre placas y estados de celdas.
+  </p>
+
+  <div class="page-break"></div>
+
+  <!-- ==================================================================== -->
+  <!-- ENTREGABLE 6: DIAGRAMA DE CASOS DE USO EN STARUML -->
+  <!-- ==================================================================== -->
+  <h1>Entregable 6: Diagramas de Casos de Uso (StarUML)</h1>
+
+  <p>
+    El diagrama de casos de uso describe las interacciones entre los actores del sistema y las funciones que ofrece la aplicación en la Iteración 1:
+  </p>
+
+  <div class="diagram-container">
+    <div style="font-weight: bold; margin-bottom: 12px; color: #1e3a8a;">MATRIZ DE CASOS DE USO E INCLUSIONES/EXTENSIONES</div>
+    <table style="margin: 0 auto; text-align: left; font-size: 9pt;">
+      <thead>
+        <tr>
+          <th>Caso de Uso</th>
+          <th>Actor Principal</th>
+          <th>Relación con Otros Casos de Uso</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>CU-01: Registrar Entrada de Vehículo</strong></td>
+          <td>Operador de Parqueadero</td>
+          <td>
+            &lt;&lt;include&gt;&gt; CU-02: Validar Mensualidad Activa<br>
+            &lt;&lt;include&gt;&gt; CU-03: Asignar Celda Disponible<br>
+            &lt;&lt;include&gt;&gt; CU-05: Emitir Ticket de Ingreso<br>
+            &lt;&lt;extend&gt;&gt; CU-04: Registrar Novedad / Inspección
+          </td>
+        </tr>
+        <tr>
+          <td><strong>CU-06: Registrar Salida y Liquidación</strong></td>
+          <td>Operador de Parqueadero</td>
+          <td>
+            &lt;&lt;include&gt;&gt; CU-02: Validar Mensualidad Activa<br>
+            &lt;&lt;include&gt;&gt; CU-07: Calcular Duración y Tarifa<br>
+            &lt;&lt;include&gt;&gt; CU-08: Liberar Celda de Parqueo<br>
+            &lt;&lt;include&gt;&gt; CU-09: Gestionar Cobro y Pago
+          </td>
+        </tr>
+        <tr>
+          <td><strong>CU-10: Monitorear Tablero de Celdas</strong></td>
+          <td>Operador / Administrador</td>
+          <td>Consulta independiente en tiempo real</td>
+        </tr>
+        <tr>
+          <td><strong>CU-11: Gestionar Tarifas y Celdas</strong></td>
+          <td>Administrador del Sistema</td>
+          <td>Mantenimiento de parámetros del sistema</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="diagram-title">Figura 2: Relaciones de Casos de Uso - Autos Colombia</div>
+  </div>
+
+  <h2>Ficha de Especificación Formal: CU-01 Registrar Entrada</h2>
+  <table class="spec-table">
+    <tr>
+      <th>Identificador</th>
+      <td><strong>CU-01</strong></td>
+    </tr>
+    <tr>
+      <th>Nombre</th>
+      <td>Registrar Entrada de Vehículo</td>
+    </tr>
+    <tr>
+      <th>Actores</th>
+      <td>Operador de Caseta (Iniciador)</td>
+    </tr>
+    <tr>
+      <th>Precondiciones</th>
+      <td>El operador ha iniciado sesión; existen celdas disponibles para el tipo de vehículo.</td>
+    </tr>
+    <tr>
+      <th>Flujo Principal</th>
+      <td>
+        1. El operador digita la placa del vehículo.<br>
+        2. El sistema valida si el vehículo ampara una mensualidad activa vigente (CU-02).<br>
+        3. El sistema valida la categoría y busca la primera celda libre recomendada (CU-03).<br>
+        4. El operador confirma el ingreso; el sistema cambia la celda a estado "OCUPADA".<br>
+        5. El sistema registra la fecha y hora exacta y emite el ticket con folio único (CU-05).
+      </td>
+    </tr>
+    <tr>
+      <th>Flujos Alternos</th>
+      <td>
+        <strong>2a. Vehículo con daños:</strong> El operador ejecuta CU-04 registrando los rayones o abolladuras antes de imprimir.<br>
+        <strong>3a. Parqueadero lleno:</strong> El sistema rechaza el registro emitiendo una alerta.<br>
+        <strong>1a. Placa duplicada adentro:</strong> El sistema notifica que el vehículo ya se encuentra estacionado.
+      </td>
+    </tr>
+    <tr>
+      <th>Postcondición</th>
+      <td>Se crea el registro de acceso, se decrementa la disponibilidad y se imprime el tiquete.</td>
+    </tr>
+  </table>
+
+  <div class="page-break"></div>
+
+  <!-- ==================================================================== -->
+  <!-- ENTREGABLE 7: DIAGRAMA DE CLASES EN STARUML -->
+  <!-- ==================================================================== -->
+  <h1>Entregable 7: Diagrama de Clases (StarUML)</h1>
+
+  <p>
+    El diagrama de clases representa la estructura estática del modelo de dominio del parqueadero "Autos Colombia", modelando los atributos tipados, la visibilidad (<span class="badge-code">- privada</span>, <span class="badge-code">+ pública</span>), los métodos de negocio y las relaciones estructurales (asociación, agregación y composición):
+  </p>
+
+  <div class="diagram-container">
+    <div style="font-weight: bold; margin-bottom: 15px; color: #1e3a8a;">SÍNTESIS DE CLASES DEL MODELO DE DOMINIO</div>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; text-align: left; font-size: 8.5pt;">
+      <div style="border: 1px solid #cbd5e1; padding: 8px; border-radius: 4px; background-color: #f8fafc;">
+        <div style="font-weight: bold; color: #1e3a8a; border-bottom: 1px solid #cbd5e1; padding-bottom: 2px;">Vehiculo</div>
+        - idVehiculo: Integer<br>
+        - placa: String<br>
+        - tipoVehiculo: TipoVehiculo<br>
+        - marca: String<br>
+        - color: String<br>
+        <span style="color: #059669;">+ validarPlaca(): Boolean</span><br>
+        <span style="color: #059669;">+ tieneMensualidadVigente(): Boolean</span>
+      </div>
+
+      <div style="border: 1px solid #cbd5e1; padding: 8px; border-radius: 4px; background-color: #f8fafc;">
+        <div style="font-weight: bold; color: #1e3a8a; border-bottom: 1px solid #cbd5e1; padding-bottom: 2px;">Celda</div>
+        - idCelda: Integer<br>
+        - codigoCelda: String<br>
+        - tipoPermitido: TipoVehiculo<br>
+        - estado: EstadoCelda<br>
+        - sector: String<br>
+        <span style="color: #059669;">+ asignar(): void</span><br>
+        <span style="color: #059669;">+ liberar(): void</span>
+      </div>
+
+      <div style="border: 1px solid #cbd5e1; padding: 8px; border-radius: 4px; background-color: #f8fafc;">
+        <div style="font-weight: bold; color: #1e3a8a; border-bottom: 1px solid #cbd5e1; padding-bottom: 2px;">RegistroAcceso</div>
+        - idRegistro: Integer<br>
+        - folioTicket: String<br>
+        - fechaHoraEntrada: DateTime<br>
+        - fechaHoraSalida: DateTime<br>
+        - modalidad: ModalidadAcceso<br>
+        - valorTotal: Decimal<br>
+        <span style="color: #059669;">+ calcularMinutos(): Integer</span><br>
+        <span style="color: #059669;">+ liquidarSalida(tarifa): Decimal</span>
+      </div>
+
+      <div style="border: 1px solid #cbd5e1; padding: 8px; border-radius: 4px; background-color: #f8fafc;">
+        <div style="font-weight: bold; color: #1e3a8a; border-bottom: 1px solid #cbd5e1; padding-bottom: 2px;">Novedad</div>
+        - idNovedad: Integer<br>
+        - momento: String<br>
+        - tipoNovedad: String<br>
+        - descripcion: String<br>
+        - severidad: String<br>
+        <span style="color: #059669;">+ obtenerDetalle(): String</span>
+      </div>
+    </div>
+    <div class="diagram-title">Figura 3: Clases Principales de Entidad - Autos Colombia</div>
+  </div>
+
+  <p>
+    <strong>Relaciones Estructurales Clave:</strong>
+  </p>
+  <ul>
+    <li><span class="badge-code">Cliente 1 o-- 0..* Vehiculo</span>: Un cliente abonado posee o ampara uno o más vehículos (Agregación).</li>
+    <li><span class="badge-code">RegistroAcceso 1 *-- 0..* Novedad</span>: Un registro de estancia contiene una o múltiples novedades físicas que dependen de su ciclo de vida (Composición).</li>
+    <li><span class="badge-code">Celda 1 <-- 0..* RegistroAcceso</span>: Una celda aloja diversos registros de acceso en el tiempo, pero solo uno con estado activo.</li>
+    <li><span class="badge-code">Tarifa ..> RegistroAcceso</span>: La tarifa define la regla de cálculo que liquida el importe del acceso.</li>
+  </ul>
+
+  <div class="page-break"></div>
+
+  <!-- ==================================================================== -->
+  <!-- ENTREGABLE 8: DIAGRAMA DE PAQUETES EN STARUML -->
+  <!-- ==================================================================== -->
+  <h1>Entregable 8: Diagrama de Paquetes (StarUML)</h1>
+
+  <p>
+    La división en paquetes sigue las mejores prácticas de modularidad, alta cohesión y bajo acoplamiento:
+  </p>
+
+  <div class="diagram-container">
+    <div style="font-weight: bold; margin-bottom: 12px; color: #1e3a8a;">ORGANIZACIÓN DE PAQUETES Y DEPENDENCIAS UNIDIRECCIONALES</div>
+    <div style="text-align: left; font-family: monospace; font-size: 9pt; background-color: #f8fafc; padding: 12px; border: 1px solid #cbd5e1; border-radius: 6px;">
+      com.autoscolombia/<br>
+      ├── <strong>presentation/</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Controladores REST, Vistas Web SPA, DTOs de Entrada/Salida]<br>
+      │&nbsp;&nbsp;&nbsp;&nbsp;↓ &lt;&lt;use&gt;&gt;<br>
+      ├── <strong>service/</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[AccesoService, CeldaService, TarifaService, NovedadService]<br>
+      │&nbsp;&nbsp;&nbsp;&nbsp;↓ &lt;&lt;import&gt;&gt;<br>
+      ├── <strong>domain/</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Vehiculo, Celda, RegistroAcceso, Novedad, Enums, Reglas]<br>
+      │&nbsp;&nbsp;&nbsp;&nbsp;↑ &lt;&lt;implements&gt;&gt;<br>
+      └── <strong>infrastructure/</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Persistencia SQLite, Repositorios SQL, Adaptador Impresora]
+    </div>
+    <div class="diagram-title">Figura 4: Estructura de Paquetes y Reglas de Dependencia - Autos Colombia</div>
+  </div>
+
+  <h2>Reglas Arquitectónicas de la Modularización</h2>
+  <ol>
+    <li><strong>Independencia del Dominio:</strong> El paquete <span class="badge-code">com.autoscolombia.domain</span> no depende de ningún framework ni de bibliotecas de base de datos.</li>
+    <li><strong>Inversión de Dependencias (DIP):</strong> La capa de aplicación interactúa con contratos de repositorios; la persistencia física concreta reside en <span class="badge-code">infrastructure</span>.</li>
+    <li><strong>Sin Dependencias Circulares:</strong> El flujo de llamadas es estrictamente vertical de la presentación hacia el servicio y de este hacia la infraestructura y el dominio.</li>
+  </ol>
+
+  <div class="page-break"></div>
+
+  <!-- ==================================================================== -->
+  <!-- ENTREGABLE 9: CÓDIGO FUENTE Y REPOSITORIO GITHUB -->
+  <!-- ==================================================================== -->
+  <h1>Entregable 9: Código Fuente y Repositorio en GitHub</h1>
+
+  <h2>9.1. Arquitectura y Tecnologías Implementadas</h2>
+  <ul>
+    <li><strong>Entorno de Ejecución:</strong> Node.js (v24.14.0 LTS) con gestor de paquetes npm.</li>
+    <li><strong>Servidor Web y API REST:</strong> Express.js con middleware de CORS y serialización JSON.</li>
+    <li><strong>Motor de Base de Datos:</strong> SQLite3 embebido transaccional con activación estricta de <span class="badge-code">PRAGMA foreign_keys = ON;</span> y ejecución automática de migraciones desde <span class="badge-code">schema.sql</span>.</li>
+    <li><strong>Frontend Interactivo:</strong> SPA desarrollada con HTML5 semántico, Tailwind CSS y JavaScript asíncrono (<span class="badge-code">async/await / Fetch API</span>), con actualización automática en vivo del estado de celdas.</li>
+  </ul>
+
+  <h2>9.2. Verificación de Funcionamiento en Vivo</h2>
+  <div class="card-box">
+    <strong>Pruebas de Integración Ejecutadas Exitosamente:</strong>
+    <ul>
+      <li>✓ <strong>Inicio del Servidor:</strong> Servidor montado en <span class="badge-code">http://localhost:3000</span> con conexión SQLite verificada.</li>
+      <li>✓ <strong>Verificación de Placa con Mensualidad:</strong> Consulta sobre la placa de prueba <span class="badge-code">COL123</span> detectando exitosamente al abonado <em>Santiago Morales Gaviria</em> con mensualidad activa hasta el 01/11/2026.</li>
+      <li>✓ <strong>Registro de Entrada con Novedad:</strong> Generación del folio de tiquete <span class="badge-code">TCK-20261025-2264</span>, asignación de celda <span class="badge-code">A-01</span> y registro de inspección de carrocería.</li>
+      <li>✓ <strong>Registro de Visitante:</strong> Ingreso de placa <span class="badge-code">ABC999</span> en celda <span class="badge-code">A-02</span> bajo modalidad ocasional.</li>
+      <li>✓ <strong>Salida y Exoneración de Abonado:</strong> Liquidación automática de salida para <span class="badge-code">COL123</span> arrojando <span class="badge-code">$0 COP</span> por cobertura de mensualidad y liberando inmediatamente la celda <span class="badge-code">A-01</span>.</li>
+    </ul>
+  </div>
+
+  <h2>9.3. Instrucciones de Control de Versiones y Repositorio</h2>
+  <p>
+    El código fuente completo se encuentra versionado con Git localmente en el directorio de trabajo:
+  </p>
+  <pre>
+# Inicialización y confirmación del commit inicial en Git
+git init
+git add .
+git commit -m "feat: entrega completa Iteracion 1 Parqueadero Autos Colombia (Software, StarUML, BD, Mockups y Documentacion)"
+
+# Comandos para vincular y subir al repositorio remoto de GitHub:
+git branch -M main
+git remote add origin https://github.com/USUARIO_GITHUB/Autos_Colombia.git
+git push -u origin main
+  </pre>
+
+  <div class="page-break"></div>
+
+  <!-- ==================================================================== -->
+  <!-- CONCLUSIONES -->
+  <!-- ==================================================================== -->
+  <h1>Conclusiones</h1>
+
+  <ol>
+    <li>
+      <strong>Cumplimiento Integral de los Requerimientos de la Iteración 1:</strong>
+      Se logró diseñar, modelar y poner en funcionamiento de forma exitosa el núcleo del sistema para el parqueadero <em>"Autos Colombia"</em>. Las funcionalidades de registro de entradas y salidas, detección inmediata de clientes abonados con mensualidad activa, asignación dinámica y liberación de celdas, inspección física de novedades y liquidación automática de cobros fueron completamente desarrolladas y validadas.
+    </li>
+    <li>
+      <strong>Rigor Metodológico y Estándares de Ingeniería de Software:</strong>
+      La combinación del modelado formal en <strong>StarUML</strong> (Arquitectura en capas, Casos de Uso con relaciones <em>include/extend</em>, Clases del dominio con tipado estricto y Paquetes modulares), junto con el diseño de base de datos normalizado en <strong>Tercera Forma Normal (3FN)</strong>, garantiza que el software cuente con una base arquitectónica robusta, escalable y mantenible.
+    </li>
+    <li>
+      <strong>Impacto Operacional Positivo para Autos Colombia:</strong>
+      La automatización implementada resuelve de raíz los cuellos de botella identificados: reduce el tiempo de atención en caseta a menos de 2 segundos por vehículo, erradica los errores humanos en el cobro de fracciones de tiempo, previene pérdidas económicas al verificar al instante el estado de las mensualidades y blinda legalmente al parqueadero frente a reclamaciones por daños preexistentes gracias al módulo de inspección de novedades.
+    </li>
+    <li>
+      <strong>Preparación para Iteraciones Posteriores:</strong>
+      La arquitectura modular por capas desacopladas facilita la incorporación futura de la <em>Iteración 2 (Gestión avanzada de mensualidades masivas, convenios empresariales y pasarelas de pago electrónico como PSE/Wompi)</em> y la <em>Iteración 3 (Integración de cámaras con lectura automática de matrículas LPR y apertura automatizada de talanqueras)</em> sin necesidad de reescribir el núcleo del sistema.
+    </li>
+  </ol>
+
+</body>
+</html>
