@@ -98,6 +98,12 @@
         <button onclick="switchTab('tabRates')" id="nav-tabRates" class="tab-btn px-4 py-2 text-sm font-medium rounded-md transition-colors flex items-center gap-2 text-blue-100 hover:bg-brand-700/50">
           <i class="fa-solid fa-tags text-purple-300"></i> Tarifas
         </button>
+        <button onclick="switchTab('tabUsers')" id="nav-tabUsers" class="tab-btn px-4 py-2 text-sm font-medium rounded-md transition-colors flex items-center gap-2 text-blue-100 hover:bg-brand-700/50">
+          <i class="fa-solid fa-users text-cyan-300"></i> Usuarios
+        </button>
+        <button onclick="switchTab('tabAdminCells')" id="nav-tabAdminCells" class="tab-btn px-4 py-2 text-sm font-medium rounded-md transition-colors flex items-center gap-2 text-blue-100 hover:bg-brand-700/50">
+          <i class="fa-solid fa-sliders text-amber-300"></i> Admin Celdas
+        </button>
         <a href="/figma-mockups.html" target="_blank" class="ml-auto px-3 py-1.5 text-xs font-bold rounded-md bg-purple-600 hover:bg-purple-500 text-white flex items-center gap-1.5 shadow transition whitespace-nowrap self-center">
           <i class="fa-brands fa-figma"></i> Mockups de Figma
         </a>
@@ -481,6 +487,180 @@
         </div>
       </div>
     </section>
+
+    <!-- ==================================================================== -->
+    <!-- PESTAÑA 7: GESTIÓN DE USUARIOS (ITERACIÓN 2) -->
+    <!-- ==================================================================== -->
+    <section id="tabUsers" class="tab-content hidden space-y-6">
+      <!-- Encabezado y Acciones -->
+      <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+        <div class="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-slate-100">
+          <div>
+            <h3 class="text-base font-bold text-slate-800 flex items-center gap-2">
+              <i class="fa-solid fa-users-gear text-cyan-600"></i> Gestión de Usuarios del Sistema
+            </h3>
+            <p class="text-xs text-slate-500">Control de acceso, roles (Administrador / Operador) y credenciales de caseta</p>
+          </div>
+          <button onclick="openUserModal()" class="bg-cyan-700 hover:bg-cyan-800 text-white text-xs font-bold px-4 py-2.5 rounded-lg flex items-center gap-2 shadow transition">
+            <i class="fa-solid fa-user-plus"></i> Nuevo Usuario
+          </button>
+        </div>
+
+        <!-- Filtros Dinámicos -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 my-4">
+          <div>
+            <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Filtrar por Rol</label>
+            <select id="userFilterRole" onchange="loadUsers()" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs font-medium text-slate-700 focus:outline-none focus:border-cyan-500">
+              <option value="TODOS">Todos los Roles</option>
+              <option value="ADMIN">Administrador</option>
+              <option value="OPERADOR">Operador</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Filtrar por Estado</label>
+            <select id="userFilterActive" onchange="loadUsers()" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs font-medium text-slate-700 focus:outline-none focus:border-cyan-500">
+              <option value="TODOS">Todos los Estados</option>
+              <option value="1">Activos</option>
+              <option value="0">Inactivos</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Buscar por Nombre o Username</label>
+            <div class="relative">
+              <input type="text" id="userSearchInput" oninput="loadUsers()" placeholder="Escriba para buscar..." class="w-full bg-slate-50 border border-slate-200 rounded-lg pl-8 pr-3 py-2 text-xs text-slate-700 focus:outline-none focus:border-cyan-500">
+              <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-2.5 text-slate-400 text-xs"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tabla de Usuarios -->
+        <div class="overflow-x-auto border border-slate-100 rounded-lg">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-slate-50 text-slate-600 font-bold uppercase tracking-wider border-b border-slate-200">
+              <tr>
+                <th class="py-3 px-4">ID</th>
+                <th class="py-3 px-4">Nombre Completo</th>
+                <th class="py-3 px-4">Username</th>
+                <th class="py-3 px-4">Rol</th>
+                <th class="py-3 px-4">Estado</th>
+                <th class="py-3 px-4">Fecha Creación</th>
+                <th class="py-3 px-4 text-center">Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="usersTableBody" class="divide-y divide-slate-100">
+              <!-- Renderizado dinámico -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================================================================== -->
+    <!-- PESTAÑA 8: ADMINISTRACIÓN DE CELDAS Y CAPACIDAD (ITERACIÓN 2) -->
+    <!-- ==================================================================== -->
+    <section id="tabAdminCells" class="tab-content hidden space-y-6">
+      <!-- Tarjetas de Reporte de Capacidad -->
+      <div id="capacityKpis" class="grid grid-cols-2 md:grid-cols-5 gap-3">
+        <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+          <span class="text-[11px] text-slate-500 font-bold uppercase">Total Celdas</span>
+          <div class="flex items-center justify-between mt-1">
+            <span id="capKpiTotal" class="text-2xl font-black text-slate-800">--</span>
+            <span class="p-2 bg-blue-50 text-blue-600 rounded-lg"><i class="fa-solid fa-warehouse"></i></span>
+          </div>
+        </div>
+        <div class="bg-white p-4 rounded-xl shadow-sm border border-emerald-200">
+          <span class="text-[11px] text-emerald-600 font-bold uppercase">Libres</span>
+          <div class="flex items-center justify-between mt-1">
+            <span id="capKpiLibres" class="text-2xl font-black text-emerald-600">--</span>
+            <span class="p-2 bg-emerald-50 text-emerald-600 rounded-lg"><i class="fa-solid fa-circle-check"></i></span>
+          </div>
+        </div>
+        <div class="bg-white p-4 rounded-xl shadow-sm border border-rose-200">
+          <span class="text-[11px] text-rose-600 font-bold uppercase">Ocupadas</span>
+          <div class="flex items-center justify-between mt-1">
+            <span id="capKpiOcupadas" class="text-2xl font-black text-rose-600">--</span>
+            <span class="p-2 bg-rose-50 text-rose-600 rounded-lg"><i class="fa-solid fa-car-side"></i></span>
+          </div>
+        </div>
+        <div class="bg-white p-4 rounded-xl shadow-sm border border-amber-200">
+          <span class="text-[11px] text-amber-600 font-bold uppercase">En Mantenimiento</span>
+          <div class="flex items-center justify-between mt-1">
+            <span id="capKpiMantenimiento" class="text-2xl font-black text-amber-600">--</span>
+            <span class="p-2 bg-amber-50 text-amber-600 rounded-lg"><i class="fa-solid fa-triangle-exclamation"></i></span>
+          </div>
+        </div>
+        <div class="bg-white p-4 rounded-xl shadow-sm border border-indigo-200 col-span-2 md:col-span-1">
+          <span class="text-[11px] text-indigo-600 font-bold uppercase">% Ocupación</span>
+          <div class="flex items-center justify-between mt-1">
+            <span id="capKpiPorcentaje" class="text-2xl font-black text-indigo-600">--%</span>
+            <span class="p-2 bg-indigo-50 text-indigo-600 rounded-lg"><i class="fa-solid fa-chart-pie"></i></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabla y Control de Celdas -->
+      <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+        <div class="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-slate-100">
+          <div>
+            <h3 class="text-base font-bold text-slate-800 flex items-center gap-2">
+              <i class="fa-solid fa-sliders text-amber-600"></i> Inventario de Celdas y Mantenimiento
+            </h3>
+            <p class="text-xs text-slate-500">Configuración física, estados de servicio y aislamiento preventivo</p>
+          </div>
+          <button onclick="openCellModal()" class="bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold px-4 py-2.5 rounded-lg flex items-center gap-2 shadow transition">
+            <i class="fa-solid fa-plus"></i> Nueva Celda
+          </button>
+        </div>
+
+        <!-- Filtros de Celdas Admin -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 my-4">
+          <div>
+            <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Filtrar por Tipo</label>
+            <select id="adminCellFilterType" onchange="loadAdminCells()" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs font-medium text-slate-700 focus:outline-none focus:border-amber-500">
+              <option value="TODOS">Todos los Tipos</option>
+              <option value="AUTOMOVIL">Automóvil</option>
+              <option value="MOTO">Motocicleta</option>
+              <option value="CAMIONETA">Camioneta</option>
+              <option value="BICICLETA">Bicicleta</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Filtrar por Estado</label>
+            <select id="adminCellFilterState" onchange="loadAdminCells()" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs font-medium text-slate-700 focus:outline-none focus:border-amber-500">
+              <option value="TODOS">Todos los Estados</option>
+              <option value="LIBRE">Libres</option>
+              <option value="OCUPADA">Ocupadas</option>
+              <option value="MANTENIMIENTO">En Mantenimiento</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Buscar por Código o Sector</label>
+            <div class="relative">
+              <input type="text" id="adminCellSearchInput" oninput="loadAdminCells()" placeholder="Buscar ej. A-01..." class="w-full bg-slate-50 border border-slate-200 rounded-lg pl-8 pr-3 py-2 text-xs text-slate-700 focus:outline-none focus:border-amber-500">
+              <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-2.5 text-slate-400 text-xs"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tabla Admin Celdas -->
+        <div class="overflow-x-auto border border-slate-100 rounded-lg">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-slate-50 text-slate-600 font-bold uppercase tracking-wider border-b border-slate-200">
+              <tr>
+                <th class="py-3 px-4">Código Celda</th>
+                <th class="py-3 px-4">Tipo Permitido</th>
+                <th class="py-3 px-4">Sector</th>
+                <th class="py-3 px-4">Estado Actual</th>
+                <th class="py-3 px-4 text-center">Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="adminCellsTableBody" class="divide-y divide-slate-100">
+              <!-- Renderizado dinámico -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
   </main>
 
   <!-- ==================================================================== -->
@@ -557,10 +737,121 @@
     </div>
   </div>
 
+  <!-- ==================================================================== -->
+  <!-- MODAL: CREAR / EDITAR USUARIO (ITERACIÓN 2) -->
+  <!-- ==================================================================== -->
+  <div id="userModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-xl shadow-2xl max-w-md w-full overflow-hidden border border-slate-200">
+      <div class="p-4 bg-cyan-900 text-white flex justify-between items-center">
+        <h4 id="userModalTitle" class="font-bold text-sm flex items-center gap-2">
+          <i class="fa-solid fa-user-plus"></i> Nuevo Usuario
+        </h4>
+        <button onclick="closeUserModal()" class="text-cyan-200 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <form id="userForm" onsubmit="saveUser(event)" class="p-5 space-y-4 text-xs">
+        <input type="hidden" id="userIdField">
+        <div>
+          <label class="block font-bold text-slate-700 uppercase mb-1">Nombre Completo <span class="text-rose-500">*</span></label>
+          <input type="text" id="userNombreField" required placeholder="Ej. Carlos Restrepo" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 text-slate-800 focus:outline-none focus:border-cyan-600">
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 uppercase mb-1">Username (Identificador Único) <span class="text-rose-500">*</span></label>
+          <input type="text" id="userUsernameField" required placeholder="Ej. operador3" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 text-slate-800 font-mono focus:outline-none focus:border-cyan-600">
+        </div>
+        <div id="userPasswordFieldWrapper">
+          <label class="block font-bold text-slate-700 uppercase mb-1">Contraseña Inicial <span class="text-rose-500">*</span></label>
+          <input type="password" id="userPasswordField" placeholder="Mínimo 4 caracteres" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 text-slate-800 focus:outline-none focus:border-cyan-600">
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 uppercase mb-1">Rol de Acceso <span class="text-rose-500">*</span></label>
+          <select id="userRoleField" required class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 text-slate-800 font-semibold focus:outline-none focus:border-cyan-600">
+            <option value="OPERADOR">Operador de Caseta (Accesos, Tickets, Novedades)</option>
+            <option value="ADMIN">Administrador (Acceso Total y Configuración)</option>
+          </select>
+        </div>
+        <div class="flex justify-end gap-2 pt-3 border-t border-slate-100">
+          <button type="button" onclick="closeUserModal()" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold rounded">Cancelar</button>
+          <button type="submit" class="px-5 py-2 bg-cyan-700 hover:bg-cyan-800 text-white font-bold rounded shadow flex items-center gap-1.5">
+            <i class="fa-solid fa-check"></i> Guardar Usuario
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==================================================================== -->
+  <!-- MODAL: CAMBIO DE CONTRASEÑA DE USUARIO (ITERACIÓN 2) -->
+  <!-- ==================================================================== -->
+  <div id="passwordModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-xl shadow-2xl max-w-sm w-full overflow-hidden border border-slate-200">
+      <div class="p-4 bg-slate-800 text-white flex justify-between items-center">
+        <h4 class="font-bold text-sm flex items-center gap-2">
+          <i class="fa-solid fa-key text-amber-400"></i> Cambiar Contraseña
+        </h4>
+        <button onclick="closePasswordModal()" class="text-slate-300 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <form id="passwordForm" onsubmit="saveNewPassword(event)" class="p-5 space-y-4 text-xs">
+        <input type="hidden" id="pwdUserIdField">
+        <p class="text-slate-600">Restablecer la clave para el usuario: <strong id="pwdUsernameDisplay" class="font-mono text-slate-900 font-bold"></strong></p>
+        <div>
+          <label class="block font-bold text-slate-700 uppercase mb-1">Nueva Contraseña <span class="text-rose-500">*</span></label>
+          <input type="password" id="newPwdField" required placeholder="Nueva clave..." class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 text-slate-800 focus:outline-none focus:border-amber-500">
+        </div>
+        <div class="flex justify-end gap-2 pt-3 border-t border-slate-100">
+          <button type="button" onclick="closePasswordModal()" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold rounded">Cancelar</button>
+          <button type="submit" class="px-5 py-2 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded shadow flex items-center gap-1.5">
+            <i class="fa-solid fa-check"></i> Actualizar Clave
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==================================================================== -->
+  <!-- MODAL: CREAR / EDITAR CELDA (ITERACIÓN 2) -->
+  <!-- ==================================================================== -->
+  <div id="cellModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-xl shadow-2xl max-w-md w-full overflow-hidden border border-slate-200">
+      <div class="p-4 bg-amber-700 text-white flex justify-between items-center">
+        <h4 id="cellModalTitle" class="font-bold text-sm flex items-center gap-2">
+          <i class="fa-solid fa-plus"></i> Nueva Celda de Parqueo
+        </h4>
+        <button onclick="closeCellModal()" class="text-amber-200 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <form id="cellForm" onsubmit="saveCell(event)" class="p-5 space-y-4 text-xs">
+        <input type="hidden" id="cellIdField">
+        <div>
+          <label class="block font-bold text-slate-700 uppercase mb-1">Código de Celda <span class="text-rose-500">*</span></label>
+          <input type="text" id="cellCodigoField" required placeholder="Ej. A-07 o M-05" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 text-slate-800 font-mono font-bold uppercase focus:outline-none focus:border-amber-600">
+          <p class="text-[10px] text-slate-400 mt-1">Formato recomendado: Letra del sector y número (ej. C-04).</p>
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 uppercase mb-1">Tipo de Vehículo Permitido <span class="text-rose-500">*</span></label>
+          <select id="cellTipoField" required class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 text-slate-800 font-semibold focus:outline-none focus:border-amber-600">
+            <option value="AUTOMOVIL">Automóvil (Tarifa $4.000 / hora)</option>
+            <option value="MOTO">Motocicleta (Tarifa $2.000 / hora)</option>
+            <option value="CAMIONETA">Camioneta (Tarifa $5.000 / hora)</option>
+            <option value="BICICLETA">Bicicleta (Tarifa $1.000 / hora)</option>
+          </select>
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 uppercase mb-1">Sector o Zona</label>
+          <input type="text" id="cellSectorField" placeholder="Ej. Sector A - Principal" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 text-slate-800 focus:outline-none focus:border-amber-600">
+        </div>
+        <div class="flex justify-end gap-2 pt-3 border-t border-slate-100">
+          <button type="button" onclick="closeCellModal()" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold rounded">Cancelar</button>
+          <button type="submit" class="px-5 py-2 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded shadow flex items-center gap-1.5">
+            <i class="fa-solid fa-check"></i> Guardar Celda
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <!-- Footer Institucional -->
   <footer class="bg-white border-t border-slate-200 py-4 text-center text-xs text-slate-500 mt-auto">
     <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-2">
-      <p>© 2026 <strong>Parqueadero Autos Colombia</strong> - Software de Control Operativo - Iteración 1</p>
+      <p>© 2026 <strong>Parqueadero Autos Colombia</strong> - Software de Control Operativo - Iteraciones 1 y 2</p>
       <p class="text-slate-400">Desarrollo Metodológico • Arquitectura StarUML • Base de Datos Normalizada 3FN</p>
     </div>
   </footer>

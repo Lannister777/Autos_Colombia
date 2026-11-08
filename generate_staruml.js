@@ -1,15 +1,14 @@
-// Script para construir el archivo oficial StarUML .mdj con todos los modelos y diagramas
+// Script para construir el archivo oficial StarUML .mdj con todos los modelos y diagramas de las Iteraciones 1 y 2
 const fs = require('fs');
 const path = require('path');
 
 function generateStarUMLProject() {
   const projectId = "AAAAAAGG" + Math.random().toString(36).substring(2, 10).toUpperCase();
 
-  // Project Root
   const project = {
     "_type": "Project",
     "_id": projectId,
-    "name": "AutosColombia_Software_StarUML",
+    "name": "AutosColombia_Software_StarUML_Iteraciones_1_y_2",
     "ownedElements": []
   };
 
@@ -21,39 +20,116 @@ function generateStarUMLProject() {
     "_type": "UMLModel",
     "_id": archModelId,
     "_parent": { "$ref": projectId },
-    "name": "Arquitectura del Sistema",
+    "name": "Arquitectura del Sistema (Tier Architecture)",
     "ownedElements": [
       {
         "_type": "UMLPackageDiagram",
         "_id": archDiagramId,
         "_parent": { "$ref": archModelId },
-        "name": "Diagrama de Arquitectura en Capas (Tier Architecture)",
+        "name": "Diagrama de Arquitectura en Capas",
         "ownedViews": []
       }
     ]
   };
 
-  // 2. MODELO DE CASOS DE USO
-  const ucModelId = "AAAAAUC" + Math.random().toString(36).substring(2, 10).toUpperCase();
-  const ucDiagramId = "AAAAAUCDIAG" + Math.random().toString(36).substring(2, 10).toUpperCase();
+  // 2. MODELO DE CASOS DE USO - ITERACIÓN 1
+  const uc1ModelId = "AAAAAUC1" + Math.random().toString(36).substring(2, 10).toUpperCase();
+  const uc1DiagramId = "AAAAAUC1DIAG" + Math.random().toString(36).substring(2, 10).toUpperCase();
   
-  const ucModel = {
+  const uc1Model = {
     "_type": "UMLModel",
-    "_id": ucModelId,
+    "_id": uc1ModelId,
     "_parent": { "$ref": projectId },
-    "name": "Modelo de Casos de Uso - Iteración 1",
+    "name": "Casos de Uso - Iteración 1 (Entrada y Salida de Vehículos)",
     "ownedElements": [
       {
         "_type": "UMLUseCaseDiagram",
-        "_id": ucDiagramId,
-        "_parent": { "$ref": ucModelId },
-        "name": "Casos de Uso - Entrada y Salida de Vehículos",
+        "_id": uc1DiagramId,
+        "_parent": { "$ref": uc1ModelId },
+        "name": "Diagrama Casos de Uso - Entrada y Salida",
         "ownedViews": []
       }
     ]
   };
 
-  // 3. MODELO DE CLASES
+  const useCasesIt1 = [
+    "CU01 - Registrar Entrada de Vehículo",
+    "CU02 - Validar Suscripción de Mensualidad",
+    "CU03 - Asignar Celda Disponible",
+    "CU04 - Registrar Novedades e Inspección Física",
+    "CU05 - Emitir Ticket de Entrada",
+    "CU06 - Registrar Salida de Vehículo",
+    "CU07 - Calcular Duración y Tarifa",
+    "CU08 - Liberar Celda de Parqueo",
+    "CU09 - Gestionar Pago y Recibo",
+    "CU10 - Monitorear Tablero de Celdas en Tiempo Real"
+  ];
+  useCasesIt1.forEach(name => {
+    uc1Model.ownedElements.push({
+      "_type": "UMLUseCase",
+      "_id": "UC1_" + Math.random().toString(36).substring(2, 8).toUpperCase(),
+      "_parent": { "$ref": uc1ModelId },
+      "name": name
+    });
+  });
+
+  // 3. MODELO DE CASOS DE USO - ITERACIÓN 2
+  const uc2ModelId = "AAAAAUC2" + Math.random().toString(36).substring(2, 10).toUpperCase();
+  const uc2DiagramId = "AAAAAUC2DIAG" + Math.random().toString(36).substring(2, 10).toUpperCase();
+  
+  const uc2Model = {
+    "_type": "UMLModel",
+    "_id": uc2ModelId,
+    "_parent": { "$ref": projectId },
+    "name": "Casos de Uso - Iteración 2 (Gestión de Usuarios y Celdas)",
+    "ownedElements": [
+      {
+        "_type": "UMLUseCaseDiagram",
+        "_id": uc2DiagramId,
+        "_parent": { "$ref": uc2ModelId },
+        "name": "Diagrama Casos de Uso - Usuarios y Celdas",
+        "ownedViews": []
+      }
+    ]
+  };
+
+  const useCasesIt2 = [
+    "CU-IT2-01: Iniciar Sesión / Autenticar Usuario",
+    "CU-IT2-02: Registrar Nuevo Usuario Operador",
+    "CU-IT2-03: Editar Información y Rol de Usuario",
+    "CU-IT2-04: Activar o Desactivar Usuario",
+    "CU-IT2-05: Cambiar Contraseña de Cuenta",
+    "CU-IT2-06: Consultar y Filtrar Listado de Usuarios",
+    "CU-IT2-07: Registrar Nueva Celda de Parqueo",
+    "CU-IT2-08: Modificar Configuración de Celda",
+    "CU-IT2-09: Cambiar Estado a Mantenimiento",
+    "CU-IT2-10: Habilitar Celda desde Mantenimiento",
+    "CU-IT2-11: Eliminar Celda sin Historial",
+    "CU-IT2-12: Generar Reporte de Capacidad y Ocupación"
+  ];
+  useCasesIt2.forEach(name => {
+    uc2Model.ownedElements.push({
+      "_type": "UMLUseCase",
+      "_id": "UC2_" + Math.random().toString(36).substring(2, 8).toUpperCase(),
+      "_parent": { "$ref": uc2ModelId },
+      "name": name
+    });
+  });
+
+  // Actores Globales
+  const actors = ["Operador de Caseta", "Administrador del Sistema", "Cliente Abonado"];
+  actors.forEach(name => {
+    const actorObj = {
+      "_type": "UMLActor",
+      "_id": "ACT_" + Math.random().toString(36).substring(2, 8).toUpperCase(),
+      "_parent": { "$ref": uc2ModelId },
+      "name": name
+    };
+    uc1Model.ownedElements.push(actorObj);
+    uc2Model.ownedElements.push(actorObj);
+  });
+
+  // 4. MODELO DE CLASES (DOMINIO COMPLETO)
   const classModelId = "AAAAACLASS" + Math.random().toString(36).substring(2, 10).toUpperCase();
   const classDiagramId = "AAAAACLASSDIAG" + Math.random().toString(36).substring(2, 10).toUpperCase();
 
@@ -67,53 +143,32 @@ function generateStarUMLProject() {
         "_type": "UMLClassDiagram",
         "_id": classDiagramId,
         "_parent": { "$ref": classModelId },
-        "name": "Diagrama de Clases - Gestión Operativa",
+        "name": "Diagrama de Clases - Autos Colombia",
         "ownedViews": []
       }
     ]
   };
 
-  // 4. MODELO DE PAQUETES
-  const pkgModelId = "AAAAAPKG" + Math.random().toString(36).substring(2, 10).toUpperCase();
-  const pkgDiagramId = "AAAAAPKGDIAG" + Math.random().toString(36).substring(2, 10).toUpperCase();
-
-  const pkgModel = {
-    "_type": "UMLModel",
-    "_id": pkgModelId,
-    "_parent": { "$ref": projectId },
-    "name": "Modelo de Paquetes Arquitectónicos",
-    "ownedElements": [
-      {
-        "_type": "UMLPackageDiagram",
-        "_id": pkgDiagramId,
-        "_parent": { "$ref": pkgModelId },
-        "name": "Diagrama de Paquetes y Modularidad",
-        "ownedViews": []
-      }
-    ]
-  };
-
-  // Helper function to build classes
-  function createUMLClass(parentRef, name, attributes, operations) {
-    const classId = "CLS_" + name + "_" + Math.random().toString(36).substring(2, 8).toUpperCase();
+  function createUMLClass(parentRef, name, attributes = [], operations = []) {
+    const classId = "CLS_" + Math.random().toString(36).substring(2, 8).toUpperCase();
     return {
       "_type": "UMLClass",
       "_id": classId,
       "_parent": parentRef,
       "name": name,
-      "attributes": attributes.map(attr => ({
+      "attributes": attributes.map(a => ({
         "_type": "UMLAttribute",
         "_id": "ATTR_" + Math.random().toString(36).substring(2, 8).toUpperCase(),
-        "name": attr.name,
-        "visibility": attr.vis || "public",
-        "type": attr.type
+        "name": a.name,
+        "visibility": a.vis || "private",
+        "type": a.type || "String"
       })),
-      "operations": operations.map(op => ({
+      "operations": operations.map(o => ({
         "_type": "UMLOperation",
         "_id": "OP_" + Math.random().toString(36).substring(2, 8).toUpperCase(),
-        "name": op.name,
-        "visibility": op.vis || "public",
-        "parameters": (op.params || []).map(p => ({
+        "name": o.name,
+        "visibility": o.vis || "public",
+        "parameters": (o.params || []).map(p => ({
           "_type": "UMLParameter",
           "_id": "PARAM_" + Math.random().toString(36).substring(2, 8).toUpperCase(),
           "name": p.name,
@@ -123,138 +178,115 @@ function generateStarUMLProject() {
     };
   }
 
-  // Adding classes to classModel
   const classesData = [
     {
-      name: "Vehiculo",
+      name: "Usuario",
       attributes: [
-        { name: "idVehiculo", type: "Integer", vis: "private" },
-        { name: "placa", type: "String", vis: "private" },
-        { name: "tipoVehiculo", type: "TipoVehiculo", vis: "private" },
-        { name: "marca", type: "String", vis: "private" },
-        { name: "color", type: "String", vis: "private" }
+        { name: "idUsuario", type: "Integer" },
+        { name: "nombreCompleto", type: "String" },
+        { name: "username", type: "String" },
+        { name: "passwordHash", type: "String" },
+        { name: "rol", type: "RolUsuario (ADMIN | OPERADOR)" },
+        { name: "activo", type: "Boolean" },
+        { name: "fechaCreacion", type: "DateTime" }
       ],
       operations: [
-        { name: "validarPlaca", vis: "public" },
-        { name: "tieneMensualidadVigente", vis: "public" },
-        { name: "getPlaca", vis: "public" }
+        { name: "autenticar", params: [{ name: "password", type: "String" }] },
+        { name: "cambiarEstado", params: [{ name: "nuevoActivo", type: "Boolean" }] },
+        { name: "actualizarPassword", params: [{ name: "nuevaClave", type: "String" }] },
+        { name: "tienePermisoAdmin" }
       ]
     },
     {
       name: "Celda",
       attributes: [
-        { name: "idCelda", type: "Integer", vis: "private" },
-        { name: "codigoCelda", type: "String", vis: "private" },
-        { name: "tipoPermitido", type: "TipoVehiculo", vis: "private" },
-        { name: "estado", type: "EstadoCelda", vis: "private" },
-        { name: "sector", type: "String", vis: "private" }
+        { name: "idCelda", type: "Integer" },
+        { name: "codigoCelda", type: "String" },
+        { name: "tipoPermitido", type: "TipoVehiculo" },
+        { name: "estado", type: "EstadoCelda (LIBRE | OCUPADA | MANTENIMIENTO)" },
+        { name: "sector", type: "String" }
       ],
       operations: [
-        { name: "asignar", vis: "public" },
-        { name: "liberar", vis: "public" },
-        { name: "estaLibre", vis: "public" }
+        { name: "asignarVehiculo" },
+        { name: "liberarCelda" },
+        { name: "ponerEnMantenimiento" },
+        { name: "habilitarDisponible" },
+        { name: "esEliminable" }
+      ]
+    },
+    {
+      name: "Vehiculo",
+      attributes: [
+        { name: "idVehiculo", type: "Integer" },
+        { name: "placa", type: "String" },
+        { name: "tipoVehiculo", type: "TipoVehiculo" },
+        { name: "marca", type: "String" },
+        { name: "lineaModelo", type: "String" },
+        { name: "color", type: "String" }
+      ],
+      operations: [
+        { name: "validarPlaca" },
+        { name: "esAbonadoMensual" }
       ]
     },
     {
       name: "RegistroAcceso",
       attributes: [
-        { name: "idRegistro", type: "Integer", vis: "private" },
-        { name: "folioTicket", type: "String", vis: "private" },
-        { name: "fechaHoraEntrada", type: "DateTime", vis: "private" },
-        { name: "fechaHoraSalida", type: "DateTime", vis: "private" },
-        { name: "modalidad", type: "ModalidadAcceso", vis: "private" },
-        { name: "minutosEstancia", type: "Integer", vis: "private" },
-        { name: "valorTotal", type: "Decimal", vis: "private" },
-        { name: "estado", type: "EstadoAcceso", vis: "private" }
+        { name: "idRegistro", type: "Integer" },
+        { name: "folioTicket", type: "String" },
+        { name: "fechaHoraEntrada", type: "DateTime" },
+        { name: "fechaHoraSalida", type: "DateTime" },
+        { name: "modalidad", type: "ModalidadAcceso (OCASIONAL | MENSUALIDAD)" },
+        { name: "minutosEstancia", type: "Integer" },
+        { name: "valorTotal", type: "Decimal" },
+        { name: "estado", type: "EstadoAcceso (EN_CURSO | FINALIZADO)" }
       ],
       operations: [
-        { name: "calcularMinutosEstancia", vis: "public" },
-        { name: "liquidarSalida", vis: "public", params: [{ name: "tarifa", type: "Tarifa" }] },
-        { name: "generarTicket", vis: "public" }
+        { name: "calcularMinutosEstancia" },
+        { name: "liquidarSalida", params: [{ name: "tarifa", type: "Tarifa" }] },
+        { name: "generarTicket" }
       ]
     },
     {
       name: "Novedad",
       attributes: [
-        { name: "idNovedad", type: "Integer", vis: "private" },
-        { name: "momento", type: "MomentoRegistro", vis: "private" },
-        { name: "tipoNovedad", type: "String", vis: "private" },
-        { name: "descripcion", type: "String", vis: "private" },
-        { name: "severidad", type: "NivelSeveridad", vis: "private" },
-        { name: "fechaHora", type: "DateTime", vis: "private" }
+        { name: "idNovedad", type: "Integer" },
+        { name: "momento", type: "MomentoRegistro (ENTRADA | ESTANCIA | SALIDA)" },
+        { name: "tipoNovedad", type: "String" },
+        { name: "descripcion", type: "String" },
+        { name: "severidad", type: "NivelSeveridad (BAJA | MEDIA | ALTA)" },
+        { name: "fechaHora", type: "DateTime" }
       ],
       operations: [
-        { name: "registrarObservacion", vis: "public" },
-        { name: "obtenerDetalle", vis: "public" }
-      ]
-    },
-    {
-      name: "Cliente",
-      attributes: [
-        { name: "idCliente", type: "Integer", vis: "private" },
-        { name: "documento", type: "String", vis: "private" },
-        { name: "nombreCompleto", type: "String", vis: "private" },
-        { name: "telefono", type: "String", vis: "private" },
-        { name: "email", type: "String", vis: "private" }
-      ],
-      operations: [
-        { name: "consultarMensualidades", vis: "public" },
-        { name: "vincularVehiculo", vis: "public" }
-      ]
-    },
-    {
-      name: "Mensualidad",
-      attributes: [
-        { name: "idMensualidad", type: "Integer", vis: "private" },
-        { name: "fechaInicio", type: "Date", vis: "private" },
-        { name: "fechaFin", type: "Date", vis: "private" },
-        { name: "valorMensual", type: "Decimal", vis: "private" },
-        { name: "estado", type: "EstadoMensualidad", vis: "private" }
-      ],
-      operations: [
-        { name: "estaVigente", vis: "public" },
-        { name: "renovar", vis: "public" }
+        { name: "registrarObservacion" }
       ]
     },
     {
       name: "Tarifa",
       attributes: [
-        { name: "idTarifa", type: "Integer", vis: "private" },
-        { name: "tipoVehiculo", type: "TipoVehiculo", vis: "private" },
-        { name: "valorHoraFraccion", type: "Decimal", vis: "private" },
-        { name: "valorDia", type: "Decimal", vis: "private" },
-        { name: "valorMensualidad", type: "Decimal", vis: "private" },
-        { name: "tiempoGraciaMinutos", type: "Integer", vis: "private" }
+        { name: "idTarifa", type: "Integer" },
+        { name: "tipoVehiculo", type: "TipoVehiculo" },
+        { name: "valorHoraFraccion", type: "Decimal" },
+        { name: "valorDia", type: "Decimal" },
+        { name: "valorMensualidad", type: "Decimal" },
+        { name: "tiempoGraciaMinutos", type: "Integer" }
       ],
       operations: [
-        { name: "calcularCobro", vis: "public", params: [{ name: "minutos", type: "Integer" }] }
+        { name: "calcularCobro", params: [{ name: "minutos", type: "Integer" }] }
       ]
     },
     {
       name: "Pago",
       attributes: [
-        { name: "idPago", type: "Integer", vis: "private" },
-        { name: "numeroComprobante", type: "String", vis: "private" },
-        { name: "montoPagado", type: "Decimal", vis: "private" },
-        { name: "metodoPago", type: "MetodoPago", vis: "private" },
-        { name: "fechaHoraPago", type: "DateTime", vis: "private" }
+        { name: "idPago", type: "Integer" },
+        { name: "numeroComprobante", type: "String" },
+        { name: "montoPagado", type: "Decimal" },
+        { name: "metodoPago", type: "MetodoPago (EFECTIVO | NEQUI | DAVIPLATA | TARJETA)" },
+        { name: "fechaHoraPago", type: "DateTime" }
       ],
       operations: [
-        { name: "procesarPago", vis: "public" },
-        { name: "generarRecibo", vis: "public" }
-      ]
-    },
-    {
-      name: "Usuario",
-      attributes: [
-        { name: "idUsuario", type: "Integer", vis: "private" },
-        { name: "nombreCompleto", type: "String", vis: "private" },
-        { name: "username", type: "String", vis: "private" },
-        { name: "rol", type: "RolUsuario", vis: "private" }
-      ],
-      operations: [
-        { name: "autenticar", vis: "public" },
-        { name: "tienePermiso", vis: "public" }
+        { name: "procesarPago" },
+        { name: "generarRecibo" }
       ]
     }
   ];
@@ -263,61 +295,68 @@ function generateStarUMLProject() {
     classModel.ownedElements.push(createUMLClass({ "$ref": classModelId }, c.name, c.attributes, c.operations));
   });
 
-  // Adding Actors & Use Cases to ucModel
-  const actors = [
-    { name: "Operador de Parqueadero" },
-    { name: "Administrador del Sistema" },
-    { name: "Cliente / Abonado" }
-  ];
-  actors.forEach(a => {
-    ucModel.ownedElements.push({
-      "_type": "UMLActor",
-      "_id": "ACT_" + Math.random().toString(36).substring(2, 8).toUpperCase(),
-      "_parent": { "$ref": ucModelId },
-      "name": a.name
-    });
-  });
+  // 5. MODELO DE DIAGRAMAS DE SECUENCIA (ITERACIONES 1 Y 2)
+  const seqModelId = "AAAAASEQ" + Math.random().toString(36).substring(2, 10).toUpperCase();
+  const seqDiagramId = "AAAAASEQDIAG" + Math.random().toString(36).substring(2, 10).toUpperCase();
 
-  const useCases = [
-    { name: "CU01 - Registrar Entrada de Vehículo" },
-    { name: "CU02 - Validar Suscripción de Mensualidad" },
-    { name: "CU03 - Asignar Celda Disponible" },
-    { name: "CU04 - Registrar Novedades e Inspección Física" },
-    { name: "CU05 - Emitir Ticket de Entrada" },
-    { name: "CU06 - Registrar Salida de Vehículo" },
-    { name: "CU07 - Calcular Duración y Tarifa" },
-    { name: "CU08 - Liberar Celda de Parqueo" },
-    { name: "CU09 - Gestionar Pago y Recibo" },
-    { name: "CU10 - Monitorear Tablero de Celdas en Tiempo Real" },
-    { name: "CU11 - Administrar Tarifas y Mensualidades" }
-  ];
-  useCases.forEach(uc => {
-    ucModel.ownedElements.push({
-      "_type": "UMLUseCase",
-      "_id": "UC_" + Math.random().toString(36).substring(2, 8).toUpperCase(),
-      "_parent": { "$ref": ucModelId },
-      "name": uc.name
-    });
-  });
+  const seqModel = {
+    "_type": "UMLModel",
+    "_id": seqModelId,
+    "_parent": { "$ref": projectId },
+    "name": "Diagramas de Secuencia (Iteraciones 1 y 2)",
+    "ownedElements": [
+      {
+        "_type": "UMLSequenceDiagram",
+        "_id": seqDiagramId,
+        "_parent": { "$ref": seqModelId },
+        "name": "Interacciones Dinámicas - Caseta, Accesos, Usuarios y Celdas",
+        "ownedViews": []
+      }
+    ]
+  };
 
-  // Adding Packages to pkgModel
-  const packages = [
-    { name: "com.autoscolombia.presentation", desc: "Controladores Web, Vistas HTML5/Tailwind, Rutas API" },
-    { name: "com.autoscolombia.service", desc: "Servicios de Negocio: AccesoService, CeldaService, BillingService, NovedadService" },
-    { name: "com.autoscolombia.domain", desc: "Entidades del Negocio, Objetos de Valor, Interfaces de Repositorio" },
-    { name: "com.autoscolombia.infrastructure", desc: "Persistencia SQLite, Conexiones a Base de Datos, Adaptadores de Impresión" }
-  ];
-  packages.forEach(p => {
-    pkgModel.ownedElements.push({
-      "_type": "UMLPackage",
-      "_id": "PKG_" + Math.random().toString(36).substring(2, 8).toUpperCase(),
-      "_parent": { "$ref": pkgModelId },
-      "name": p.name
-    });
-  });
+  // 6. MODELO DE DIAGRAMA DE COMPONENTES (ITERACIONES 1 Y 2)
+  const compModelId = "AAAAACOMP" + Math.random().toString(36).substring(2, 10).toUpperCase();
+  const compDiagramId = "AAAAACOMPDIAG" + Math.random().toString(36).substring(2, 10).toUpperCase();
 
-  // Assemble full project
-  project.ownedElements = [archModel, ucModel, classModel, pkgModel];
+  const compModel = {
+    "_type": "UMLModel",
+    "_id": compModelId,
+    "_parent": { "$ref": projectId },
+    "name": "Diagrama de Componentes (Iteraciones 1 y 2)",
+    "ownedElements": [
+      {
+        "_type": "UMLComponentDiagram",
+        "_id": compDiagramId,
+        "_parent": { "$ref": compModelId },
+        "name": "Arquitectura de Componentes del Sistema",
+        "ownedViews": []
+      }
+    ]
+  };
+
+  // 7. MODELO DE PAQUETES
+  const pkgModelId = "AAAAAPKG" + Math.random().toString(36).substring(2, 10).toUpperCase();
+  const pkgDiagramId = "AAAAAPKGDIAG" + Math.random().toString(36).substring(2, 10).toUpperCase();
+
+  const pkgModel = {
+    "_type": "UMLModel",
+    "_id": pkgModelId,
+    "_parent": { "$ref": projectId },
+    "name": "Diagrama de Paquetes del Sistema",
+    "ownedElements": [
+      {
+        "_type": "UMLPackageDiagram",
+        "_id": pkgDiagramId,
+        "_parent": { "$ref": pkgModelId },
+        "name": "Estructura de Paquetes Modulares",
+        "ownedViews": []
+      }
+    ]
+  };
+
+  // Ensamblar proyecto
+  project.ownedElements = [archModel, uc1Model, uc2Model, classModel, seqModel, compModel, pkgModel];
 
   return project;
 }
@@ -325,4 +364,4 @@ function generateStarUMLProject() {
 const starUmlProject = generateStarUMLProject();
 const outputPath = path.join(__dirname, 'docs', 'staruml', 'autos_colombia_model.mdj');
 fs.writeFileSync(outputPath, JSON.stringify(starUmlProject, null, 2), 'utf-8');
-console.log('Archivo StarUML creado exitosamente en:', outputPath);
+console.log('Archivo StarUML .mdj generado exitosamente con Iteraciones 1 y 2 en:', outputPath);

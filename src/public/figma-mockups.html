@@ -139,6 +139,15 @@
       <button onclick="switchView('frame5')" id="tab-frame5" class="frame-tab px-3 py-1 rounded text-gray-300 hover:bg-figma-hover transition">
         5. Ticket Impreso
       </button>
+      <button onclick="switchView('frame6')" id="tab-frame6" class="frame-tab px-3 py-1 rounded text-gray-300 hover:bg-figma-hover transition">
+        6. Gestión Usuarios (HU-IT2-02, 03)
+      </button>
+      <button onclick="switchView('frame7')" id="tab-frame7" class="frame-tab px-3 py-1 rounded text-gray-300 hover:bg-figma-hover transition">
+        7. Admin Celdas (HU-IT2-06, 08)
+      </button>
+      <button onclick="switchView('frame8')" id="tab-frame8" class="frame-tab px-3 py-1 rounded text-gray-300 hover:bg-figma-hover transition">
+        8. Reporte Capacidad (HU-IT2-10)
+      </button>
     </div>
 
     <!-- Zoom & Dimensions indicator -->
@@ -208,6 +217,27 @@
             <span class="flex items-center space-x-2">
               <i class="fa-solid fa-hashtag text-purple-400"></i>
               <span class="group-hover:text-white">Frame 5: Ticket Térmico</span>
+            </span>
+            <i class="fa-regular fa-eye text-gray-500 group-hover:text-white"></i>
+          </li>
+          <li onclick="switchView('frame6')" class="flex items-center justify-between px-2 py-1.5 rounded hover:bg-figma-hover cursor-pointer group">
+            <span class="flex items-center space-x-2">
+              <i class="fa-solid fa-hashtag text-cyan-400"></i>
+              <span class="group-hover:text-white">Frame 6: Gestión Usuarios</span>
+            </span>
+            <i class="fa-regular fa-eye text-gray-500 group-hover:text-white"></i>
+          </li>
+          <li onclick="switchView('frame7')" class="flex items-center justify-between px-2 py-1.5 rounded hover:bg-figma-hover cursor-pointer group">
+            <span class="flex items-center space-x-2">
+              <i class="fa-solid fa-hashtag text-amber-400"></i>
+              <span class="group-hover:text-white">Frame 7: Admin Celdas</span>
+            </span>
+            <i class="fa-regular fa-eye text-gray-500 group-hover:text-white"></i>
+          </li>
+          <li onclick="switchView('frame8')" class="flex items-center justify-between px-2 py-1.5 rounded hover:bg-figma-hover cursor-pointer group">
+            <span class="flex items-center space-x-2">
+              <i class="fa-solid fa-hashtag text-emerald-400"></i>
+              <span class="group-hover:text-white">Frame 8: Reporte Capacidad</span>
             </span>
             <i class="fa-regular fa-eye text-gray-500 group-hover:text-white"></i>
           </li>
@@ -948,6 +978,336 @@
         </div>
       </section>
 
+      <!-- ================= FRAME 6: GESTIÓN DE USUARIOS DEL SISTEMA ================= -->
+      <section id="frame6" class="figma-frame-card mb-16 w-full max-w-5xl transition-all">
+        <div class="flex items-center justify-between mb-2">
+          <div class="flex items-center space-x-2">
+            <span class="text-xs font-mono font-medium text-cyan-400 bg-cyan-950/80 px-2 py-0.5 rounded border border-cyan-800/60">
+              # Frame 6: Panel de Gestión de Usuarios y Roles (HU-IT2-02, HU-IT2-03)
+            </span>
+            <span class="text-[11px] text-gray-400">1440 × 900 px</span>
+          </div>
+          <button onclick="downloadAsPNG('frame6-content', 'Mockup_06_Gestion_Usuarios')" class="text-xs text-gray-400 hover:text-white flex items-center space-x-1 bg-figma-panel px-2 py-1 rounded border border-figma-border">
+            <i class="fa-solid fa-download"></i><span>Exportar Frame</span>
+          </button>
+        </div>
+
+        <div id="frame6-content" class="bg-slate-50 text-slate-800 rounded-xl shadow-2xl border border-slate-300 overflow-hidden font-sans">
+          <!-- Top Bar -->
+          <div class="bg-cyan-900 text-white px-6 py-4 flex items-center justify-between shadow-md">
+            <div class="flex items-center space-x-3">
+              <div class="w-9 h-9 rounded-lg bg-cyan-600 flex items-center justify-center font-bold text-lg shadow">
+                <i class="fa-solid fa-users-gear text-white"></i>
+              </div>
+              <div>
+                <h1 class="text-base font-bold leading-tight">ADMINISTRACIÓN DE USUARIOS Y ROLES</h1>
+                <p class="text-xs text-cyan-200">Control de credenciales, roles RBAC y trazabilidad de operadores</p>
+              </div>
+            </div>
+            <div class="flex items-center space-x-3 text-xs">
+              <span class="bg-cyan-800/80 px-3 py-1.5 rounded-lg border border-cyan-700 text-cyan-100">
+                <i class="fa-solid fa-shield-halved mr-1 text-cyan-300"></i> Módulo Administrador
+              </span>
+            </div>
+          </div>
+
+          <!-- Content Body -->
+          <div class="p-6 space-y-4">
+            <!-- Summary Strip & Action -->
+            <div class="flex items-center justify-between bg-white p-4 rounded-lg border border-slate-200 shadow-sm">
+              <div class="flex items-center space-x-6 text-xs">
+                <div>
+                  <span class="text-slate-400 block uppercase">Total Cuentas</span>
+                  <span class="text-xl font-black text-slate-800">4 Usuarios</span>
+                </div>
+                <div class="border-l border-slate-200 pl-6">
+                  <span class="text-emerald-500 block uppercase font-semibold">Activos</span>
+                  <span class="text-xl font-black text-emerald-600">3 Operativos</span>
+                </div>
+                <div class="border-l border-slate-200 pl-6">
+                  <span class="text-rose-500 block uppercase font-semibold">Inactivos</span>
+                  <span class="text-xl font-black text-rose-600">1 Bloqueado</span>
+                </div>
+              </div>
+              <button class="bg-cyan-700 hover:bg-cyan-800 text-white text-xs font-bold px-4 py-2.5 rounded-lg flex items-center gap-2 shadow">
+                <i class="fa-solid fa-user-plus"></i> + Crear Nuevo Usuario
+              </button>
+            </div>
+
+            <!-- Filters -->
+            <div class="grid grid-cols-3 gap-3 bg-white p-3 rounded-lg border border-slate-200 text-xs">
+              <select class="bg-slate-50 border border-slate-200 rounded p-2 text-slate-700">
+                <option>Todos los Roles (ADMIN / OPERADOR)</option>
+              </select>
+              <select class="bg-slate-50 border border-slate-200 rounded p-2 text-slate-700">
+                <option>Estado: Todos (Activos e Inactivos)</option>
+              </select>
+              <input type="text" value="operador" readonly class="bg-slate-50 border border-slate-200 rounded p-2 text-slate-700">
+            </div>
+
+            <!-- Table -->
+            <div class="bg-white rounded-lg border border-slate-200 shadow-sm overflow-hidden text-xs">
+              <table class="w-full text-left">
+                <thead class="bg-slate-100 text-slate-700 font-bold border-b border-slate-200">
+                  <tr>
+                    <th class="p-3">ID</th>
+                    <th class="p-3">Nombre Completo</th>
+                    <th class="p-3">Username</th>
+                    <th class="p-3">Rol</th>
+                    <th class="p-3">Estado</th>
+                    <th class="p-3">Fecha Alta</th>
+                    <th class="p-3 text-center">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                  <tr class="hover:bg-slate-50">
+                    <td class="p-3 font-mono font-bold text-slate-500">#1</td>
+                    <td class="p-3 font-bold text-slate-900">Administrador General</td>
+                    <td class="p-3 font-mono text-slate-600">admin</td>
+                    <td class="p-3"><span class="bg-purple-100 text-purple-800 font-bold px-2 py-0.5 rounded text-[10px]">ADMIN</span></td>
+                    <td class="p-3"><span class="bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded text-[10px]">ACTIVO</span></td>
+                    <td class="p-3 text-slate-500">2026-10-01</td>
+                    <td class="p-3 text-center space-x-1">
+                      <span class="bg-slate-100 px-2 py-1 rounded text-slate-600 cursor-pointer">✎ Editar</span>
+                      <span class="bg-slate-100 px-2 py-1 rounded text-amber-600 cursor-pointer">🔑 Clave</span>
+                    </td>
+                  </tr>
+                  <tr class="hover:bg-slate-50">
+                    <td class="p-3 font-mono font-bold text-slate-500">#2</td>
+                    <td class="p-3 font-bold text-slate-900">Carlos Alberto Restrepo</td>
+                    <td class="p-3 font-mono text-slate-600">operador1</td>
+                    <td class="p-3"><span class="bg-cyan-100 text-cyan-800 font-bold px-2 py-0.5 rounded text-[10px]">OPERADOR</span></td>
+                    <td class="p-3"><span class="bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded text-[10px]">ACTIVO</span></td>
+                    <td class="p-3 text-slate-500">2026-10-15</td>
+                    <td class="p-3 text-center space-x-1">
+                      <span class="bg-slate-100 px-2 py-1 rounded text-slate-600 cursor-pointer">✎ Editar</span>
+                      <span class="bg-slate-100 px-2 py-1 rounded text-rose-600 cursor-pointer">⊘ Bloquear</span>
+                      <span class="bg-slate-100 px-2 py-1 rounded text-amber-600 cursor-pointer">🔑 Clave</span>
+                    </td>
+                  </tr>
+                  <tr class="hover:bg-slate-50">
+                    <td class="p-3 font-mono font-bold text-slate-500">#3</td>
+                    <td class="p-3 font-bold text-slate-900">Andrea Gómez Henao</td>
+                    <td class="p-3 font-mono text-slate-600">operador2</td>
+                    <td class="p-3"><span class="bg-cyan-100 text-cyan-800 font-bold px-2 py-0.5 rounded text-[10px]">OPERADOR</span></td>
+                    <td class="p-3"><span class="bg-rose-100 text-rose-800 font-bold px-2 py-0.5 rounded text-[10px]">INACTIVO</span></td>
+                    <td class="p-3 text-slate-500">2026-10-20</td>
+                    <td class="p-3 text-center space-x-1">
+                      <span class="bg-slate-100 px-2 py-1 rounded text-slate-600 cursor-pointer">✎ Editar</span>
+                      <span class="bg-emerald-50 px-2 py-1 rounded text-emerald-700 cursor-pointer">✓ Activar</span>
+                      <span class="bg-slate-100 px-2 py-1 rounded text-amber-600 cursor-pointer">🔑 Clave</span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= FRAME 7: ADMINISTRACIÓN DE CELDAS Y MANTENIMIENTO ================= -->
+      <section id="frame7" class="figma-frame-card mb-16 w-full max-w-5xl transition-all">
+        <div class="flex items-center justify-between mb-2">
+          <div class="flex items-center space-x-2">
+            <span class="text-xs font-mono font-medium text-amber-400 bg-amber-950/80 px-2 py-0.5 rounded border border-amber-800/60">
+              # Frame 7: Administración de Celdas y Aislamiento por Mantenimiento (HU-IT2-06, 08)
+            </span>
+            <span class="text-[11px] text-gray-400">1440 × 900 px</span>
+          </div>
+          <button onclick="downloadAsPNG('frame7-content', 'Mockup_07_Admin_Celdas')" class="text-xs text-gray-400 hover:text-white flex items-center space-x-1 bg-figma-panel px-2 py-1 rounded border border-figma-border">
+            <i class="fa-solid fa-download"></i><span>Exportar Frame</span>
+          </button>
+        </div>
+
+        <div id="frame7-content" class="bg-slate-50 text-slate-800 rounded-xl shadow-2xl border border-slate-300 overflow-hidden font-sans">
+          <!-- Top Bar -->
+          <div class="bg-amber-800 text-white px-6 py-4 flex items-center justify-between shadow-md">
+            <div class="flex items-center space-x-3">
+              <div class="w-9 h-9 rounded-lg bg-amber-600 flex items-center justify-center font-bold text-lg shadow">
+                <i class="fa-solid fa-sliders text-white"></i>
+              </div>
+              <div>
+                <h1 class="text-base font-bold leading-tight">CONFIGURACIÓN FÍSICA Y MANTENIMIENTO DE CELDAS</h1>
+                <p class="text-xs text-amber-200">Alta de espacios, cambio de estados, sectores y bloqueo preventivo</p>
+              </div>
+            </div>
+            <button class="bg-white text-amber-900 font-bold px-3.5 py-2 rounded-lg text-xs shadow flex items-center gap-1.5">
+              <i class="fa-solid fa-plus"></i> + Nueva Celda
+            </button>
+          </div>
+
+          <!-- Body -->
+          <div class="p-6 space-y-4">
+            <!-- Capacity KPI bar -->
+            <div class="grid grid-cols-4 gap-4">
+              <div class="bg-white p-3.5 rounded-lg border border-slate-200 shadow-sm">
+                <span class="text-[10px] text-slate-500 font-bold uppercase">Total Celdas</span>
+                <p class="text-2xl font-black text-slate-800">20</p>
+              </div>
+              <div class="bg-white p-3.5 rounded-lg border border-emerald-200 shadow-sm">
+                <span class="text-[10px] text-emerald-600 font-bold uppercase">Disponibles</span>
+                <p class="text-2xl font-black text-emerald-600">13</p>
+              </div>
+              <div class="bg-white p-3.5 rounded-lg border border-rose-200 shadow-sm">
+                <span class="text-[10px] text-rose-600 font-bold uppercase">Ocupadas</span>
+                <p class="text-2xl font-black text-rose-600">5</p>
+              </div>
+              <div class="bg-white p-3.5 rounded-lg border border-amber-200 shadow-sm">
+                <span class="text-[10px] text-amber-600 font-bold uppercase">En Mantenimiento</span>
+                <p class="text-2xl font-black text-amber-600">2</p>
+              </div>
+            </div>
+
+            <!-- Table of cells -->
+            <div class="bg-white rounded-lg border border-slate-200 shadow-sm overflow-hidden text-xs">
+              <table class="w-full text-left">
+                <thead class="bg-slate-100 text-slate-700 font-bold border-b border-slate-200">
+                  <tr>
+                    <th class="p-3">Código</th>
+                    <th class="p-3">Tipo Permitido</th>
+                    <th class="p-3">Sector</th>
+                    <th class="p-3">Estado</th>
+                    <th class="p-3 text-center">Gestión de Servicio</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                  <tr class="hover:bg-slate-50">
+                    <td class="p-3 font-mono font-black text-slate-900">A-01</td>
+                    <td class="p-3 font-medium"><i class="fa-solid fa-car text-blue-700 mr-1.5"></i>AUTOMÓVIL</td>
+                    <td class="p-3 text-slate-600">Sector A - Principal</td>
+                    <td class="p-3"><span class="bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded text-[10px]">LIBRE</span></td>
+                    <td class="p-3 text-center space-x-1">
+                      <button class="bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 px-2.5 py-1 rounded font-semibold text-[11px]">
+                        <i class="fa-solid fa-wrench mr-1"></i>Poner Mantenimiento
+                      </button>
+                      <button class="bg-slate-100 p-1 rounded text-slate-600">✎</button>
+                      <button class="bg-rose-50 p-1 rounded text-rose-600">🗑</button>
+                    </td>
+                  </tr>
+                  <tr class="hover:bg-slate-50">
+                    <td class="p-3 font-mono font-black text-slate-900">A-02</td>
+                    <td class="p-3 font-medium"><i class="fa-solid fa-car text-blue-700 mr-1.5"></i>AUTOMÓVIL</td>
+                    <td class="p-3 text-slate-600">Sector A - Principal</td>
+                    <td class="p-3"><span class="bg-rose-100 text-rose-800 font-bold px-2 py-0.5 rounded text-[10px]">OCUPADA (ABC-123)</span></td>
+                    <td class="p-3 text-center text-slate-400 italic text-[11px]">
+                      Vehículo activo adentro (Bloqueada para cambios)
+                    </td>
+                  </tr>
+                  <tr class="hover:bg-slate-50">
+                    <td class="p-3 font-mono font-black text-slate-900">A-03</td>
+                    <td class="p-3 font-medium"><i class="fa-solid fa-car text-blue-700 mr-1.5"></i>AUTOMÓVIL</td>
+                    <td class="p-3 text-slate-600">Sector A - Principal</td>
+                    <td class="p-3"><span class="bg-amber-100 text-amber-800 font-bold px-2 py-0.5 rounded text-[10px]">MANTENIMIENTO (Pintura)</span></td>
+                    <td class="p-3 text-center space-x-1">
+                      <button class="bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 px-2.5 py-1 rounded font-bold text-[11px]">
+                        <i class="fa-solid fa-check mr-1"></i>Habilitar Celda
+                      </button>
+                      <button class="bg-slate-100 p-1 rounded text-slate-600">✎</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= FRAME 8: REPORTE GRÁFICO DE CAPACIDAD ================= -->
+      <section id="frame8" class="figma-frame-card mb-16 w-full max-w-5xl transition-all">
+        <div class="flex items-center justify-between mb-2">
+          <div class="flex items-center space-x-2">
+            <span class="text-xs font-mono font-medium text-emerald-400 bg-emerald-950/80 px-2 py-0.5 rounded border border-emerald-800/60">
+              # Frame 8: Reporte de Capacidad y Ocupación del Parqueadero (HU-IT2-10)
+            </span>
+            <span class="text-[11px] text-gray-400">1440 × 900 px</span>
+          </div>
+          <button onclick="downloadAsPNG('frame8-content', 'Mockup_08_Reporte_Capacidad')" class="text-xs text-gray-400 hover:text-white flex items-center space-x-1 bg-figma-panel px-2 py-1 rounded border border-figma-border">
+            <i class="fa-solid fa-download"></i><span>Exportar Frame</span>
+          </button>
+        </div>
+
+        <div id="frame8-content" class="bg-slate-50 text-slate-800 rounded-xl shadow-2xl border border-slate-300 overflow-hidden font-sans">
+          <!-- Top Bar -->
+          <div class="bg-emerald-900 text-white px-6 py-4 flex items-center justify-between shadow-md">
+            <div class="flex items-center space-x-3">
+              <div class="w-9 h-9 rounded-lg bg-emerald-600 flex items-center justify-center font-bold text-lg shadow">
+                <i class="fa-solid fa-chart-pie text-white"></i>
+              </div>
+              <div>
+                <h1 class="text-base font-bold leading-tight">INFORME EJECUTIVO DE CAPACIDAD Y SATURACIÓN</h1>
+                <p class="text-xs text-emerald-200">Monitoreo estadístico por categoría de vehículo y zonas operativas</p>
+              </div>
+            </div>
+            <button class="bg-emerald-700 hover:bg-emerald-600 px-3 py-1.5 rounded text-xs font-semibold border border-emerald-500 text-white flex items-center gap-1.5">
+              <i class="fa-solid fa-print"></i> Exportar Reporte
+            </button>
+          </div>
+
+          <!-- Body -->
+          <div class="p-6 space-y-6">
+            <!-- Global Circular Gauge Simulation -->
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm grid grid-cols-12 gap-6 items-center">
+              <div class="col-span-4 text-center border-r border-slate-100 pr-6">
+                <span class="text-xs text-slate-400 font-bold uppercase tracking-wider block mb-1">Índice de Saturación Global</span>
+                <div class="text-5xl font-black text-blue-900 font-mono my-2">35%</div>
+                <div class="w-full bg-slate-100 rounded-full h-3 overflow-hidden">
+                  <div class="bg-emerald-500 h-3 rounded-full" style="width: 35%"></div>
+                </div>
+                <p class="text-[11px] text-emerald-600 font-medium mt-2"><i class="fa-solid fa-circle-check"></i> Capacidad óptima (13 celdas libres)</p>
+              </div>
+
+              <!-- Segmented Bars -->
+              <div class="col-span-8 space-y-3.5 text-xs">
+                <div>
+                  <div class="flex justify-between font-semibold mb-1">
+                    <span>🚗 Automóviles (10 celdas)</span>
+                    <span class="text-slate-600">6 Libres • 3 Ocupadas • 1 Mantenimiento (40% ocupado)</span>
+                  </div>
+                  <div class="w-full bg-slate-100 rounded-full h-2.5 flex overflow-hidden">
+                    <div class="bg-emerald-500 h-2.5" style="width: 60%"></div>
+                    <div class="bg-rose-500 h-2.5" style="width: 30%"></div>
+                    <div class="bg-amber-400 h-2.5" style="width: 10%"></div>
+                  </div>
+                </div>
+
+                <div>
+                  <div class="flex justify-between font-semibold mb-1">
+                    <span>🏍️ Motocicletas (6 celdas)</span>
+                    <span class="text-slate-600">4 Libres • 1 Ocupada • 1 Mantenimiento (33% ocupado)</span>
+                  </div>
+                  <div class="w-full bg-slate-100 rounded-full h-2.5 flex overflow-hidden">
+                    <div class="bg-emerald-500 h-2.5" style="width: 66%"></div>
+                    <div class="bg-rose-500 h-2.5" style="width: 17%"></div>
+                    <div class="bg-amber-400 h-2.5" style="width: 17%"></div>
+                  </div>
+                </div>
+
+                <div>
+                  <div class="flex justify-between font-semibold mb-1">
+                    <span>🛻 Camionetas (3 celdas)</span>
+                    <span class="text-slate-600">2 Libres • 1 Ocupada (33% ocupado)</span>
+                  </div>
+                  <div class="w-full bg-slate-100 rounded-full h-2.5 flex overflow-hidden">
+                    <div class="bg-emerald-500 h-2.5" style="width: 66%"></div>
+                    <div class="bg-rose-500 h-2.5" style="width: 34%"></div>
+                  </div>
+                </div>
+
+                <div>
+                  <div class="flex justify-between font-semibold mb-1">
+                    <span>🚲 Bicicletas (1 celda)</span>
+                    <span class="text-slate-600">1 Libre • 0 Ocupadas (0% ocupado)</span>
+                  </div>
+                  <div class="w-full bg-slate-100 rounded-full h-2.5 flex overflow-hidden">
+                    <div class="bg-emerald-500 h-2.5" style="width: 100%"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
     </main>
   </div>
 
@@ -964,7 +1324,7 @@
   <script>
     // Switch between all frames or an isolated frame
     function switchView(viewId) {
-      const frames = ['frame1', 'frame2', 'frame3', 'frame4', 'frame5'];
+      const frames = ['frame1', 'frame2', 'frame3', 'frame4', 'frame5', 'frame6', 'frame7', 'frame8'];
       const tabs = ['all', ...frames];
 
       tabs.forEach(tab => {

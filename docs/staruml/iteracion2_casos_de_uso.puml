@@ -1,0 +1,99 @@
+@startuml Casos_De_Uso_Iteracion2_Autos_Colombia
+title Diagrama de Casos de Uso — Iteración 2: Gestión de Usuarios y Celdas\nParqueadero "Autos Colombia"
+
+left to right direction
+skinparam packageStyle rectangle
+skinparam actorStyle awesome
+skinparam usecase {
+    BackgroundColor #FEFCE8
+    BorderColor #CA8A04
+    ArrowColor #374151
+}
+
+actor "Administrador" as Admin #3B82F6
+actor "Operador de Caseta" as Operador #10B981
+
+' =========================================================
+' MÓDULO 1: GESTIÓN DE USUARIOS
+' =========================================================
+rectangle "Módulo: Gestión de Usuarios" as MU #E0F2FE {
+    usecase "CU-IT2-01: Iniciar Sesión\n(Login / Autenticación)" as UC_LOGIN
+    usecase "CU-IT2-02: Crear Usuario" as UC_CREAR_USER
+    usecase "CU-IT2-03: Editar Usuario" as UC_EDITAR_USER
+    usecase "CU-IT2-04: Desactivar / Reactivar\nCuenta de Usuario" as UC_DESACT_USER
+    usecase "CU-IT2-05: Listar y Buscar\nUsuarios" as UC_LISTAR_USER
+    usecase "CU-IT2-06: Cambiar Contraseña" as UC_CAMBIAR_PASS
+    usecase "CU-IT2-07: Validar Rol y\nPermisos (RBAC)" as UC_RBAC
+    usecase "CU-IT2-08: Registrar Log\nde Auditoría" as UC_AUDIT
+}
+
+' =========================================================
+' MÓDULO 2: GESTIÓN DE CELDAS
+' =========================================================
+rectangle "Módulo: Gestión de Celdas" as MC #DCFCE7 {
+    usecase "CU-IT2-09: Crear Nueva Celda" as UC_CREAR_CELDA
+    usecase "CU-IT2-10: Editar Configuración\nde Celda" as UC_EDITAR_CELDA
+    usecase "CU-IT2-11: Cambiar Estado\nde Celda" as UC_CAMBIAR_ESTADO
+    usecase "CU-IT2-12: Eliminar Celda\n(Controlada)" as UC_ELIMINAR_CELDA
+    usecase "CU-IT2-13: Listar y Filtrar\nCeldas (Dashboard)" as UC_LISTAR_CELDAS
+    usecase "CU-IT2-14: Cambio Masivo\nde Estado" as UC_MASIVO
+    usecase "CU-IT2-15: Gestionar Sectores" as UC_SECTORES
+    usecase "CU-IT2-16: Generar Reporte de\nCapacidad y Ocupación" as UC_REPORTE
+}
+
+' =========================================================
+' RELACIONES: ADMINISTRADOR
+' =========================================================
+Admin --> UC_LOGIN
+Admin --> UC_CREAR_USER
+Admin --> UC_EDITAR_USER
+Admin --> UC_DESACT_USER
+Admin --> UC_LISTAR_USER
+Admin --> UC_CAMBIAR_PASS
+
+Admin --> UC_CREAR_CELDA
+Admin --> UC_EDITAR_CELDA
+Admin --> UC_CAMBIAR_ESTADO
+Admin --> UC_ELIMINAR_CELDA
+Admin --> UC_LISTAR_CELDAS
+Admin --> UC_MASIVO
+Admin --> UC_SECTORES
+Admin --> UC_REPORTE
+
+' =========================================================
+' RELACIONES: OPERADOR (acceso limitado)
+' =========================================================
+Operador --> UC_LOGIN
+Operador --> UC_CAMBIAR_PASS : (solo propia)
+Operador --> UC_LISTAR_CELDAS : (solo consulta)
+Operador --> UC_CAMBIAR_ESTADO : (solo LIBRE↔MANT.)
+
+' =========================================================
+' RELACIONES DE INCLUSIÓN (<<include>>)
+' =========================================================
+UC_LOGIN ..> UC_RBAC : <<include>>
+UC_CREAR_USER ..> UC_RBAC : <<include>>
+UC_EDITAR_USER ..> UC_RBAC : <<include>>
+UC_DESACT_USER ..> UC_RBAC : <<include>>
+
+UC_CREAR_CELDA ..> UC_RBAC : <<include>>
+UC_EDITAR_CELDA ..> UC_RBAC : <<include>>
+UC_ELIMINAR_CELDA ..> UC_RBAC : <<include>>
+UC_MASIVO ..> UC_RBAC : <<include>>
+
+' =========================================================
+' RELACIONES DE EXTENSIÓN (<<extend>>)
+' =========================================================
+UC_CAMBIAR_PASS ..> UC_EDITAR_USER : <<extend>>
+UC_AUDIT ..> UC_LOGIN : <<extend>>
+UC_AUDIT ..> UC_CREAR_USER : <<extend>>
+UC_AUDIT ..> UC_EDITAR_USER : <<extend>>
+UC_AUDIT ..> UC_DESACT_USER : <<extend>>
+UC_AUDIT ..> UC_CAMBIAR_PASS : <<extend>>
+
+UC_ELIMINAR_CELDA ..> UC_EDITAR_CELDA : <<extend>>
+UC_MASIVO ..> UC_CAMBIAR_ESTADO : <<extend>>
+UC_SECTORES ..> UC_CREAR_CELDA : <<extend>>
+UC_SECTORES ..> UC_EDITAR_CELDA : <<extend>>
+
+@enduml

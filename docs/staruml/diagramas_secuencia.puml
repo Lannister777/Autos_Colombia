@@ -1,0 +1,272 @@
+@startuml AutosColombia_Secuencia_Iteraciones1y2
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam sequenceMessageAlign center
+
+skinparam sequence {
+    ArrowColor #1E3A8A
+    ActorBorderColor #1E3A8A
+    ActorBackgroundColor #EFF6FF
+    LifeLineBorderColor #2563EB
+    LifeLineBackgroundColor #DBEAFE
+    ParticipantBorderColor #1E3A8A
+    ParticipantBackgroundColor #F8FAFC
+    ParticipantFontColor #1E293B
+    BoxBorderColor #94A3B8
+    BoxBackgroundColor #F1F5F9
+}
+
+' ============================================================================
+' DIAGRAMA DE SECUENCIA 1: INGRESO DE VEHÍCULO Y ASIGNACIÓN DE CELDA (ITERACIÓN 1)
+' ============================================================================
+== SD-01: Registro de Entrada de Vehículo (Iteración 1) ==
+
+actor "Operador Caseta" as Op
+participant "Frontend SPA\n(index.html / app.js)" as UI
+participant "API Router\n(apiRoutes.js)" as Router
+participant "accessController\n(accessController.js)" as AccessCtrl
+participant "vehicleModel\n(vehicleModel.js)" as VehModel
+participant "cellModel\n(cellModel.js)" as CellModel
+participant "accessModel\n(accessModel.js)" as AccessModel
+database "SQLite Database\n(autos_colombia.db)" as DB
+
+Op -> UI : 1. Digita Placa y Selecciona Tipo Vehículo
+activate UI
+UI -> Router : GET /api/accesos/verificar/:placa
+activate Router
+Router -> AccessCtrl : checkPlate(placa)
+activate AccessCtrl
+AccessCtrl -> AccessModel : getActiveByPlate(placa)
+AccessModel -> DB : SELECT * FROM registros_acceso WHERE placa = ? AND estado = 'EN_CURSO'
+DB --> AccessModel : null (no está adentro)
+AccessCtrl -> VehModel : checkActiveSubscription(placa)
+VehModel -> DB : SELECT * FROM mensualidades WHERE placa = ? AND estado = 'ACTIVA'
+DB --> VehModel : suscripción o null
+AccessCtrl --> Router : { success: true, estaAdentro: false, tieneMensualidad }
+Router --> UI : 200 OK
+deactivate AccessCtrl
+deactivate Router
+
+UI --> Op : 2. Muestra validación y celdas disponibles
+Op -> UI : 3. Presiona "Registrar Entrada y Emitir Ticket"
+UI -> Router : POST /api/accesos/entrada { placa, tipoVehiculo, idCelda, novedad }
+activate Router
+Router -> AccessCtrl : registerEntry(req, res)
+activate AccessCtrl
+
+AccessCtrl -> CellModel : getCellById(idCelda)
+CellModel -> DB : SELECT * FROM celdas WHERE id_celda = ?
+DB --> CellModel : { id_celda, estado: 'LIBRE' }
+
+AccessCtrl -> VehModel : findOrCreate(placa, tipo, marca, color)
+VehModel -> DB : INSERT OR IGNORE INTO vehiculos ...
+DB --> VehModel : id_vehiculo
+
+AccessCtrl -> CellModel : updateCellState(idCelda, 'OCUPADA')
+CellModel -> DB : UPDATE celdas SET estado = 'OCUPADA' WHERE id_celda = ?
+DB --> CellModel : changes = 1
+
+AccessCtrl -> AccessModel : createEntry(idVehiculo, idCelda, modalidad, idOperador)
+AccessModel -> DB : INSERT INTO registros_acceso (folio_ticket, ...) VALUES (...)
+DB --> AccessModel : { id_registro, folio_ticket }
+
+AccessCtrl --> Router : 201 Created { registro, folio, celda }
+deactivate AccessCtrl
+Router --> UI : 201 Created
+deactivate Router
+
+UI -> UI : showTicketModal(data)
+UI --> Op : 4. Renderiza e Imprime Ticket Térmico (TCK-XXXX)
+deactivate UI
+
+newpage
+
+' ============================================================================
+' DIAGRAMA DE SECUENCIA 2: LIQUIDACIÓN DE SALIDA, PAGO Y LIBERACIÓN DE CELDA (ITERACIÓN 1)
+' ============================================================================
+== SD-02: Liquidación de Salida y Liberación de Celda (Iteración 1) ==
+
+actor "Operador Caseta" as Op
+participant "Frontend SPA\n(app.js)" as UI
+participant "API Router" as Router
+participant "accessController" as AccessCtrl
+participant "billingModel\n(billingModel.js)" as BillingModel
+participant "cellModel" as CellModel
+participant "accessModel" as AccessModel
+database "SQLite Database" as DB
+
+Op -> UI : 1. Digita Placa o Folio de Ticket
+activate UI
+UI -> Router : GET /api/accesos/calcular-salida?busqueda=ABC123
+activate Router
+Router -> AccessCtrl : calculateExit(busqueda)
+activate AccessCtrl
+AccessCtrl -> AccessModel : getActiveByPlate(placa)
+AccessModel -> DB : SELECT * FROM registros_acceso ...
+DB --> AccessModel : registroActivo (hora_entrada)
+AccessCtrl -> BillingModel : calculateCharge(tarifa, minutos, esAbonado)
+BillingModel --> AccessCtrl : { total, motivo, minutosFraccion }
+AccessCtrl --> Router : { liquidacion, tiempoEstancia, total }
+deactivate AccessCtrl
+Router --> UI : 200 OK
+deactivate Router
+
+UI --> Op : 2. Muestra Desglose, Minutos y Total a Pagar ($16.000)
+Op -> UI : 3. Selecciona Medio de Pago (Efectivo) y confirma
+UI -> Router : POST /api/accesos/salida { idRegistro, metodoPago, novedadSalida }
+activate Router
+Router -> AccessCtrl : confirmExit(req, res)
+activate AccessCtrl
+
+AccessCtrl -> AccessModel : registerExit(idRegistro, minutos, total, idOperador)
+AccessModel -> DB : UPDATE registros_acceso SET estado='FINALIZADO', fecha_salida=now() ...
+DB --> AccessModel : OK
+
+AccessCtrl -> CellModel : updateCellState(idCelda, 'LIBRE')
+CellModel -> DB : UPDATE celdas SET estado = 'LIBRE' WHERE id_celda = ?
+DB --> CellModel : OK
+
+AccessCtrl -> BillingModel : registerPayment(idRegistro, monto, metodo, idOperador)
+BillingModel -> DB : INSERT INTO pagos (numero_comprobante, monto, metodo) VALUES (...)
+DB --> BillingModel : id_pago
+
+AccessCtrl --> Router : 200 OK { celdaLiberada: 'A-02', totalCobrado, recibo }
+deactivate AccessCtrl
+Router --> UI : 200 OK
+deactivate Router
+
+UI --> Op : 4. Muestra Recibo de Salida y Celda queda disponible
+deactivate UI
+
+newpage
+
+' ============================================================================
+' DIAGRAMA DE SECUENCIA 3: AUTENTICACIÓN / LOGIN DE USUARIO (ITERACIÓN 2)
+' ============================================================================
+== SD-03: Autenticación / Inicio de Sesión (Iteración 2) ==
+
+actor "Usuario (Admin/Operador)" as User
+participant "Frontend SPA\n(Login Form)" as UI
+participant "API Router" as Router
+participant "userController\n(userController.js)" as UserCtrl
+participant "userModel\n(userModel.js)" as UserModel
+database "SQLite Database" as DB
+
+User -> UI : 1. Ingresa username ("operador1") y password ("operador123")
+activate UI
+UI -> Router : POST /api/auth/login { username, password }
+activate Router
+Router -> UserCtrl : login(req, res)
+activate UserCtrl
+
+UserCtrl -> UserModel : getUserByUsername(username)
+UserModel -> DB : SELECT * FROM usuarios WHERE username = ?
+DB --> UserModel : { id_usuario: 2, password_hash, rol: 'OPERADOR', activo: 1 }
+
+alt Credenciales Correctas y Usuario Activo
+    UserCtrl -> UserCtrl : Comparar password == password_hash
+    UserCtrl -> UserCtrl : Generar Token de Sesión Base64
+    UserCtrl --> Router : 200 OK { token, usuario: { id: 2, nombre, rol: 'OPERADOR' } }
+    Router --> UI : 200 OK
+    UI -> UI : localStorage.setItem('currentUser', session)
+    UI --> User : 2. Redirige a Caseta, activa vista según Rol
+else Contraseña Incorrecta
+    UserCtrl --> Router : 401 Unauthorized { message: 'Credenciales inválidas' }
+    Router --> UI : 401 Unauthorized
+    UI --> User : 2b. Muestra error en rojo: "Contraseña incorrecta"
+else Usuario Desactivado (activo = 0)
+    UserCtrl --> Router : 403 Forbidden { message: 'Cuenta desactivada' }
+    Router --> UI : 403 Forbidden
+    UI --> User : 2c. Muestra: "Cuenta inactiva. Contacte al Administrador"
+end
+deactivate UserCtrl
+deactivate Router
+deactivate UI
+
+newpage
+
+' ============================================================================
+' DIAGRAMA DE SECUENCIA 4: CREACIÓN DE NUEVO USUARIO (ITERACIÓN 2)
+' ============================================================================
+== SD-04: Creación de Nuevo Usuario - Solo Administrador (Iteración 2) ==
+
+actor "Administrador" as Admin
+participant "Frontend SPA\n(tabUsers)" as UI
+participant "API Router" as Router
+participant "userController" as UserCtrl
+participant "userModel" as UserModel
+database "SQLite Database" as DB
+
+Admin -> UI : 1. Clic "+ Nuevo Usuario", diligencia datos y rol
+activate UI
+UI -> Router : POST /api/usuarios { nombre_completo, username, password, rol }
+activate Router
+Router -> UserCtrl : create(req, res)
+activate UserCtrl
+
+UserCtrl -> UserModel : getUserByUsername(username)
+UserModel -> DB : SELECT id_usuario FROM usuarios WHERE username = ?
+DB --> UserModel : null (no existe duplicado)
+
+UserCtrl -> UserModel : createUser({ nombre_completo, username, password_hash, rol })
+UserModel -> DB : INSERT INTO usuarios (nombre_completo, username, password_hash, rol, activo, fecha_creacion) VALUES (?, ?, ?, ?, 1, now())
+DB --> UserModel : lastID = 3
+
+UserModel -> DB : SELECT id_usuario, nombre_completo, username, rol, activo, fecha_creacion FROM usuarios WHERE id_usuario = 3
+DB --> UserModel : { id_usuario: 3, ... }
+
+UserCtrl --> Router : 201 Created { success: true, data: newUser }
+deactivate UserCtrl
+Router --> UI : 201 Created
+deactivate Router
+
+UI -> UI : loadUsers()
+UI --> Admin : 2. Notificación "Usuario creado exitosamente" y tabla actualizada
+deactivate UI
+
+newpage
+
+' ============================================================================
+' DIAGRAMA DE SECUENCIA 5: GESTIÓN Y MANTENIMIENTO DE CELDAS (ITERACIÓN 2)
+' ============================================================================
+== SD-05: Administración de Celdas y Cambio a Mantenimiento (Iteración 2) ==
+
+actor "Administrador" as Admin
+participant "Frontend SPA\n(tabAdminCells)" as UI
+participant "API Router" as Router
+participant "cellAdminController\n(cellAdminController.js)" as CellAdminCtrl
+participant "cellModel" as CellModel
+database "SQLite Database" as DB
+
+Admin -> UI : 1. Clic en botón "Mantenimiento" en Celda A-04
+activate UI
+UI -> Router : PATCH /api/celdas/4/maintenance
+activate Router
+Router -> CellAdminCtrl : setMaintenance(req, res)
+activate CellAdminCtrl
+
+CellAdminCtrl -> CellModel : getCellById(4)
+CellModel -> DB : SELECT * FROM celdas WHERE id_celda = 4
+DB --> CellModel : { id_celda: 4, codigo_celda: 'A-04', estado: 'LIBRE' }
+
+alt Celda está LIBRE
+    CellAdminCtrl -> CellModel : updateCellState(4, 'MANTENIMIENTO')
+    CellModel -> DB : UPDATE celdas SET estado = 'MANTENIMIENTO' WHERE id_celda = 4
+    DB --> CellModel : OK
+    CellAdminCtrl --> Router : 200 OK { message: 'Celda A-04 en mantenimiento' }
+    Router --> UI : 200 OK
+    UI -> UI : loadAdminCells() & loadCapacityReport()
+    UI --> Admin : 2. Celda cambia a color ámbar "MANTENIMIENTO" en tablero
+else Celda está OCUPADA
+    CellAdminCtrl --> Router : 400 Bad Request { message: 'No se puede poner en mantenimiento una celda OCUPADA' }
+    Router --> UI : 400 Bad Request
+    UI --> Admin : 2b. Toast de error: Operación no permitida
+end
+
+deactivate CellAdminCtrl
+deactivate Router
+deactivate UI
+
+@enduml

@@ -1,238 +1,411 @@
 {
   "_type": "Project",
-  "_id": "AAAAAAGGOCN30BHS",
-  "name": "AutosColombia_Software_StarUML",
+  "_id": "AAAAAAGGAIH7705G",
+  "name": "AutosColombia_Software_StarUML_Iteraciones_1_y_2",
   "ownedElements": [
     {
       "_type": "UMLModel",
-      "_id": "AAAAARCHNCB53C4F",
+      "_id": "AAAAARCHLRYEJLI6",
       "_parent": {
-        "$ref": "AAAAAAGGOCN30BHS"
+        "$ref": "AAAAAAGGAIH7705G"
       },
-      "name": "Arquitectura del Sistema",
+      "name": "Arquitectura del Sistema (Tier Architecture)",
       "ownedElements": [
         {
           "_type": "UMLPackageDiagram",
-          "_id": "AAAAARCHDIAG3QU741D0",
+          "_id": "AAAAARCHDIAGWXKK10NY",
           "_parent": {
-            "$ref": "AAAAARCHNCB53C4F"
+            "$ref": "AAAAARCHLRYEJLI6"
           },
-          "name": "Diagrama de Arquitectura en Capas (Tier Architecture)",
+          "name": "Diagrama de Arquitectura en Capas",
           "ownedViews": []
         }
       ]
     },
     {
       "_type": "UMLModel",
-      "_id": "AAAAAUC6DFQ36JH",
+      "_id": "AAAAAUC1ZHXUIEP5",
       "_parent": {
-        "$ref": "AAAAAAGGOCN30BHS"
+        "$ref": "AAAAAAGGAIH7705G"
       },
-      "name": "Modelo de Casos de Uso - Iteración 1",
+      "name": "Casos de Uso - Iteración 1 (Entrada y Salida de Vehículos)",
       "ownedElements": [
         {
           "_type": "UMLUseCaseDiagram",
-          "_id": "AAAAAUCDIAGLDQZ3O2L",
+          "_id": "AAAAAUC1DIAG22HOAZDV",
           "_parent": {
-            "$ref": "AAAAAUC6DFQ36JH"
+            "$ref": "AAAAAUC1ZHXUIEP5"
           },
-          "name": "Casos de Uso - Entrada y Salida de Vehículos",
+          "name": "Diagrama Casos de Uso - Entrada y Salida",
           "ownedViews": []
         },
         {
-          "_type": "UMLActor",
-          "_id": "ACT_SN3LNF",
-          "_parent": {
-            "$ref": "AAAAAUC6DFQ36JH"
-          },
-          "name": "Operador de Parqueadero"
-        },
-        {
-          "_type": "UMLActor",
-          "_id": "ACT_BK2ELI",
-          "_parent": {
-            "$ref": "AAAAAUC6DFQ36JH"
-          },
-          "name": "Administrador del Sistema"
-        },
-        {
-          "_type": "UMLActor",
-          "_id": "ACT_7QTPPB",
-          "_parent": {
-            "$ref": "AAAAAUC6DFQ36JH"
-          },
-          "name": "Cliente / Abonado"
-        },
-        {
           "_type": "UMLUseCase",
-          "_id": "UC_A4LLKX",
+          "_id": "UC1_8ZCV0Q",
           "_parent": {
-            "$ref": "AAAAAUC6DFQ36JH"
+            "$ref": "AAAAAUC1ZHXUIEP5"
           },
           "name": "CU01 - Registrar Entrada de Vehículo"
         },
         {
           "_type": "UMLUseCase",
-          "_id": "UC_BW98MN",
+          "_id": "UC1_L607Z6",
           "_parent": {
-            "$ref": "AAAAAUC6DFQ36JH"
+            "$ref": "AAAAAUC1ZHXUIEP5"
           },
           "name": "CU02 - Validar Suscripción de Mensualidad"
         },
         {
           "_type": "UMLUseCase",
-          "_id": "UC_ZWE23O",
+          "_id": "UC1_8T0BWE",
           "_parent": {
-            "$ref": "AAAAAUC6DFQ36JH"
+            "$ref": "AAAAAUC1ZHXUIEP5"
           },
           "name": "CU03 - Asignar Celda Disponible"
         },
         {
           "_type": "UMLUseCase",
-          "_id": "UC_9Z8BA7",
+          "_id": "UC1_KH8KVX",
           "_parent": {
-            "$ref": "AAAAAUC6DFQ36JH"
+            "$ref": "AAAAAUC1ZHXUIEP5"
           },
           "name": "CU04 - Registrar Novedades e Inspección Física"
         },
         {
           "_type": "UMLUseCase",
-          "_id": "UC_AGOBZK",
+          "_id": "UC1_2S1E6D",
           "_parent": {
-            "$ref": "AAAAAUC6DFQ36JH"
+            "$ref": "AAAAAUC1ZHXUIEP5"
           },
           "name": "CU05 - Emitir Ticket de Entrada"
         },
         {
           "_type": "UMLUseCase",
-          "_id": "UC_ZA3OJC",
+          "_id": "UC1_9LW4R7",
           "_parent": {
-            "$ref": "AAAAAUC6DFQ36JH"
+            "$ref": "AAAAAUC1ZHXUIEP5"
           },
           "name": "CU06 - Registrar Salida de Vehículo"
         },
         {
           "_type": "UMLUseCase",
-          "_id": "UC_B4QO69",
+          "_id": "UC1_NK5P5X",
           "_parent": {
-            "$ref": "AAAAAUC6DFQ36JH"
+            "$ref": "AAAAAUC1ZHXUIEP5"
           },
           "name": "CU07 - Calcular Duración y Tarifa"
         },
         {
           "_type": "UMLUseCase",
-          "_id": "UC_M7ABYZ",
+          "_id": "UC1_T2K5F6",
           "_parent": {
-            "$ref": "AAAAAUC6DFQ36JH"
+            "$ref": "AAAAAUC1ZHXUIEP5"
           },
           "name": "CU08 - Liberar Celda de Parqueo"
         },
         {
           "_type": "UMLUseCase",
-          "_id": "UC_UQO9V3",
+          "_id": "UC1_6NPBFP",
           "_parent": {
-            "$ref": "AAAAAUC6DFQ36JH"
+            "$ref": "AAAAAUC1ZHXUIEP5"
           },
           "name": "CU09 - Gestionar Pago y Recibo"
         },
         {
           "_type": "UMLUseCase",
-          "_id": "UC_WPRHIA",
+          "_id": "UC1_WF0XHA",
           "_parent": {
-            "$ref": "AAAAAUC6DFQ36JH"
+            "$ref": "AAAAAUC1ZHXUIEP5"
           },
           "name": "CU10 - Monitorear Tablero de Celdas en Tiempo Real"
         },
         {
-          "_type": "UMLUseCase",
-          "_id": "UC_2JYL8V",
+          "_type": "UMLActor",
+          "_id": "ACT_S28LX4",
           "_parent": {
-            "$ref": "AAAAAUC6DFQ36JH"
+            "$ref": "AAAAAUC2H3RCESUB"
           },
-          "name": "CU11 - Administrar Tarifas y Mensualidades"
+          "name": "Operador de Caseta"
+        },
+        {
+          "_type": "UMLActor",
+          "_id": "ACT_6TV869",
+          "_parent": {
+            "$ref": "AAAAAUC2H3RCESUB"
+          },
+          "name": "Administrador del Sistema"
+        },
+        {
+          "_type": "UMLActor",
+          "_id": "ACT_RS9RRI",
+          "_parent": {
+            "$ref": "AAAAAUC2H3RCESUB"
+          },
+          "name": "Cliente Abonado"
         }
       ]
     },
     {
       "_type": "UMLModel",
-      "_id": "AAAAACLASSCELV055W",
+      "_id": "AAAAAUC2H3RCESUB",
       "_parent": {
-        "$ref": "AAAAAAGGOCN30BHS"
+        "$ref": "AAAAAAGGAIH7705G"
+      },
+      "name": "Casos de Uso - Iteración 2 (Gestión de Usuarios y Celdas)",
+      "ownedElements": [
+        {
+          "_type": "UMLUseCaseDiagram",
+          "_id": "AAAAAUC2DIAGNFWM7FH2",
+          "_parent": {
+            "$ref": "AAAAAUC2H3RCESUB"
+          },
+          "name": "Diagrama Casos de Uso - Usuarios y Celdas",
+          "ownedViews": []
+        },
+        {
+          "_type": "UMLUseCase",
+          "_id": "UC2_S57INJ",
+          "_parent": {
+            "$ref": "AAAAAUC2H3RCESUB"
+          },
+          "name": "CU-IT2-01: Iniciar Sesión / Autenticar Usuario"
+        },
+        {
+          "_type": "UMLUseCase",
+          "_id": "UC2_J1C7D1",
+          "_parent": {
+            "$ref": "AAAAAUC2H3RCESUB"
+          },
+          "name": "CU-IT2-02: Registrar Nuevo Usuario Operador"
+        },
+        {
+          "_type": "UMLUseCase",
+          "_id": "UC2_K1GNC0",
+          "_parent": {
+            "$ref": "AAAAAUC2H3RCESUB"
+          },
+          "name": "CU-IT2-03: Editar Información y Rol de Usuario"
+        },
+        {
+          "_type": "UMLUseCase",
+          "_id": "UC2_VWF6NX",
+          "_parent": {
+            "$ref": "AAAAAUC2H3RCESUB"
+          },
+          "name": "CU-IT2-04: Activar o Desactivar Usuario"
+        },
+        {
+          "_type": "UMLUseCase",
+          "_id": "UC2_GLKCWD",
+          "_parent": {
+            "$ref": "AAAAAUC2H3RCESUB"
+          },
+          "name": "CU-IT2-05: Cambiar Contraseña de Cuenta"
+        },
+        {
+          "_type": "UMLUseCase",
+          "_id": "UC2_1SH7YV",
+          "_parent": {
+            "$ref": "AAAAAUC2H3RCESUB"
+          },
+          "name": "CU-IT2-06: Consultar y Filtrar Listado de Usuarios"
+        },
+        {
+          "_type": "UMLUseCase",
+          "_id": "UC2_31NIYX",
+          "_parent": {
+            "$ref": "AAAAAUC2H3RCESUB"
+          },
+          "name": "CU-IT2-07: Registrar Nueva Celda de Parqueo"
+        },
+        {
+          "_type": "UMLUseCase",
+          "_id": "UC2_MK8RMH",
+          "_parent": {
+            "$ref": "AAAAAUC2H3RCESUB"
+          },
+          "name": "CU-IT2-08: Modificar Configuración de Celda"
+        },
+        {
+          "_type": "UMLUseCase",
+          "_id": "UC2_HTMG8K",
+          "_parent": {
+            "$ref": "AAAAAUC2H3RCESUB"
+          },
+          "name": "CU-IT2-09: Cambiar Estado a Mantenimiento"
+        },
+        {
+          "_type": "UMLUseCase",
+          "_id": "UC2_4XF6C9",
+          "_parent": {
+            "$ref": "AAAAAUC2H3RCESUB"
+          },
+          "name": "CU-IT2-10: Habilitar Celda desde Mantenimiento"
+        },
+        {
+          "_type": "UMLUseCase",
+          "_id": "UC2_RYIFKG",
+          "_parent": {
+            "$ref": "AAAAAUC2H3RCESUB"
+          },
+          "name": "CU-IT2-11: Eliminar Celda sin Historial"
+        },
+        {
+          "_type": "UMLUseCase",
+          "_id": "UC2_4BAMZV",
+          "_parent": {
+            "$ref": "AAAAAUC2H3RCESUB"
+          },
+          "name": "CU-IT2-12: Generar Reporte de Capacidad y Ocupación"
+        },
+        {
+          "_type": "UMLActor",
+          "_id": "ACT_S28LX4",
+          "_parent": {
+            "$ref": "AAAAAUC2H3RCESUB"
+          },
+          "name": "Operador de Caseta"
+        },
+        {
+          "_type": "UMLActor",
+          "_id": "ACT_6TV869",
+          "_parent": {
+            "$ref": "AAAAAUC2H3RCESUB"
+          },
+          "name": "Administrador del Sistema"
+        },
+        {
+          "_type": "UMLActor",
+          "_id": "ACT_RS9RRI",
+          "_parent": {
+            "$ref": "AAAAAUC2H3RCESUB"
+          },
+          "name": "Cliente Abonado"
+        }
+      ]
+    },
+    {
+      "_type": "UMLModel",
+      "_id": "AAAAACLASSLJ7YUIDY",
+      "_parent": {
+        "$ref": "AAAAAAGGAIH7705G"
       },
       "name": "Modelo de Clases del Dominio",
       "ownedElements": [
         {
           "_type": "UMLClassDiagram",
-          "_id": "AAAAACLASSDIAGSRA1I81O",
+          "_id": "AAAAACLASSDIAGYGZ2WEIR",
           "_parent": {
-            "$ref": "AAAAACLASSCELV055W"
+            "$ref": "AAAAACLASSLJ7YUIDY"
           },
-          "name": "Diagrama de Clases - Gestión Operativa",
+          "name": "Diagrama de Clases - Autos Colombia",
           "ownedViews": []
         },
         {
           "_type": "UMLClass",
-          "_id": "CLS_Vehiculo_5Q56T8",
+          "_id": "CLS_R74ORA",
           "_parent": {
-            "$ref": "AAAAACLASSCELV055W"
+            "$ref": "AAAAACLASSLJ7YUIDY"
           },
-          "name": "Vehiculo",
+          "name": "Usuario",
           "attributes": [
             {
               "_type": "UMLAttribute",
-              "_id": "ATTR_FBV6WV",
-              "name": "idVehiculo",
+              "_id": "ATTR_URW4TO",
+              "name": "idUsuario",
               "visibility": "private",
               "type": "Integer"
             },
             {
               "_type": "UMLAttribute",
-              "_id": "ATTR_YHN5A6",
-              "name": "placa",
+              "_id": "ATTR_7Z58YF",
+              "name": "nombreCompleto",
               "visibility": "private",
               "type": "String"
             },
             {
               "_type": "UMLAttribute",
-              "_id": "ATTR_XBUZD1",
-              "name": "tipoVehiculo",
-              "visibility": "private",
-              "type": "TipoVehiculo"
-            },
-            {
-              "_type": "UMLAttribute",
-              "_id": "ATTR_D8LOX2",
-              "name": "marca",
+              "_id": "ATTR_DBDGV1",
+              "name": "username",
               "visibility": "private",
               "type": "String"
             },
             {
               "_type": "UMLAttribute",
-              "_id": "ATTR_TX2P9S",
-              "name": "color",
+              "_id": "ATTR_KTJCLX",
+              "name": "passwordHash",
               "visibility": "private",
               "type": "String"
+            },
+            {
+              "_type": "UMLAttribute",
+              "_id": "ATTR_CK2OBP",
+              "name": "rol",
+              "visibility": "private",
+              "type": "RolUsuario (ADMIN | OPERADOR)"
+            },
+            {
+              "_type": "UMLAttribute",
+              "_id": "ATTR_VHZ9DU",
+              "name": "activo",
+              "visibility": "private",
+              "type": "Boolean"
+            },
+            {
+              "_type": "UMLAttribute",
+              "_id": "ATTR_3O7VL9",
+              "name": "fechaCreacion",
+              "visibility": "private",
+              "type": "DateTime"
             }
           ],
           "operations": [
             {
               "_type": "UMLOperation",
-              "_id": "OP_9LWRDY",
-              "name": "validarPlaca",
+              "_id": "OP_M0J7JE",
+              "name": "autenticar",
               "visibility": "public",
-              "parameters": []
+              "parameters": [
+                {
+                  "_type": "UMLParameter",
+                  "_id": "PARAM_EBIOQ5",
+                  "name": "password",
+                  "type": "String"
+                }
+              ]
             },
             {
               "_type": "UMLOperation",
-              "_id": "OP_JYH0U2",
-              "name": "tieneMensualidadVigente",
+              "_id": "OP_HJ79R0",
+              "name": "cambiarEstado",
               "visibility": "public",
-              "parameters": []
+              "parameters": [
+                {
+                  "_type": "UMLParameter",
+                  "_id": "PARAM_R36TMR",
+                  "name": "nuevoActivo",
+                  "type": "Boolean"
+                }
+              ]
             },
             {
               "_type": "UMLOperation",
-              "_id": "OP_1Y4L26",
-              "name": "getPlaca",
+              "_id": "OP_3XRAJB",
+              "name": "actualizarPassword",
+              "visibility": "public",
+              "parameters": [
+                {
+                  "_type": "UMLParameter",
+                  "_id": "PARAM_KN7M8G",
+                  "name": "nuevaClave",
+                  "type": "String"
+                }
+              ]
+            },
+            {
+              "_type": "UMLOperation",
+              "_id": "OP_PKN2RU",
+              "name": "tienePermisoAdmin",
               "visibility": "public",
               "parameters": []
             }
@@ -240,43 +413,43 @@
         },
         {
           "_type": "UMLClass",
-          "_id": "CLS_Celda_JDR6XP",
+          "_id": "CLS_HAUCAR",
           "_parent": {
-            "$ref": "AAAAACLASSCELV055W"
+            "$ref": "AAAAACLASSLJ7YUIDY"
           },
           "name": "Celda",
           "attributes": [
             {
               "_type": "UMLAttribute",
-              "_id": "ATTR_A0ENRP",
+              "_id": "ATTR_YW0MSR",
               "name": "idCelda",
               "visibility": "private",
               "type": "Integer"
             },
             {
               "_type": "UMLAttribute",
-              "_id": "ATTR_7ICMZ5",
+              "_id": "ATTR_AIV9K6",
               "name": "codigoCelda",
               "visibility": "private",
               "type": "String"
             },
             {
               "_type": "UMLAttribute",
-              "_id": "ATTR_ZHTMJH",
+              "_id": "ATTR_EL0YTA",
               "name": "tipoPermitido",
               "visibility": "private",
               "type": "TipoVehiculo"
             },
             {
               "_type": "UMLAttribute",
-              "_id": "ATTR_0AHS3I",
+              "_id": "ATTR_PHHB86",
               "name": "estado",
               "visibility": "private",
-              "type": "EstadoCelda"
+              "type": "EstadoCelda (LIBRE | OCUPADA | MANTENIMIENTO)"
             },
             {
               "_type": "UMLAttribute",
-              "_id": "ATTR_DYNFNT",
+              "_id": "ATTR_7RBUHD",
               "name": "sector",
               "visibility": "private",
               "type": "String"
@@ -285,22 +458,36 @@
           "operations": [
             {
               "_type": "UMLOperation",
-              "_id": "OP_RF2QRJ",
-              "name": "asignar",
+              "_id": "OP_B3CO3R",
+              "name": "asignarVehiculo",
               "visibility": "public",
               "parameters": []
             },
             {
               "_type": "UMLOperation",
-              "_id": "OP_9S6R6I",
-              "name": "liberar",
+              "_id": "OP_WZV01N",
+              "name": "liberarCelda",
               "visibility": "public",
               "parameters": []
             },
             {
               "_type": "UMLOperation",
-              "_id": "OP_BX0999",
-              "name": "estaLibre",
+              "_id": "OP_ZJ72B1",
+              "name": "ponerEnMantenimiento",
+              "visibility": "public",
+              "parameters": []
+            },
+            {
+              "_type": "UMLOperation",
+              "_id": "OP_3T6IQC",
+              "name": "habilitarDisponible",
+              "visibility": "public",
+              "parameters": []
+            },
+            {
+              "_type": "UMLOperation",
+              "_id": "OP_NJCUGF",
+              "name": "esEliminable",
               "visibility": "public",
               "parameters": []
             }
@@ -308,86 +495,154 @@
         },
         {
           "_type": "UMLClass",
-          "_id": "CLS_RegistroAcceso_RO0YVY",
+          "_id": "CLS_DZJSTS",
           "_parent": {
-            "$ref": "AAAAACLASSCELV055W"
+            "$ref": "AAAAACLASSLJ7YUIDY"
+          },
+          "name": "Vehiculo",
+          "attributes": [
+            {
+              "_type": "UMLAttribute",
+              "_id": "ATTR_RVMZ1Q",
+              "name": "idVehiculo",
+              "visibility": "private",
+              "type": "Integer"
+            },
+            {
+              "_type": "UMLAttribute",
+              "_id": "ATTR_SJ9C27",
+              "name": "placa",
+              "visibility": "private",
+              "type": "String"
+            },
+            {
+              "_type": "UMLAttribute",
+              "_id": "ATTR_RCZOY8",
+              "name": "tipoVehiculo",
+              "visibility": "private",
+              "type": "TipoVehiculo"
+            },
+            {
+              "_type": "UMLAttribute",
+              "_id": "ATTR_KEMX5F",
+              "name": "marca",
+              "visibility": "private",
+              "type": "String"
+            },
+            {
+              "_type": "UMLAttribute",
+              "_id": "ATTR_GMHZVO",
+              "name": "lineaModelo",
+              "visibility": "private",
+              "type": "String"
+            },
+            {
+              "_type": "UMLAttribute",
+              "_id": "ATTR_IPS35R",
+              "name": "color",
+              "visibility": "private",
+              "type": "String"
+            }
+          ],
+          "operations": [
+            {
+              "_type": "UMLOperation",
+              "_id": "OP_ANP4EM",
+              "name": "validarPlaca",
+              "visibility": "public",
+              "parameters": []
+            },
+            {
+              "_type": "UMLOperation",
+              "_id": "OP_1QO65S",
+              "name": "esAbonadoMensual",
+              "visibility": "public",
+              "parameters": []
+            }
+          ]
+        },
+        {
+          "_type": "UMLClass",
+          "_id": "CLS_JV0U4L",
+          "_parent": {
+            "$ref": "AAAAACLASSLJ7YUIDY"
           },
           "name": "RegistroAcceso",
           "attributes": [
             {
               "_type": "UMLAttribute",
-              "_id": "ATTR_6WEHMF",
+              "_id": "ATTR_1UHNWF",
               "name": "idRegistro",
               "visibility": "private",
               "type": "Integer"
             },
             {
               "_type": "UMLAttribute",
-              "_id": "ATTR_PV1B69",
+              "_id": "ATTR_S5W63D",
               "name": "folioTicket",
               "visibility": "private",
               "type": "String"
             },
             {
               "_type": "UMLAttribute",
-              "_id": "ATTR_7EFGSC",
+              "_id": "ATTR_1RV5WU",
               "name": "fechaHoraEntrada",
               "visibility": "private",
               "type": "DateTime"
             },
             {
               "_type": "UMLAttribute",
-              "_id": "ATTR_P0SXKI",
+              "_id": "ATTR_CVNNNY",
               "name": "fechaHoraSalida",
               "visibility": "private",
               "type": "DateTime"
             },
             {
               "_type": "UMLAttribute",
-              "_id": "ATTR_XFYUK0",
+              "_id": "ATTR_U7VXAO",
               "name": "modalidad",
               "visibility": "private",
-              "type": "ModalidadAcceso"
+              "type": "ModalidadAcceso (OCASIONAL | MENSUALIDAD)"
             },
             {
               "_type": "UMLAttribute",
-              "_id": "ATTR_QSOYHV",
+              "_id": "ATTR_NWKICI",
               "name": "minutosEstancia",
               "visibility": "private",
               "type": "Integer"
             },
             {
               "_type": "UMLAttribute",
-              "_id": "ATTR_L0IVSD",
+              "_id": "ATTR_NXEWIP",
               "name": "valorTotal",
               "visibility": "private",
               "type": "Decimal"
             },
             {
               "_type": "UMLAttribute",
-              "_id": "ATTR_W3ZBW5",
+              "_id": "ATTR_0KZE2S",
               "name": "estado",
               "visibility": "private",
-              "type": "EstadoAcceso"
+              "type": "EstadoAcceso (EN_CURSO | FINALIZADO)"
             }
           ],
           "operations": [
             {
               "_type": "UMLOperation",
-              "_id": "OP_QESDYB",
+              "_id": "OP_TIL6WZ",
               "name": "calcularMinutosEstancia",
               "visibility": "public",
               "parameters": []
             },
             {
               "_type": "UMLOperation",
-              "_id": "OP_4M6AEG",
+              "_id": "OP_DIAJKI",
               "name": "liquidarSalida",
               "visibility": "public",
               "parameters": [
                 {
                   "_type": "UMLParameter",
-                  "_id": "PARAM_Y2C31V",
+                  "_id": "PARAM_CYHG9C",
                   "name": "tarifa",
                   "type": "Tarifa"
                 }
@@ -395,7 +650,7 @@
             },
             {
               "_type": "UMLOperation",
-              "_id": "OP_LA5FCW",
+              "_id": "OP_OSVM1Z",
               "name": "generarTicket",
               "visibility": "public",
               "parameters": []
@@ -404,50 +659,50 @@
         },
         {
           "_type": "UMLClass",
-          "_id": "CLS_Novedad_WF2SGB",
+          "_id": "CLS_RVFUE1",
           "_parent": {
-            "$ref": "AAAAACLASSCELV055W"
+            "$ref": "AAAAACLASSLJ7YUIDY"
           },
           "name": "Novedad",
           "attributes": [
             {
               "_type": "UMLAttribute",
-              "_id": "ATTR_3ZEOWQ",
+              "_id": "ATTR_26WE84",
               "name": "idNovedad",
               "visibility": "private",
               "type": "Integer"
             },
             {
               "_type": "UMLAttribute",
-              "_id": "ATTR_RBS99Q",
+              "_id": "ATTR_PKGDCO",
               "name": "momento",
               "visibility": "private",
-              "type": "MomentoRegistro"
+              "type": "MomentoRegistro (ENTRADA | ESTANCIA | SALIDA)"
             },
             {
               "_type": "UMLAttribute",
-              "_id": "ATTR_VLYRG1",
+              "_id": "ATTR_T4N3BJ",
               "name": "tipoNovedad",
               "visibility": "private",
               "type": "String"
             },
             {
               "_type": "UMLAttribute",
-              "_id": "ATTR_NSC2N0",
+              "_id": "ATTR_Z05OPK",
               "name": "descripcion",
               "visibility": "private",
               "type": "String"
             },
             {
               "_type": "UMLAttribute",
-              "_id": "ATTR_WMI6XM",
+              "_id": "ATTR_V0G1XA",
               "name": "severidad",
               "visibility": "private",
-              "type": "NivelSeveridad"
+              "type": "NivelSeveridad (BAJA | MEDIA | ALTA)"
             },
             {
               "_type": "UMLAttribute",
-              "_id": "ATTR_IPQXL8",
+              "_id": "ATTR_4WKNIA",
               "name": "fechaHora",
               "visibility": "private",
               "type": "DateTime"
@@ -456,188 +711,59 @@
           "operations": [
             {
               "_type": "UMLOperation",
-              "_id": "OP_V6TP7B",
+              "_id": "OP_LSKDI1",
               "name": "registrarObservacion",
               "visibility": "public",
               "parameters": []
-            },
-            {
-              "_type": "UMLOperation",
-              "_id": "OP_C28T5O",
-              "name": "obtenerDetalle",
-              "visibility": "public",
-              "parameters": []
             }
           ]
         },
         {
           "_type": "UMLClass",
-          "_id": "CLS_Cliente_FUG81D",
+          "_id": "CLS_UZEU3V",
           "_parent": {
-            "$ref": "AAAAACLASSCELV055W"
-          },
-          "name": "Cliente",
-          "attributes": [
-            {
-              "_type": "UMLAttribute",
-              "_id": "ATTR_4TEKVK",
-              "name": "idCliente",
-              "visibility": "private",
-              "type": "Integer"
-            },
-            {
-              "_type": "UMLAttribute",
-              "_id": "ATTR_9WQSVO",
-              "name": "documento",
-              "visibility": "private",
-              "type": "String"
-            },
-            {
-              "_type": "UMLAttribute",
-              "_id": "ATTR_14XDPI",
-              "name": "nombreCompleto",
-              "visibility": "private",
-              "type": "String"
-            },
-            {
-              "_type": "UMLAttribute",
-              "_id": "ATTR_E2981I",
-              "name": "telefono",
-              "visibility": "private",
-              "type": "String"
-            },
-            {
-              "_type": "UMLAttribute",
-              "_id": "ATTR_GZT5BD",
-              "name": "email",
-              "visibility": "private",
-              "type": "String"
-            }
-          ],
-          "operations": [
-            {
-              "_type": "UMLOperation",
-              "_id": "OP_MHNN00",
-              "name": "consultarMensualidades",
-              "visibility": "public",
-              "parameters": []
-            },
-            {
-              "_type": "UMLOperation",
-              "_id": "OP_77Y5JG",
-              "name": "vincularVehiculo",
-              "visibility": "public",
-              "parameters": []
-            }
-          ]
-        },
-        {
-          "_type": "UMLClass",
-          "_id": "CLS_Mensualidad_02UW41",
-          "_parent": {
-            "$ref": "AAAAACLASSCELV055W"
-          },
-          "name": "Mensualidad",
-          "attributes": [
-            {
-              "_type": "UMLAttribute",
-              "_id": "ATTR_23SFMR",
-              "name": "idMensualidad",
-              "visibility": "private",
-              "type": "Integer"
-            },
-            {
-              "_type": "UMLAttribute",
-              "_id": "ATTR_C4KQ82",
-              "name": "fechaInicio",
-              "visibility": "private",
-              "type": "Date"
-            },
-            {
-              "_type": "UMLAttribute",
-              "_id": "ATTR_R8TJTA",
-              "name": "fechaFin",
-              "visibility": "private",
-              "type": "Date"
-            },
-            {
-              "_type": "UMLAttribute",
-              "_id": "ATTR_I9WBHH",
-              "name": "valorMensual",
-              "visibility": "private",
-              "type": "Decimal"
-            },
-            {
-              "_type": "UMLAttribute",
-              "_id": "ATTR_DOVSVY",
-              "name": "estado",
-              "visibility": "private",
-              "type": "EstadoMensualidad"
-            }
-          ],
-          "operations": [
-            {
-              "_type": "UMLOperation",
-              "_id": "OP_EX17PE",
-              "name": "estaVigente",
-              "visibility": "public",
-              "parameters": []
-            },
-            {
-              "_type": "UMLOperation",
-              "_id": "OP_RY0QXX",
-              "name": "renovar",
-              "visibility": "public",
-              "parameters": []
-            }
-          ]
-        },
-        {
-          "_type": "UMLClass",
-          "_id": "CLS_Tarifa_NUIJ3I",
-          "_parent": {
-            "$ref": "AAAAACLASSCELV055W"
+            "$ref": "AAAAACLASSLJ7YUIDY"
           },
           "name": "Tarifa",
           "attributes": [
             {
               "_type": "UMLAttribute",
-              "_id": "ATTR_QDNEAO",
+              "_id": "ATTR_7DTLG5",
               "name": "idTarifa",
               "visibility": "private",
               "type": "Integer"
             },
             {
               "_type": "UMLAttribute",
-              "_id": "ATTR_D7XWK1",
+              "_id": "ATTR_A7DBIQ",
               "name": "tipoVehiculo",
               "visibility": "private",
               "type": "TipoVehiculo"
             },
             {
               "_type": "UMLAttribute",
-              "_id": "ATTR_QO7Q8P",
+              "_id": "ATTR_4C01PI",
               "name": "valorHoraFraccion",
               "visibility": "private",
               "type": "Decimal"
             },
             {
               "_type": "UMLAttribute",
-              "_id": "ATTR_ZDMCPF",
+              "_id": "ATTR_ZUL2M7",
               "name": "valorDia",
               "visibility": "private",
               "type": "Decimal"
             },
             {
               "_type": "UMLAttribute",
-              "_id": "ATTR_Y0OUPH",
+              "_id": "ATTR_WSA7GL",
               "name": "valorMensualidad",
               "visibility": "private",
               "type": "Decimal"
             },
             {
               "_type": "UMLAttribute",
-              "_id": "ATTR_GDIHLU",
+              "_id": "ATTR_KN4F5B",
               "name": "tiempoGraciaMinutos",
               "visibility": "private",
               "type": "Integer"
@@ -646,13 +772,13 @@
           "operations": [
             {
               "_type": "UMLOperation",
-              "_id": "OP_617GFN",
+              "_id": "OP_VJDSCC",
               "name": "calcularCobro",
               "visibility": "public",
               "parameters": [
                 {
                   "_type": "UMLParameter",
-                  "_id": "PARAM_FXUVGL",
+                  "_id": "PARAM_9EZ2XC",
                   "name": "minutos",
                   "type": "Integer"
                 }
@@ -662,43 +788,43 @@
         },
         {
           "_type": "UMLClass",
-          "_id": "CLS_Pago_HGF3EQ",
+          "_id": "CLS_K8YIRW",
           "_parent": {
-            "$ref": "AAAAACLASSCELV055W"
+            "$ref": "AAAAACLASSLJ7YUIDY"
           },
           "name": "Pago",
           "attributes": [
             {
               "_type": "UMLAttribute",
-              "_id": "ATTR_JPXZN9",
+              "_id": "ATTR_ARJEDL",
               "name": "idPago",
               "visibility": "private",
               "type": "Integer"
             },
             {
               "_type": "UMLAttribute",
-              "_id": "ATTR_W8DMRW",
+              "_id": "ATTR_H208UU",
               "name": "numeroComprobante",
               "visibility": "private",
               "type": "String"
             },
             {
               "_type": "UMLAttribute",
-              "_id": "ATTR_U39X02",
+              "_id": "ATTR_K559WV",
               "name": "montoPagado",
               "visibility": "private",
               "type": "Decimal"
             },
             {
               "_type": "UMLAttribute",
-              "_id": "ATTR_8PRDUC",
+              "_id": "ATTR_HPDJKV",
               "name": "metodoPago",
               "visibility": "private",
-              "type": "MetodoPago"
+              "type": "MetodoPago (EFECTIVO | NEQUI | DAVIPLATA | TARJETA)"
             },
             {
               "_type": "UMLAttribute",
-              "_id": "ATTR_P05B1H",
+              "_id": "ATTR_ZWSXQL",
               "name": "fechaHoraPago",
               "visibility": "private",
               "type": "DateTime"
@@ -707,69 +833,15 @@
           "operations": [
             {
               "_type": "UMLOperation",
-              "_id": "OP_BWII51",
+              "_id": "OP_S2ESEE",
               "name": "procesarPago",
               "visibility": "public",
               "parameters": []
             },
             {
               "_type": "UMLOperation",
-              "_id": "OP_UVP9NL",
+              "_id": "OP_KG83W6",
               "name": "generarRecibo",
-              "visibility": "public",
-              "parameters": []
-            }
-          ]
-        },
-        {
-          "_type": "UMLClass",
-          "_id": "CLS_Usuario_PBIB0V",
-          "_parent": {
-            "$ref": "AAAAACLASSCELV055W"
-          },
-          "name": "Usuario",
-          "attributes": [
-            {
-              "_type": "UMLAttribute",
-              "_id": "ATTR_V015H5",
-              "name": "idUsuario",
-              "visibility": "private",
-              "type": "Integer"
-            },
-            {
-              "_type": "UMLAttribute",
-              "_id": "ATTR_SR4KEH",
-              "name": "nombreCompleto",
-              "visibility": "private",
-              "type": "String"
-            },
-            {
-              "_type": "UMLAttribute",
-              "_id": "ATTR_AK97WH",
-              "name": "username",
-              "visibility": "private",
-              "type": "String"
-            },
-            {
-              "_type": "UMLAttribute",
-              "_id": "ATTR_1M969G",
-              "name": "rol",
-              "visibility": "private",
-              "type": "RolUsuario"
-            }
-          ],
-          "operations": [
-            {
-              "_type": "UMLOperation",
-              "_id": "OP_113L32",
-              "name": "autenticar",
-              "visibility": "public",
-              "parameters": []
-            },
-            {
-              "_type": "UMLOperation",
-              "_id": "OP_IFD4YZ",
-              "name": "tienePermiso",
               "visibility": "public",
               "parameters": []
             }
@@ -779,52 +851,58 @@
     },
     {
       "_type": "UMLModel",
-      "_id": "AAAAAPKG6EXNWQU9",
+      "_id": "AAAAASEQDRSHJZNE",
       "_parent": {
-        "$ref": "AAAAAAGGOCN30BHS"
+        "$ref": "AAAAAAGGAIH7705G"
       },
-      "name": "Modelo de Paquetes Arquitectónicos",
+      "name": "Diagramas de Secuencia (Iteraciones 1 y 2)",
+      "ownedElements": [
+        {
+          "_type": "UMLSequenceDiagram",
+          "_id": "AAAAASEQDIAGHDLZ6IWE",
+          "_parent": {
+            "$ref": "AAAAASEQDRSHJZNE"
+          },
+          "name": "Interacciones Dinámicas - Caseta, Accesos, Usuarios y Celdas",
+          "ownedViews": []
+        }
+      ]
+    },
+    {
+      "_type": "UMLModel",
+      "_id": "AAAAACOMPLSNW2CWA",
+      "_parent": {
+        "$ref": "AAAAAAGGAIH7705G"
+      },
+      "name": "Diagrama de Componentes (Iteraciones 1 y 2)",
+      "ownedElements": [
+        {
+          "_type": "UMLComponentDiagram",
+          "_id": "AAAAACOMPDIAGDZMZA86G",
+          "_parent": {
+            "$ref": "AAAAACOMPLSNW2CWA"
+          },
+          "name": "Arquitectura de Componentes del Sistema",
+          "ownedViews": []
+        }
+      ]
+    },
+    {
+      "_type": "UMLModel",
+      "_id": "AAAAAPKGVJVJK99K",
+      "_parent": {
+        "$ref": "AAAAAAGGAIH7705G"
+      },
+      "name": "Diagrama de Paquetes del Sistema",
       "ownedElements": [
         {
           "_type": "UMLPackageDiagram",
-          "_id": "AAAAAPKGDIAGEWBMNXQY",
+          "_id": "AAAAAPKGDIAGUYMQRH1A",
           "_parent": {
-            "$ref": "AAAAAPKG6EXNWQU9"
+            "$ref": "AAAAAPKGVJVJK99K"
           },
-          "name": "Diagrama de Paquetes y Modularidad",
+          "name": "Estructura de Paquetes Modulares",
           "ownedViews": []
-        },
-        {
-          "_type": "UMLPackage",
-          "_id": "PKG_DH3BSW",
-          "_parent": {
-            "$ref": "AAAAAPKG6EXNWQU9"
-          },
-          "name": "com.autoscolombia.presentation"
-        },
-        {
-          "_type": "UMLPackage",
-          "_id": "PKG_QJFZSD",
-          "_parent": {
-            "$ref": "AAAAAPKG6EXNWQU9"
-          },
-          "name": "com.autoscolombia.service"
-        },
-        {
-          "_type": "UMLPackage",
-          "_id": "PKG_EEMKSN",
-          "_parent": {
-            "$ref": "AAAAAPKG6EXNWQU9"
-          },
-          "name": "com.autoscolombia.domain"
-        },
-        {
-          "_type": "UMLPackage",
-          "_id": "PKG_O73KLP",
-          "_parent": {
-            "$ref": "AAAAAPKG6EXNWQU9"
-          },
-          "name": "com.autoscolombia.infrastructure"
         }
       ]
     }

@@ -1,0 +1,141 @@
+@startuml AutosColombia_Componentes_Iteraciones1y2
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+
+skinparam component {
+    BackgroundColor #EFF6FF
+    BorderColor #1E3A8A
+    FontColor #0F172A
+    ArrowColor #2563EB
+}
+
+skinparam package {
+    BackgroundColor #F8FAFC
+    BorderColor #94A3B8
+    FontColor #1E293B
+}
+
+skinparam database {
+    BackgroundColor #FEF3C7
+    BorderColor #D97706
+    FontColor #78350F
+}
+
+skinparam node {
+    BackgroundColor #F1F5F9
+    BorderColor #64748B
+    FontColor #0F172A
+}
+
+title Diagrama de Componentes - Parqueadero "Autos Colombia" (Iteraciones 1 y 2)
+
+' ============================================================================
+' CLIENTE / CAPA DE PRESENTACIÓN
+' ============================================================================
+package "Capa de Presentación (Frontend SPA)" {
+    [index.html\n(Interfaz Principal SPA)] as WebUI
+    [figma-mockups.html\n(Visor de Mockups Figma)] as MockupUI
+    [app.js\n(Lógica de Negocio Cliente)] as ClientLogic
+    
+    component [Tailwind CSS CDN] as Tailwind
+    component [Font Awesome CDN] as Icons
+    
+    WebUI ..> Tailwind : <<use>>
+    WebUI ..> Icons : <<use>>
+    WebUI --> ClientLogic : ejecuta
+    MockupUI ..> Tailwind : <<use>>
+}
+
+' ============================================================================
+' SERVIDOR / CAPA DE CONTROLADORES Y API REST
+' ============================================================================
+package "Capa de Aplicación y API REST (Node.js / Express)" {
+    [server.js\n(Servidor HTTP & Static)] as Server
+    [apiRoutes.js\n(Enrutador REST)] as Router
+    
+    package "Controladores Iteración 1 (Accesos y Caseta)" {
+        [accessController.js\n(Entrada, Salida, Activos)] as AccessCtrl
+        [cellController.js\n(Consulta Operativa Celdas)] as CellCtrl
+        [noveltyController.js\n(Bitácora Novedades)] as NoveltyCtrl
+        [rateController.js\n(Tarifas Vigentes)] as RateCtrl
+    }
+    
+    package "Controladores Iteración 2 (Usuarios y Admin Celdas)" {
+        [userController.js\n(CRUD Usuarios, Auth & Login)] as UserCtrl
+        [cellAdminController.js\n(CRUD Celdas, Mantenimiento, Reporte)] as CellAdminCtrl
+    }
+    
+    Server --> Router : monta en /api
+    Router --> AccessCtrl : /api/accesos/*
+    Router --> CellCtrl : /api/celdas/*
+    Router --> NoveltyCtrl : /api/novedades/*
+    Router --> RateCtrl : /api/tarifas/*
+    Router --> UserCtrl : /api/usuarios/* & /api/auth/*
+    Router --> CellAdminCtrl : /api/celdas/* (Admin)
+}
+
+' ============================================================================
+' CAPA DE DATOS / MODELOS
+' ============================================================================
+package "Capa de Acceso a Datos (Data Access Layer)" {
+    [accessModel.js\n(Registros de Acceso)] as AccessModel
+    [vehicleModel.js\n(Vehículos y Mensualidades)] as VehModel
+    [cellModel.js\n(Inventario de Celdas)] as CellModel
+    [billingModel.js\n(Liquidación y Pagos)] as BillingModel
+    [noveltyModel.js\n(Novedades e Inspecciones)] as NoveltyModel
+    [userModel.js\n(Usuarios y Roles)] as UserModel
+    
+    [database.js\n(SQLite Connection Pool)] as DBConfig
+    
+    AccessCtrl --> AccessModel
+    AccessCtrl --> VehModel
+    AccessCtrl --> CellModel
+    AccessCtrl --> BillingModel
+    AccessCtrl --> NoveltyModel
+    
+    CellCtrl --> CellModel
+    NoveltyCtrl --> NoveltyModel
+    RateCtrl --> BillingModel
+    
+    UserCtrl --> UserModel
+    CellAdminCtrl --> CellModel
+    
+    AccessModel --> DBConfig
+    VehModel --> DBConfig
+    CellModel --> DBConfig
+    BillingModel --> DBConfig
+    NoveltyModel --> DBConfig
+    UserModel --> DBConfig
+}
+
+' ============================================================================
+' BASE DE DATOS
+' ============================================================================
+database "Base de Datos Relacional\n(SQLite3: autos_colombia.db)" {
+    [usuarios] as TblUsuarios
+    [celdas] as TblCeldas
+    [clientes] as TblClientes
+    [vehiculos] as TblVehiculos
+    [tarifas] as TblTarifas
+    [mensualidades] as TblMensualidades
+    [registros_acceso] as TblAccesos
+    [novedades] as TblNovedades
+    [pagos] as TblPagos
+}
+
+DBConfig --> TblUsuarios
+DBConfig --> TblCeldas
+DBConfig --> TblClientes
+DBConfig --> TblVehiculos
+DBConfig --> TblTarifas
+DBConfig --> TblMensualidades
+DBConfig --> TblAccesos
+DBConfig --> TblNovedades
+DBConfig --> TblPagos
+
+' Conexión cliente a servidor
+ClientLogic --> Router : HTTP / REST (Fetch API)
+
+@enduml

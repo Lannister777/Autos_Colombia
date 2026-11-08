@@ -76,6 +76,11 @@ function switchTab(tabId) {
   if (tabId === 'tabActive') loadActiveVehicles();
   if (tabId === 'tabNovelties') loadNovelties();
   if (tabId === 'tabRates') loadRates();
+  if (tabId === 'tabUsers') loadUsers();
+  if (tabId === 'tabAdminCells') {
+    loadAdminCells();
+    loadCapacityReport();
+  }
 }
 
 // Carga global de datos
@@ -693,3 +698,424 @@ function showTicketModal(data) {
 function closeTicketModal() {
   document.getElementById('ticketModal').classList.add('hidden');
 }
+
+// ========================================================================
+// PESTAÑA 7: GESTIÓN DE USUARIOS (ITERACIÓN 2)
+// ========================================================================
+let editingUserId = null;
+
+async function loadUsers() {
+  const role = document.getElementById('userFilterRole')?.value || 'TODOS';
+  const active = document.getElementById('userFilterActive')?.value || 'TODOS';
+  const q = document.getElementById('userSearchInput')?.value || '';
+
+  let url = `/api/usuarios?rol=${role}&activo=${active}`;
+  if (q.trim()) url += `&q=${encodeURIComponent(q.trim())}`;
+
+  try {
+    const res = await fetch(url);
+    const json = await res.json();
+    const tbody = document.getElementById('usersTableBody');
+    if (!tbody) return;
+    tbody.innerHTML = '';
+
+    if (!json.success || !json.data || json.data.length === 0) {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="7" class="py-8 text-center text-slate-400">
+            <i class="fa-solid fa-user-slash text-2xl mb-1 block"></i>
+            No se encontraron usuarios con los criterios seleccionados
+          </td>
+        </tr>`;
+      return;
+    }
+
+    json.data.forEach(u => {
+      const tr = document.createElement('tr');
+      tr.className = 'hover:bg-slate-50 transition border-b border-slate-100';
+
+      const roleBadge = u.rol === 'ADMIN'
+        ? `<span class="bg-purple-100 text-purple-800 font-bold px-2 py-0.5 rounded text-[10px]"><i class="fa-solid fa-crown mr-1"></i>ADMIN</span>`
+        : `<span class="bg-cyan-100 text-cyan-800 font-bold px-2 py-0.5 rounded text-[10px]"><i class="fa-solid fa-user-tie mr-1"></i>OPERADOR</span>`;
+
+      const activeBadge = u.activo === 1
+        ? `<span class="bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded text-[10px]"><i class="fa-solid fa-check mr-1"></i>ACTIVO</span>`
+        : `<span class="bg-rose-100 text-rose-800 font-bold px-2 py-0.5 rounded text-[10px]"><i class="fa-solid fa-ban mr-1"></i>INACTIVO</span>`;
+
+      const toggleActionTitle = u.activo === 1 ? 'Desactivar Cuenta' : 'Activar Cuenta';
+      const toggleIcon = u.activo === 1 ? 'fa-user-slash text-rose-600' : 'fa-user-check text-emerald-600';
+
+      tr.innerHTML = `
+        <td class="py-3 px-4 font-mono font-bold text-slate-500">#${u.id_usuario}</td>
+        <td class="py-3 px-4 font-semibold text-slate-900">${u.nombre_completo}</td>
+        <td class="py-3 px-4 font-mono text-slate-700">${u.username}</td>
+        <td class="py-3 px-4">${roleBadge}</td>
+        <td class="py-3 px-4">${activeBadge}</td>
+        <td class="py-3 px-4 text-slate-500 text-[11px]">${u.fecha_creacion ? new Date(u.fecha_creacion).toLocaleDateString('es-CO') : '--'}</td>
+        <td class="py-3 px-4 text-center">
+          <div class="inline-flex items-center gap-1">
+            <button onclick='editUser(${JSON.stringify(u)})' class="p-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded transition" title="Editar Información">
+              <i class="fa-solid fa-pen-to-square"></i>
+            </button>
+            <button onclick="toggleUserActive(${u.id_usuario})" class="p-1.5 bg-slate-100 hover:bg-slate-200 rounded transition" title="${toggleActionTitle}">
+              <i class="fa-solid ${toggleIcon}"></i>
+            </button>
+            <button onclick="openPasswordModal(${u.id_usuario}, '${u.username}')" class="p-1.5 bg-slate-100 hover:bg-slate-200 text-amber-600 rounded transition" title="Cambiar Contraseña">
+              <i class="fa-solid fa-key"></i>
+            </button>
+          </div>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+  } catch (err) {
+    console.error('Error cargando usuarios:', err);
+    showToast('Error cargando la lista de usuarios', 'error');
+  }
+}
+
+function openUserModal() {
+  editingUserId = null;
+  document.getElementById('userModalTitle').innerHTML = '<i class="fa-solid fa-user-plus"></i> Nuevo Usuario';
+  document.getElementById('userIdField').value = '';
+  document.getElementById('userNombreField').value = '';
+  document.getElementById('userUsernameField').value = '';
+  document.getElementById('userUsernameField').readOnly = false;
+  document.getElementById('userPasswordField').value = '';
+  document.getElementById('userPasswordFieldWrapper').classList.remove('hidden');
+  document.getElementById('userPasswordField').required = true;
+  document.getElementById('userRoleField').value = 'OPERADOR';
+  document.getElementById('userModal').classList.remove('hidden');
+}
+
+function editUser(u) {
+  editingUserId = u.id_usuario;
+  document.getElementById('userModalTitle').innerHTML = '<i class="fa-solid fa-pen-to-square"></i> Editar Usuario';
+  document.getElementById('userIdField').value = u.id_usuario;
+  document.getElementById('userNombreField').value = u.nombre_completo;
+  document.getElementById('userUsernameField').value = u.username;
+  document.getElementById('userUsernameField').readOnly = false;
+  document.getElementById('userPasswordFieldWrapper').classList.add('hidden');
+  document.getElementById('userPasswordField').required = false;
+  document.getElementById('userRoleField').value = u.rol;
+  document.getElementById('userModal').classList.remove('hidden');
+}
+
+function closeUserModal() {
+  document.getElementById('userModal').classList.add('hidden');
+}
+
+async function saveUser(e) {
+  e.preventDefault();
+  const id = document.getElementById('userIdField').value;
+  const nombre_completo = document.getElementById('userNombreField').value.trim();
+  const username = document.getElementById('userUsernameField').value.trim();
+  const password = document.getElementById('userPasswordField').value;
+  const rol = document.getElementById('userRoleField').value;
+
+  try {
+    let res;
+    if (id) {
+      // Actualizar PUT
+      res = await fetch(`/api/usuarios/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nombre_completo, username, rol })
+      });
+    } else {
+      // Crear POST
+      res = await fetch('/api/usuarios', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nombre_completo, username, password, rol })
+      });
+    }
+
+    const data = await res.json();
+    if (!res.ok || !data.success) {
+      showToast(data.message || 'Error guardando usuario', 'error');
+      return;
+    }
+
+    showToast(data.message || 'Operación exitosa', 'success');
+    closeUserModal();
+    loadUsers();
+  } catch (err) {
+    console.error('Error guardando usuario:', err);
+    showToast('Error de conexión al guardar usuario', 'error');
+  }
+}
+
+async function toggleUserActive(id) {
+  if (!confirm('¿Confirma que desea alternar el estado (activo/inactivo) de esta cuenta?')) return;
+  try {
+    const res = await fetch(`/api/usuarios/${id}/toggle-active`, { method: 'PATCH' });
+    const data = await res.json();
+    if (data.success) {
+      showToast(data.message, 'success');
+      loadUsers();
+    } else {
+      showToast(data.message || 'Error cambiando estado', 'error');
+    }
+  } catch (err) {
+    showToast('Error al comunicar con el servidor', 'error');
+  }
+}
+
+function openPasswordModal(id, username) {
+  document.getElementById('pwdUserIdField').value = id;
+  document.getElementById('pwdUsernameDisplay').textContent = username;
+  document.getElementById('newPwdField').value = '';
+  document.getElementById('passwordModal').classList.remove('hidden');
+}
+
+function closePasswordModal() {
+  document.getElementById('passwordModal').classList.add('hidden');
+}
+
+async function saveNewPassword(e) {
+  e.preventDefault();
+  const id = document.getElementById('pwdUserIdField').value;
+  const newPassword = document.getElementById('newPwdField').value;
+
+  try {
+    const res = await fetch(`/api/usuarios/${id}/password`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ newPassword })
+    });
+    const data = await res.json();
+    if (data.success) {
+      showToast('Contraseña actualizada exitosamente', 'success');
+      closePasswordModal();
+    } else {
+      showToast(data.message || 'Error actualizando contraseña', 'error');
+    }
+  } catch (err) {
+    showToast('Error al conectar con el servidor', 'error');
+  }
+}
+
+// ========================================================================
+// PESTAÑA 8: ADMINISTRACIÓN DE CELDAS Y CAPACIDAD (ITERACIÓN 2)
+// ========================================================================
+let editingCellId = null;
+
+async function loadCapacityReport() {
+  try {
+    const res = await fetch('/api/celdas/reporte-capacidad');
+    const json = await res.json();
+    if (!json.success || !json.data) return;
+
+    const d = json.data;
+    document.getElementById('capKpiTotal').textContent = d.total;
+    document.getElementById('capKpiLibres').textContent = d.libres;
+    document.getElementById('capKpiOcupadas').textContent = d.ocupadas;
+    document.getElementById('capKpiMantenimiento').textContent = d.mantenimiento;
+    document.getElementById('capKpiPorcentaje').textContent = `${d.porcentajeOcupacion}%`;
+  } catch (err) {
+    console.error('Error cargando reporte de capacidad:', err);
+  }
+}
+
+async function loadAdminCells() {
+  const tipo = document.getElementById('adminCellFilterType')?.value || 'TODOS';
+  const estado = document.getElementById('adminCellFilterState')?.value || 'TODOS';
+  const q = document.getElementById('adminCellSearchInput')?.value.toUpperCase() || '';
+
+  try {
+    const res = await fetch('/api/celdas');
+    const json = await res.json();
+    const tbody = document.getElementById('adminCellsTableBody');
+    if (!tbody) return;
+    tbody.innerHTML = '';
+
+    if (!json.success || !json.data) return;
+
+    let cells = json.data;
+    if (tipo !== 'TODOS') cells = cells.filter(c => c.tipo_permitido === tipo);
+    if (estado !== 'TODOS') cells = cells.filter(c => c.estado === estado);
+    if (q.trim()) cells = cells.filter(c => c.codigo_celda.includes(q) || (c.sector && c.sector.toUpperCase().includes(q)));
+
+    if (cells.length === 0) {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="5" class="py-8 text-center text-slate-400">
+            <i class="fa-solid fa-table-cells text-2xl mb-1 block"></i>
+            No se encontraron celdas con los filtros aplicados
+          </td>
+        </tr>`;
+      return;
+    }
+
+    cells.forEach(c => {
+      const tr = document.createElement('tr');
+      tr.className = 'hover:bg-slate-50 transition border-b border-slate-100';
+
+      let stateBadge = '';
+      if (c.estado === 'LIBRE') {
+        stateBadge = `<span class="bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded text-[10px]"><i class="fa-solid fa-circle-check mr-1"></i>LIBRE</span>`;
+      } else if (c.estado === 'OCUPADA') {
+        stateBadge = `<span class="bg-rose-100 text-rose-800 font-bold px-2 py-0.5 rounded text-[10px]"><i class="fa-solid fa-car-side mr-1"></i>OCUPADA (${c.placa || 'En Curso'})</span>`;
+      } else {
+        stateBadge = `<span class="bg-amber-100 text-amber-800 font-bold px-2 py-0.5 rounded text-[10px]"><i class="fa-solid fa-wrench mr-1"></i>MANTENIMIENTO</span>`;
+      }
+
+      let typeIcon = 'fa-car';
+      if (c.tipo_permitido === 'MOTO') typeIcon = 'fa-motorcycle';
+      if (c.tipo_permitido === 'CAMIONETA') typeIcon = 'fa-truck-pickup';
+      if (c.tipo_permitido === 'BICICLETA') typeIcon = 'fa-bicycle';
+
+      // Acciones según estado
+      let maintenanceBtn = '';
+      if (c.estado === 'LIBRE') {
+        maintenanceBtn = `
+          <button onclick="toggleCellMaintenance(${c.id_celda}, false)" class="px-2 py-1 bg-amber-50 hover:bg-amber-100 text-amber-700 font-semibold rounded text-[11px] border border-amber-200" title="Poner en Mantenimiento">
+            <i class="fa-solid fa-wrench"></i> Mantenimiento
+          </button>`;
+      } else if (c.estado === 'MANTENIMIENTO') {
+        maintenanceBtn = `
+          <button onclick="toggleCellMaintenance(${c.id_celda}, true)" class="px-2 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-semibold rounded text-[11px] border border-emerald-200" title="Habilitar a Disponible">
+            <i class="fa-solid fa-check"></i> Habilitar
+          </button>`;
+      } else {
+        maintenanceBtn = `<span class="text-[11px] text-slate-400 italic">Vehículo adentro</span>`;
+      }
+
+      const canEdit = c.estado !== 'OCUPADA';
+      const editBtn = canEdit
+        ? `<button onclick='editCell(${JSON.stringify(c)})' class="p-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded transition" title="Editar"><i class="fa-solid fa-pen-to-square"></i></button>`
+        : `<button disabled class="p-1.5 bg-slate-100 text-slate-300 rounded cursor-not-allowed" title="No editable mientras esté ocupada"><i class="fa-solid fa-pen-to-square"></i></button>`;
+
+      const deleteBtn = c.estado === 'LIBRE'
+        ? `<button onclick="deleteCell(${c.id_celda}, '${c.codigo_celda}')" class="p-1.5 bg-slate-100 hover:bg-rose-100 text-rose-600 rounded transition" title="Eliminar Celda"><i class="fa-solid fa-trash"></i></button>`
+        : '';
+
+      tr.innerHTML = `
+        <td class="py-3 px-4 font-mono font-bold text-slate-900">${c.codigo_celda}</td>
+        <td class="py-3 px-4">
+          <span class="inline-flex items-center gap-1.5 font-medium text-slate-700">
+            <i class="fa-solid ${typeIcon} text-brand-700"></i> ${c.tipo_permitido}
+          </span>
+        </td>
+        <td class="py-3 px-4 text-slate-600">${c.sector || 'General'}</td>
+        <td class="py-3 px-4">${stateBadge}</td>
+        <td class="py-3 px-4 text-center">
+          <div class="inline-flex items-center gap-1.5">
+            ${maintenanceBtn}
+            ${editBtn}
+            ${deleteBtn}
+          </div>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+  } catch (err) {
+    console.error('Error cargando celdas admin:', err);
+    showToast('Error al consultar inventario de celdas', 'error');
+  }
+}
+
+function openCellModal() {
+  editingCellId = null;
+  document.getElementById('cellModalTitle').innerHTML = '<i class="fa-solid fa-plus"></i> Nueva Celda de Parqueo';
+  document.getElementById('cellIdField').value = '';
+  document.getElementById('cellCodigoField').value = '';
+  document.getElementById('cellTipoField').value = 'AUTOMOVIL';
+  document.getElementById('cellSectorField').value = 'Sector A - Principal';
+  document.getElementById('cellModal').classList.remove('hidden');
+}
+
+function editCell(c) {
+  editingCellId = c.id_celda;
+  document.getElementById('cellModalTitle').innerHTML = '<i class="fa-solid fa-pen-to-square"></i> Editar Celda';
+  document.getElementById('cellIdField').value = c.id_celda;
+  document.getElementById('cellCodigoField').value = c.codigo_celda;
+  document.getElementById('cellTipoField').value = c.tipo_permitido;
+  document.getElementById('cellSectorField').value = c.sector || '';
+  document.getElementById('cellModal').classList.remove('hidden');
+}
+
+function closeCellModal() {
+  document.getElementById('cellModal').classList.add('hidden');
+}
+
+async function saveCell(e) {
+  e.preventDefault();
+  const id = document.getElementById('cellIdField').value;
+  const codigo_celda = document.getElementById('cellCodigoField').value.trim().toUpperCase();
+  const tipo_permitido = document.getElementById('cellTipoField').value;
+  const sector = document.getElementById('cellSectorField').value.trim();
+
+  try {
+    let res;
+    if (id) {
+      res = await fetch(`/api/celdas/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ codigo_celda, tipo_permitido, sector })
+      });
+    } else {
+      res = await fetch('/api/celdas', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ codigo_celda, tipo_permitido, sector })
+      });
+    }
+
+    const data = await res.json();
+    if (!res.ok || !data.success) {
+      showToast(data.message || 'Error guardando celda', 'error');
+      return;
+    }
+
+    showToast(data.message || 'Celda guardada con éxito', 'success');
+    closeCellModal();
+    loadAdminCells();
+    loadCapacityReport();
+    loadCells(); // Refrescar vista caseta
+  } catch (err) {
+    showToast('Error de conexión al guardar celda', 'error');
+  }
+}
+
+async function toggleCellMaintenance(id, isCurrentlyMaintenance) {
+  const endpoint = isCurrentlyMaintenance ? `/api/celdas/${id}/available` : `/api/celdas/${id}/maintenance`;
+  const confirmMsg = isCurrentlyMaintenance ? '¿Desea habilitar nuevamente esta celda para parqueo?' : '¿Desea poner esta celda en Mantenimiento?';
+  if (!confirm(confirmMsg)) return;
+
+  try {
+    const res = await fetch(endpoint, { method: 'PATCH' });
+    const data = await res.json();
+    if (data.success) {
+      showToast(data.message, 'success');
+      loadAdminCells();
+      loadCapacityReport();
+      loadCells();
+    } else {
+      showToast(data.message || 'Error modificando estado de celda', 'error');
+    }
+  } catch (err) {
+    showToast('Error de conexión con el servidor', 'error');
+  }
+}
+
+async function deleteCell(id, codigo) {
+  if (!confirm(`¿Está seguro de eliminar permanentemente la celda ${codigo}? Esta acción no se puede deshacer.`)) return;
+
+  try {
+    const res = await fetch(`/api/celdas/${id}`, { method: 'DELETE' });
+    const data = await res.json();
+    if (data.success) {
+      showToast(data.message, 'success');
+      loadAdminCells();
+      loadCapacityReport();
+      loadCells();
+    } else {
+      showToast(data.message || 'No se pudo eliminar la celda', 'error');
+    }
+  } catch (err) {
+    showToast('Error de conexión con el servidor', 'error');
+  }
+}
+
