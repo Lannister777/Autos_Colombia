@@ -1,4 +1,4 @@
-@startuml AutosColombia_Componentes_Iteraciones1y2
+@startuml AutosColombia_Componentes_Iteraciones1_2_y_3
 skinparam backgroundColor #FFFFFF
 skinparam shadowing false
 skinparam roundcorner 8
@@ -29,7 +29,7 @@ skinparam node {
     FontColor #0F172A
 }
 
-title Diagrama de Componentes - Parqueadero "Autos Colombia" (Iteraciones 1 y 2)
+title Diagrama de Componentes - Parqueadero "Autos Colombia" (Iteraciones 1, 2 y 3)
 
 ' ============================================================================
 ' CLIENTE / CAPA DE PRESENTACIÓN
@@ -67,6 +67,10 @@ package "Capa de Aplicación y API REST (Node.js / Express)" {
         [cellAdminController.js\n(CRUD Celdas, Mantenimiento, Reporte)] as CellAdminCtrl
     }
     
+    package "Controladores Iteración 3 (Gestión de Pagos y Finanzas)" {
+        [paymentController.js\n(Historial Pagos, Mensualidades & Reportes)] as PaymentCtrl
+    }
+    
     Server --> Router : monta en /api
     Router --> AccessCtrl : /api/accesos/*
     Router --> CellCtrl : /api/celdas/*
@@ -74,6 +78,7 @@ package "Capa de Aplicación y API REST (Node.js / Express)" {
     Router --> RateCtrl : /api/tarifas/*
     Router --> UserCtrl : /api/usuarios/* & /api/auth/*
     Router --> CellAdminCtrl : /api/celdas/* (Admin)
+    Router --> PaymentCtrl : /api/pagos/*, /api/mensualidades/*, /api/reportes/*
 }
 
 ' ============================================================================
@@ -86,6 +91,7 @@ package "Capa de Acceso a Datos (Data Access Layer)" {
     [billingModel.js\n(Liquidación y Pagos)] as BillingModel
     [noveltyModel.js\n(Novedades e Inspecciones)] as NoveltyModel
     [userModel.js\n(Usuarios y Roles)] as UserModel
+    [paymentModel.js\n(Gestión Pagos, Suscripciones & Auditoría)] as PaymentModel
     
     [database.js\n(SQLite Connection Pool)] as DBConfig
     
@@ -101,6 +107,8 @@ package "Capa de Acceso a Datos (Data Access Layer)" {
     
     UserCtrl --> UserModel
     CellAdminCtrl --> CellModel
+    PaymentCtrl --> PaymentModel
+    PaymentCtrl --> CellModel
     
     AccessModel --> DBConfig
     VehModel --> DBConfig
@@ -108,6 +116,7 @@ package "Capa de Acceso a Datos (Data Access Layer)" {
     BillingModel --> DBConfig
     NoveltyModel --> DBConfig
     UserModel --> DBConfig
+    PaymentModel --> DBConfig
 }
 
 ' ============================================================================

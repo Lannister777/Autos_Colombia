@@ -104,6 +104,15 @@
         <button onclick="switchTab('tabAdminCells')" id="nav-tabAdminCells" class="tab-btn px-4 py-2 text-sm font-medium rounded-md transition-colors flex items-center gap-2 text-blue-100 hover:bg-brand-700/50">
           <i class="fa-solid fa-sliders text-amber-300"></i> Admin Celdas
         </button>
+        <button onclick="switchTab('tabPayments')" id="nav-tabPayments" class="tab-btn px-4 py-2 text-sm font-medium rounded-md transition-colors flex items-center gap-2 text-blue-100 hover:bg-brand-700/50">
+          <i class="fa-solid fa-credit-card text-emerald-300"></i> Pagos
+        </button>
+        <button onclick="switchTab('tabSubscriptions')" id="nav-tabSubscriptions" class="tab-btn px-4 py-2 text-sm font-medium rounded-md transition-colors flex items-center gap-2 text-blue-100 hover:bg-brand-700/50">
+          <i class="fa-solid fa-calendar-check text-indigo-300"></i> Mensualidades
+        </button>
+        <button onclick="switchTab('tabReports')" id="nav-tabReports" class="tab-btn px-4 py-2 text-sm font-medium rounded-md transition-colors flex items-center gap-2 text-blue-100 hover:bg-brand-700/50">
+          <i class="fa-solid fa-chart-line text-teal-300"></i> Reportes
+        </button>
         <a href="/figma-mockups.html" target="_blank" class="ml-auto px-3 py-1.5 text-xs font-bold rounded-md bg-purple-600 hover:bg-purple-500 text-white flex items-center gap-1.5 shadow transition whitespace-nowrap self-center">
           <i class="fa-brands fa-figma"></i> Mockups de Figma
         </a>
@@ -661,6 +670,369 @@
         </div>
       </div>
     </section>
+
+    <!-- ==================================================================== -->
+    <!-- PESTAÑA 7: GESTIÓN DE PAGOS (ITERACIÓN 3) -->
+    <!-- ==================================================================== -->
+    <section id="tabPayments" class="tab-content hidden space-y-6">
+      <!-- Encabezado de la Sección -->
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-5 rounded-xl shadow-sm border border-slate-200">
+        <div>
+          <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+            <i class="fa-solid fa-credit-card text-emerald-600"></i> Historial y Control de Pagos
+          </h2>
+          <p class="text-xs text-slate-500 mt-0.5">Registro de cobros por acceso ocasional, suscripciones mensuales y auditoría contable.</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="loadPayments()" class="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-lg text-xs flex items-center gap-1.5 transition">
+            <i class="fa-solid fa-arrows-rotate"></i> Actualizar
+          </button>
+        </div>
+      </div>
+
+      <!-- Tarjetas KPI de Pagos -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+          <span class="text-xs text-slate-500 font-medium uppercase tracking-wider">Recaudo Total Registrado</span>
+          <div class="flex items-center justify-between mt-1">
+            <span id="kpiRecaudoTotal" class="text-2xl font-bold text-emerald-600">$ 0</span>
+            <span class="p-2 bg-emerald-50 text-emerald-600 rounded-lg"><i class="fa-solid fa-coins"></i></span>
+          </div>
+        </div>
+        <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+          <span class="text-xs text-slate-500 font-medium uppercase tracking-wider">Total Transacciones</span>
+          <div class="flex items-center justify-between mt-1">
+            <span id="kpiTransaccionesTotal" class="text-2xl font-bold text-slate-800">0</span>
+            <span class="p-2 bg-blue-50 text-blue-600 rounded-lg"><i class="fa-solid fa-receipt"></i></span>
+          </div>
+        </div>
+        <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+          <span class="text-xs text-slate-500 font-medium uppercase tracking-wider">Cobros por Acceso Ocasional</span>
+          <div class="flex items-center justify-between mt-1">
+            <span id="kpiPagosAcceso" class="text-2xl font-bold text-cyan-600">0</span>
+            <span class="p-2 bg-cyan-50 text-cyan-600 rounded-lg"><i class="fa-solid fa-car"></i></span>
+          </div>
+        </div>
+        <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+          <span class="text-xs text-slate-500 font-medium uppercase tracking-wider">Cobros por Mensualidad</span>
+          <div class="flex items-center justify-between mt-1">
+            <span id="kpiPagosMensualidad" class="text-2xl font-bold text-indigo-600">0</span>
+            <span class="p-2 bg-indigo-50 text-indigo-600 rounded-lg"><i class="fa-solid fa-calendar-check"></i></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Barra de Filtros de Pagos -->
+      <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 space-y-3">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3">
+          <div>
+            <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Fecha Desde</label>
+            <input type="date" id="paymentFilterFechaInicio" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs text-slate-700 focus:outline-none focus:border-emerald-500">
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Fecha Hasta</label>
+            <input type="date" id="paymentFilterFechaFin" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs text-slate-700 focus:outline-none focus:border-emerald-500">
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Método de Pago</label>
+            <select id="paymentFilterMetodo" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs text-slate-700 focus:outline-none focus:border-emerald-500">
+              <option value="TODOS">Todos los Métodos</option>
+              <option value="EFECTIVO">Efectivo</option>
+              <option value="NEQUI">Nequi</option>
+              <option value="DAVIPLATA">Daviplata</option>
+              <option value="TARJETA">Tarjeta Débito/Crédito</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Tipo de Servicio</label>
+            <select id="paymentFilterTipo" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs text-slate-700 focus:outline-none focus:border-emerald-500">
+              <option value="TODOS">Todos los Servicios</option>
+              <option value="ACCESO">Acceso Ocasional</option>
+              <option value="MENSUALIDAD">Mensualidad</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Estado</label>
+            <select id="paymentFilterEstado" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs text-slate-700 focus:outline-none focus:border-emerald-500">
+              <option value="TODOS">Todos los Estados</option>
+              <option value="APROBADO">Aprobado</option>
+              <option value="ANULADO">Anulado</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row gap-3 pt-2 border-t border-slate-100">
+          <div class="relative flex-1">
+            <input type="text" id="paymentSearchInput" onkeyup="if(event.key==='Enter') loadPayments()" placeholder="Buscar por comprobante, placa de vehículo, cliente o referencia..." class="w-full bg-slate-50 border border-slate-200 rounded-lg pl-8 pr-3 py-2 text-xs text-slate-700 focus:outline-none focus:border-emerald-500">
+            <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-2.5 text-slate-400 text-xs"></i>
+          </div>
+          <div class="flex gap-2">
+            <button onclick="loadPayments()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg text-xs flex items-center gap-1.5 shadow">
+              <i class="fa-solid fa-filter"></i> Aplicar Filtros
+            </button>
+            <button onclick="resetPaymentFilters()" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold rounded-lg text-xs">
+              Limpiar
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabla de Historial de Pagos -->
+      <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-slate-50 text-slate-600 font-bold uppercase tracking-wider border-b border-slate-200">
+              <tr>
+                <th class="py-3 px-4">Comprobante</th>
+                <th class="py-3 px-4">Tipo</th>
+                <th class="py-3 px-4">Fecha y Hora</th>
+                <th class="py-3 px-4">Vehículo / Placa</th>
+                <th class="py-3 px-4">Cliente / Usuario</th>
+                <th class="py-3 px-4">Método</th>
+                <th class="py-3 px-4">Referencia</th>
+                <th class="py-3 px-4 text-right">Monto Pagado</th>
+                <th class="py-3 px-4 text-center">Estado</th>
+                <th class="py-3 px-4 text-center">Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="paymentsTableBody" class="divide-y divide-slate-100">
+              <!-- Renderizado dinámico -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================================================================== -->
+    <!-- PESTAÑA 8: GESTIÓN DE MENSUALIDADES (ITERACIÓN 3) -->
+    <!-- ==================================================================== -->
+    <section id="tabSubscriptions" class="tab-content hidden space-y-6">
+      <!-- Encabezado de Mensualidades -->
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-5 rounded-xl shadow-sm border border-slate-200">
+        <div>
+          <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+            <i class="fa-solid fa-calendar-check text-indigo-600"></i> Gestión de Clientes Abonados y Mensualidades
+          </h2>
+          <p class="text-xs text-slate-500 mt-0.5">Control de suscripciones, asignación exclusiva de celdas y renovaciones periódicas.</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="openNewSubscriptionModal()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-lg text-xs flex items-center gap-1.5 shadow transition">
+            <i class="fa-solid fa-plus"></i> Nueva Mensualidad
+          </button>
+          <button onclick="loadSubscriptions()" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-lg text-xs flex items-center gap-1.5 transition">
+            <i class="fa-solid fa-arrows-rotate"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Tarjetas KPI de Mensualidades -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+          <span class="text-xs text-slate-500 font-medium uppercase tracking-wider">Mensualidades Activas</span>
+          <div class="flex items-center justify-between mt-1">
+            <span id="kpiSubsActivas" class="text-2xl font-bold text-emerald-600">0</span>
+            <span class="p-2 bg-emerald-50 text-emerald-600 rounded-lg"><i class="fa-solid fa-circle-check"></i></span>
+          </div>
+        </div>
+        <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+          <span class="text-xs text-slate-500 font-medium uppercase tracking-wider">Próximas a Vencer (&le; 7 días)</span>
+          <div class="flex items-center justify-between mt-1">
+            <span id="kpiSubsPorVencer" class="text-2xl font-bold text-amber-500">0</span>
+            <span class="p-2 bg-amber-50 text-amber-600 rounded-lg"><i class="fa-solid fa-triangle-exclamation"></i></span>
+          </div>
+        </div>
+        <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+          <span class="text-xs text-slate-500 font-medium uppercase tracking-wider">Mensualidades Vencidas</span>
+          <div class="flex items-center justify-between mt-1">
+            <span id="kpiSubsVencidas" class="text-2xl font-bold text-rose-600">0</span>
+            <span class="p-2 bg-rose-50 text-rose-600 rounded-lg"><i class="fa-solid fa-clock"></i></span>
+          </div>
+        </div>
+        <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+          <span class="text-xs text-slate-500 font-medium uppercase tracking-wider">Total Suscripciones</span>
+          <div class="flex items-center justify-between mt-1">
+            <span id="kpiSubsTotal" class="text-2xl font-bold text-slate-800">0</span>
+            <span class="p-2 bg-slate-100 text-slate-700 rounded-lg"><i class="fa-solid fa-folder"></i></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Barra de Filtros de Mensualidades -->
+      <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex flex-col sm:flex-row gap-3 items-center justify-between">
+        <div class="flex gap-2 w-full sm:w-auto">
+          <select id="subFilterEstado" onchange="loadSubscriptions()" class="bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs text-slate-700 font-semibold focus:outline-none focus:border-indigo-500">
+            <option value="TODOS">Todos los Estados</option>
+            <option value="ACTIVA">Activas</option>
+            <option value="VENCIDA">Vencidas</option>
+            <option value="CANCELADA">Canceladas</option>
+          </select>
+        </div>
+        <div class="relative w-full sm:w-80">
+          <input type="text" id="subSearchInput" oninput="loadSubscriptions()" placeholder="Buscar cliente, documento, placa o celda..." class="w-full bg-slate-50 border border-slate-200 rounded-lg pl-8 pr-3 py-2 text-xs text-slate-700 focus:outline-none focus:border-indigo-500">
+          <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-2.5 text-slate-400 text-xs"></i>
+        </div>
+      </div>
+
+      <!-- Tabla de Mensualidades -->
+      <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-slate-50 text-slate-600 font-bold uppercase tracking-wider border-b border-slate-200">
+              <tr>
+                <th class="py-3 px-4">ID</th>
+                <th class="py-3 px-4">Cliente Abonado</th>
+                <th class="py-3 px-4">Contacto / Teléfono</th>
+                <th class="py-3 px-4">Vehículo</th>
+                <th class="py-3 px-4">Celda Asignada</th>
+                <th class="py-3 px-4">Vigencia (Inicio - Fin)</th>
+                <th class="py-3 px-4 text-right">Valor Mensual</th>
+                <th class="py-3 px-4 text-center">Estado</th>
+                <th class="py-3 px-4 text-center">Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="subscriptionsTableBody" class="divide-y divide-slate-100">
+              <!-- Renderizado dinámico -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================================================================== -->
+    <!-- PESTAÑA 9: REPORTES FINANCIEROS Y AUDITORÍA (ITERACIÓN 3) -->
+    <!-- ==================================================================== -->
+    <section id="tabReports" class="tab-content hidden space-y-6">
+      <!-- Encabezado de Reportes -->
+      <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200">
+        <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+          <i class="fa-solid fa-chart-pie text-teal-600"></i> Informes Financieros y Alertas de Cartera
+        </h2>
+        <p class="text-xs text-slate-500 mt-0.5">Consolidados diarios, balances mensuales y control preventivo de vencimiento de abonados.</p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- 1. Reporte Diario de Ingresos -->
+        <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200 space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+            <h3 class="font-bold text-sm text-slate-800 flex items-center gap-2">
+              <i class="fa-solid fa-calendar-day text-emerald-600"></i> Cierre Diario de Caja
+            </h3>
+            <div class="flex items-center gap-2">
+              <input type="date" id="dailyReportDate" onchange="loadDailyReport()" class="bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1 text-xs text-slate-700 font-semibold focus:outline-none focus:border-teal-500">
+              <button onclick="loadDailyReport()" class="px-2.5 py-1 bg-teal-50 text-teal-700 font-bold rounded text-xs hover:bg-teal-100"><i class="fa-solid fa-rotate-right"></i></button>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div class="bg-emerald-50/70 border border-emerald-100 p-3.5 rounded-lg text-center">
+              <span class="text-[10px] uppercase font-bold text-emerald-700 block">Total Recaudado</span>
+              <span id="dailyTotalAmount" class="text-xl font-black text-emerald-700">$ 0</span>
+            </div>
+            <div class="bg-blue-50/70 border border-blue-100 p-3.5 rounded-lg text-center">
+              <span class="text-[10px] uppercase font-bold text-blue-700 block">Operaciones</span>
+              <span id="dailyTotalCount" class="text-xl font-black text-blue-700">0</span>
+            </div>
+          </div>
+
+          <!-- Desglose por Método -->
+          <div>
+            <h4 class="text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-2">Desglose por Medio de Pago</h4>
+            <div id="dailyMethodBreakdown" class="space-y-2">
+              <!-- Renderizado dinámico -->
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Alertas de Mensualidades por Vencer -->
+        <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200 space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+            <h3 class="font-bold text-sm text-slate-800 flex items-center gap-2">
+              <i class="fa-solid fa-bell text-amber-500"></i> Alerta de Vencimiento de Abonados
+            </h3>
+            <div class="flex items-center gap-1.5">
+              <span class="text-xs text-slate-500">Días:</span>
+              <select id="expiringDaysSelect" onchange="loadExpiringSubscriptions()" class="bg-slate-50 border border-slate-200 rounded-lg px-2 py-1 text-xs font-semibold text-slate-700 focus:outline-none focus:border-teal-500">
+                <option value="7">Próximos 7 días</option>
+                <option value="15">Próximos 15 días</option>
+                <option value="30">Próximos 30 días</option>
+              </select>
+            </div>
+          </div>
+
+          <div id="expiringSubsContainer" class="space-y-2 max-h-72 overflow-y-auto pr-1">
+            <!-- Renderizado dinámico -->
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. Reporte Mensual Consolidado -->
+      <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200 space-y-4">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-slate-100 pb-3">
+          <div>
+            <h3 class="font-bold text-sm text-slate-800 flex items-center gap-2">
+              <i class="fa-solid fa-chart-column text-indigo-600"></i> Balance Mensual de Ingresos
+            </h3>
+            <p class="text-xs text-slate-400">Totalización día a día de cobros en el periodo seleccionado.</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <select id="monthlyReportYear" onchange="loadMonthlyReport()" class="bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 text-xs font-semibold text-slate-700 focus:outline-none">
+              <option value="2026">2026</option>
+              <option value="2025">2025</option>
+            </select>
+            <select id="monthlyReportMonth" onchange="loadMonthlyReport()" class="bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 text-xs font-semibold text-slate-700 focus:outline-none">
+              <option value="1">Enero</option>
+              <option value="2">Febrero</option>
+              <option value="3">Marzo</option>
+              <option value="4">Abril</option>
+              <option value="5">Mayo</option>
+              <option value="6">Junio</option>
+              <option value="7">Julio</option>
+              <option value="8">Agosto</option>
+              <option value="9">Septiembre</option>
+              <option value="10">Octubre</option>
+              <option value="11" selected>Noviembre</option>
+              <option value="12">Diciembre</option>
+            </select>
+            <button onclick="loadMonthlyReport()" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-lg text-xs shadow flex items-center gap-1">
+              <i class="fa-solid fa-magnifying-glass"></i> Consultar
+            </button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="bg-gradient-to-br from-indigo-900 to-indigo-800 text-white p-4 rounded-xl shadow">
+            <span class="text-xs uppercase font-medium text-indigo-200">Ingresos Totales del Mes</span>
+            <div id="monthlyTotalAmount" class="text-2xl font-black mt-1">$ 0</div>
+            <div class="text-xs text-indigo-200 mt-2 flex items-center gap-1">
+              <i class="fa-solid fa-receipt"></i> <span id="monthlyTotalCount">0</span> operaciones aprobadas
+            </div>
+          </div>
+          <div class="md:col-span-2 bg-slate-50 p-4 rounded-xl border border-slate-200">
+            <span class="text-xs uppercase font-bold text-slate-500 mb-2 block">Participación por Método de Pago</span>
+            <div id="monthlyMethodsContainer" class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+              <!-- Renderizado dinámico -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Tabla Diaria del Mes -->
+        <div class="overflow-x-auto border border-slate-200 rounded-lg">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-slate-50 text-slate-600 font-bold uppercase tracking-wider border-b border-slate-200">
+              <tr>
+                <th class="py-2.5 px-4">Fecha</th>
+                <th class="py-2.5 px-4 text-center">Día</th>
+                <th class="py-2.5 px-4 text-center">Transacciones</th>
+                <th class="py-2.5 px-4 text-right">Total Ingresos Día</th>
+              </tr>
+            </thead>
+            <tbody id="monthlyTableBody" class="divide-y divide-slate-100">
+              <!-- Renderizado dinámico -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
   </main>
 
   <!-- ==================================================================== -->
@@ -848,10 +1220,371 @@
     </div>
   </div>
 
+  <!-- ==================================================================== -->
+  <!-- MODAL: DETALLE Y COMPROBANTE DE PAGO (ITERACIÓN 3) -->
+  <!-- ==================================================================== -->
+  <div id="paymentDetailModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-xl shadow-2xl max-w-sm w-full overflow-hidden border border-slate-300">
+      <div class="p-3 bg-emerald-800 text-white flex justify-between items-center">
+        <h4 class="font-bold text-xs uppercase tracking-wider flex items-center gap-1.5">
+          <i class="fa-solid fa-receipt"></i> Comprobante de Pago Oficial
+        </h4>
+        <button onclick="closePaymentDetailModal()" class="text-emerald-200 hover:text-white text-sm"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <!-- Recibo Imprimible -->
+      <div id="printPaymentReceiptArea" class="p-5 font-mono text-xs text-slate-900 bg-white space-y-3 border-b-2 border-dashed border-slate-300">
+        <div class="text-center space-y-0.5">
+          <p class="font-bold text-sm tracking-wider">PARQUEADERO AUTOS COLOMBIA</p>
+          <p class="text-[10px] text-slate-500">NIT: 900.876.543-1</p>
+          <p class="text-[10px] text-slate-500">Calle 45 # 12-34 - PBX: (604) 444-5566</p>
+          <p class="text-[10px] text-slate-500">Régimen Común • Factura / Recibo de Caja</p>
+        </div>
+
+        <div class="border-t border-b border-dashed border-slate-400 py-2 space-y-1">
+          <div class="flex justify-between font-bold">
+            <span>COMPROBANTE:</span>
+            <span id="payReceiptComprobante" class="text-emerald-700">CP-0000</span>
+          </div>
+          <div class="flex justify-between">
+            <span>Fecha y Hora:</span>
+            <span id="payReceiptFecha">--</span>
+          </div>
+          <div class="flex justify-between">
+            <span>Estado:</span>
+            <span id="payReceiptEstado" class="font-bold">APROBADO</span>
+          </div>
+        </div>
+
+        <div class="space-y-1 py-1">
+          <div class="flex justify-between">
+            <span class="text-slate-500">Tipo de Servicio:</span>
+            <span id="payReceiptTipoServicio" class="font-bold">ACCESO</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-slate-500">Placa Vehículo:</span>
+            <span id="payReceiptPlaca" class="font-bold bg-slate-100 px-1.5 py-0.5 rounded">ABC-123</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-slate-500">Cliente / Pagador:</span>
+            <span id="payReceiptCliente" class="font-semibold text-right truncate max-w-[170px]">--</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-slate-500">Medio de Pago:</span>
+            <span id="payReceiptMetodo" class="font-bold">EFECTIVO</span>
+          </div>
+          <div id="payReceiptRefRow" class="flex justify-between hidden">
+            <span class="text-slate-500">Referencia Transacción:</span>
+            <span id="payReceiptRef" class="font-mono text-[11px]">--</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-slate-500">Operador de Turno:</span>
+            <span id="payReceiptOperador">--</span>
+          </div>
+        </div>
+
+        <div class="border-t-2 border-slate-800 pt-2 flex justify-between items-baseline font-bold">
+          <span class="text-sm">TOTAL PAGADO:</span>
+          <span id="payReceiptTotal" class="text-lg text-emerald-800">$ 0</span>
+        </div>
+
+        <div id="payReceiptAnuladoBox" class="hidden bg-rose-50 border border-rose-300 p-2 rounded text-[10px] text-rose-800">
+          <span class="font-bold block uppercase">Información de Anulación:</span>
+          <p id="payReceiptAnuladoMotivo">--</p>
+          <span id="payReceiptAnuladoFecha" class="block text-[9px] text-rose-600 mt-0.5">--</span>
+        </div>
+
+        <div class="text-[9px] text-center text-slate-500 pt-2 space-y-0.5 border-t border-dashed border-slate-300">
+          <p>Comprobante válido como soporte de pago.</p>
+          <p>¡Gracias por su confianza y preferencia!</p>
+        </div>
+      </div>
+
+      <div class="p-3 bg-slate-50 flex gap-2">
+        <button onclick="reprintPaymentReceipt()" class="flex-1 bg-emerald-700 hover:bg-emerald-800 text-white font-bold py-2 rounded text-xs flex items-center justify-center gap-1.5 shadow">
+          <i class="fa-solid fa-print"></i> Reimprimir Comprobante
+        </button>
+        <button onclick="closePaymentDetailModal()" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold rounded text-xs">
+          Cerrar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================================================================== -->
+  <!-- MODAL: ANULAR PAGO (ITERACIÓN 3) -->
+  <!-- ==================================================================== -->
+  <div id="voidPaymentModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-xl shadow-2xl max-w-md w-full overflow-hidden border border-slate-200">
+      <div class="p-4 bg-rose-700 text-white flex justify-between items-center">
+        <h4 class="font-bold text-sm flex items-center gap-2">
+          <i class="fa-solid fa-ban"></i> Anular Comprobante de Pago
+        </h4>
+        <button onclick="closeVoidModal()" class="text-rose-200 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <form id="voidForm" onsubmit="confirmVoidPayment(event)" class="p-5 space-y-4 text-xs">
+        <input type="hidden" id="voidPaymentId">
+        <div class="bg-amber-50 border border-amber-200 p-3 rounded-lg text-amber-800 flex gap-2">
+          <i class="fa-solid fa-triangle-exclamation text-amber-600 text-sm mt-0.5"></i>
+          <div>
+            <p class="font-bold">Advertencia de Seguridad Contable:</p>
+            <p class="text-[11px] mt-0.5">Esta acción marcará el comprobante como ANULADO en los balances contables. Se requiere rol de Administrador.</p>
+          </div>
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 uppercase mb-1">Comprobante a Anular</label>
+          <input type="text" id="voidComprobanteText" readonly class="w-full bg-slate-100 border border-slate-300 rounded-lg p-2.5 text-slate-800 font-mono font-bold">
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 uppercase mb-1">Usuario Administrador Autorizador <span class="text-rose-500">*</span></label>
+          <select id="voidUserIdSelect" required class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 text-slate-800 font-semibold focus:outline-none focus:border-rose-600">
+            <option value="1">1 - Administrador Autos Colombia (ADMIN)</option>
+          </select>
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 uppercase mb-1">Motivo de Anulación <span class="text-rose-500">*</span></label>
+          <textarea id="voidMotivoField" required rows="3" placeholder="Indique detalladamente el motivo de la anulación (ej. Error en digitación de método, duplicidad de cobro...)" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 text-slate-800 focus:outline-none focus:border-rose-600"></textarea>
+        </div>
+        <div class="flex justify-end gap-2 pt-3 border-t border-slate-100">
+          <button type="button" onclick="closeVoidModal()" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold rounded">Cancelar</button>
+          <button type="submit" class="px-5 py-2 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded shadow flex items-center gap-1.5">
+            <i class="fa-solid fa-ban"></i> Confirmar Anulación
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==================================================================== -->
+  <!-- MODAL: NUEVA MENSUALIDAD (ITERACIÓN 3) -->
+  <!-- ==================================================================== -->
+  <div id="newSubModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-xl shadow-2xl max-w-lg w-full overflow-hidden border border-slate-200">
+      <div class="p-4 bg-indigo-700 text-white flex justify-between items-center">
+        <h4 class="font-bold text-sm flex items-center gap-2">
+          <i class="fa-solid fa-calendar-plus"></i> Nueva Suscripción de Mensualidad
+        </h4>
+        <button onclick="closeNewSubModal()" class="text-indigo-200 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <form id="newSubForm" onsubmit="saveNewSubscription(event)" class="p-5 space-y-4 text-xs">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-700 uppercase mb-1">Cliente Abonado <span class="text-rose-500">*</span></label>
+            <select id="subClienteSelect" required class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 text-slate-800 font-semibold focus:outline-none focus:border-indigo-600">
+              <!-- Cargado dinámicamente -->
+            </select>
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 uppercase mb-1">Vehículo Asociado <span class="text-rose-500">*</span></label>
+            <select id="subVehiculoSelect" required class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 text-slate-800 font-semibold focus:outline-none focus:border-indigo-600">
+              <!-- Cargado dinámicamente -->
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-700 uppercase mb-1">Celda de Parqueo Asignada</label>
+            <select id="subCeldaSelect" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 text-slate-800 font-semibold focus:outline-none focus:border-indigo-600">
+              <!-- Celdas libres -->
+            </select>
+            <p class="text-[10px] text-slate-400 mt-1">Celda exclusiva mientras la mensualidad esté activa.</p>
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 uppercase mb-1">Tarifa / Valor Mensual ($) <span class="text-rose-500">*</span></label>
+            <input type="number" id="subValorField" required min="1000" step="1000" placeholder="180000" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 text-slate-800 font-bold focus:outline-none focus:border-indigo-600">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-700 uppercase mb-1">Fecha de Inicio <span class="text-rose-500">*</span></label>
+            <input type="date" id="subFechaInicioField" required class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 text-slate-800 focus:outline-none focus:border-indigo-600">
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 uppercase mb-1">Fecha de Fin (Vigencia)</label>
+            <input type="date" id="subFechaFinField" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 text-slate-800 focus:outline-none focus:border-indigo-600">
+            <p class="text-[10px] text-slate-400 mt-1">Por defecto: 30 días a partir de la fecha de inicio.</p>
+          </div>
+        </div>
+
+        <!-- Cobro Inicial de Activación -->
+        <div class="bg-indigo-50/70 border border-indigo-200 p-3 rounded-lg space-y-3">
+          <span class="font-bold text-indigo-900 block text-[11px] uppercase tracking-wider">
+            <i class="fa-solid fa-cash-register"></i> Pago de Activación Inicial
+          </span>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block font-bold text-slate-700 uppercase mb-1">Método de Pago <span class="text-rose-500">*</span></label>
+              <select id="subMetodoPagoSelect" required class="w-full bg-white border border-slate-300 rounded-lg p-2 text-slate-800 font-semibold focus:outline-none focus:border-indigo-600">
+                <option value="EFECTIVO">Efectivo</option>
+                <option value="NEQUI">Nequi</option>
+                <option value="DAVIPLATA">Daviplata</option>
+                <option value="TARJETA">Tarjeta Débito/Crédito</option>
+              </select>
+            </div>
+            <div>
+              <label class="block font-bold text-slate-700 uppercase mb-1">Referencia Transacción</label>
+              <input type="text" id="subReferenciaField" placeholder="Ej. NEQ-987654" class="w-full bg-white border border-slate-300 rounded-lg p-2 text-slate-800 focus:outline-none focus:border-indigo-600">
+            </div>
+          </div>
+        </div>
+
+        <div class="flex justify-end gap-2 pt-3 border-t border-slate-100">
+          <button type="button" onclick="closeNewSubModal()" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold rounded">Cancelar</button>
+          <button type="submit" class="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded shadow flex items-center gap-1.5">
+            <i class="fa-solid fa-check"></i> Registrar y Activar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==================================================================== -->
+  <!-- MODAL: RENOVAR MENSUALIDAD (ITERACIÓN 3) -->
+  <!-- ==================================================================== -->
+  <div id="renewSubModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-xl shadow-2xl max-w-md w-full overflow-hidden border border-slate-200">
+      <div class="p-4 bg-emerald-700 text-white flex justify-between items-center">
+        <h4 class="font-bold text-sm flex items-center gap-2">
+          <i class="fa-solid fa-rotate-right"></i> Renovar Mensualidad de Abonado
+        </h4>
+        <button onclick="closeRenewSubModal()" class="text-emerald-200 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <form id="renewSubForm" onsubmit="confirmRenewSubscription(event)" class="p-5 space-y-4 text-xs">
+        <input type="hidden" id="renewSubId">
+        <div class="bg-slate-50 border border-slate-200 p-3 rounded-lg space-y-1">
+          <div class="flex justify-between">
+            <span class="text-slate-500 font-semibold">Cliente:</span>
+            <span id="renewClientName" class="font-bold text-slate-800">--</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-slate-500 font-semibold">Vehículo / Placa:</span>
+            <span id="renewVehiclePlate" class="font-bold text-slate-800">--</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-slate-500 font-semibold">Nueva Vigencia:</span>
+            <span class="font-bold text-emerald-700">+30 Días desde vencimiento</span>
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 uppercase mb-1">Valor a Cobrar ($) <span class="text-rose-500">*</span></label>
+          <input type="number" id="renewValorField" required min="1000" step="1000" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 text-slate-800 font-bold focus:outline-none focus:border-emerald-600">
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-700 uppercase mb-1">Método de Pago <span class="text-rose-500">*</span></label>
+            <select id="renewMetodoSelect" required class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 text-slate-800 font-semibold focus:outline-none focus:border-emerald-600">
+              <option value="EFECTIVO">Efectivo</option>
+              <option value="NEQUI">Nequi</option>
+              <option value="DAVIPLATA">Daviplata</option>
+              <option value="TARJETA">Tarjeta</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 uppercase mb-1">Referencia</label>
+            <input type="text" id="renewRefField" placeholder="Ej. NEQ-00123" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 text-slate-800 focus:outline-none focus:border-emerald-600">
+          </div>
+        </div>
+
+        <div class="flex justify-end gap-2 pt-3 border-t border-slate-100">
+          <button type="button" onclick="closeRenewSubModal()" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold rounded">Cancelar</button>
+          <button type="submit" class="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded shadow flex items-center gap-1.5">
+            <i class="fa-solid fa-check"></i> Procesar Renovación y Pago
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==================================================================== -->
+  <!-- MODAL: DETALLE DE MENSUALIDAD E HISTORIAL (ITERACIÓN 3) -->
+  <!-- ==================================================================== -->
+  <div id="subDetailModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-xl shadow-2xl max-w-lg w-full overflow-hidden border border-slate-200">
+      <div class="p-4 bg-indigo-900 text-white flex justify-between items-center">
+        <h4 class="font-bold text-sm flex items-center gap-2">
+          <i class="fa-solid fa-id-card"></i> Ficha de Abonado y Registro de Pagos
+        </h4>
+        <button onclick="closeSubDetailModal()" class="text-indigo-200 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="p-5 space-y-4 text-xs">
+        <!-- Tarjeta de Información General -->
+        <div class="bg-slate-50 border border-slate-200 rounded-lg p-3 grid grid-cols-2 gap-2">
+          <div>
+            <span class="text-slate-400 block text-[10px] uppercase font-bold">Cliente</span>
+            <span id="dtSubCliente" class="font-bold text-slate-800">--</span>
+          </div>
+          <div>
+            <span class="text-slate-400 block text-[10px] uppercase font-bold">Documento / Cédula</span>
+            <span id="dtSubDoc" class="font-semibold text-slate-700">--</span>
+          </div>
+          <div>
+            <span class="text-slate-400 block text-[10px] uppercase font-bold">Teléfono Contacto</span>
+            <span id="dtSubTel" class="font-semibold text-slate-700">--</span>
+          </div>
+          <div>
+            <span class="text-slate-400 block text-[10px] uppercase font-bold">Vehículo y Placa</span>
+            <span id="dtSubVehiculo" class="font-bold text-slate-800">--</span>
+          </div>
+          <div>
+            <span class="text-slate-400 block text-[10px] uppercase font-bold">Celda Asignada</span>
+            <span id="dtSubCelda" class="font-bold text-indigo-700">--</span>
+          </div>
+          <div>
+            <span class="text-slate-400 block text-[10px] uppercase font-bold">Estado</span>
+            <span id="dtSubEstado">--</span>
+          </div>
+          <div class="col-span-2 flex justify-between items-center pt-2 border-t border-slate-200">
+            <div>
+              <span class="text-slate-400 block text-[10px] uppercase font-bold">Periodo de Cobertura</span>
+              <span id="dtSubPeriodo" class="font-semibold text-slate-700">--</span>
+            </div>
+            <div class="text-right">
+              <span class="text-slate-400 block text-[10px] uppercase font-bold">Días Restantes</span>
+              <span id="dtSubDias" class="font-bold text-sm">--</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Historial de Pagos de esta mensualidad -->
+        <div>
+          <h5 class="font-bold text-slate-700 uppercase tracking-wider text-[11px] mb-2 flex items-center gap-1.5">
+            <i class="fa-solid fa-clock-rotate-left text-indigo-600"></i> Historial de Comprobantes de Pago
+          </h5>
+          <div class="max-h-48 overflow-y-auto border border-slate-200 rounded-lg">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-slate-50 text-slate-600 font-bold uppercase tracking-wider border-b border-slate-200 text-[10px]">
+                <tr>
+                  <th class="py-2 px-3">Comprobante</th>
+                  <th class="py-2 px-3">Fecha</th>
+                  <th class="py-2 px-3">Método</th>
+                  <th class="py-2 px-3 text-right">Monto</th>
+                  <th class="py-2 px-3 text-center">Acción</th>
+                </tr>
+              </thead>
+              <tbody id="subDetailPaymentsBody" class="divide-y divide-slate-100">
+                <!-- Renderizado dinámico -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="flex justify-end pt-2 border-t border-slate-100">
+          <button type="button" onclick="closeSubDetailModal()" class="px-5 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold rounded">
+            Cerrar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Footer Institucional -->
   <footer class="bg-white border-t border-slate-200 py-4 text-center text-xs text-slate-500 mt-auto">
     <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-2">
-      <p>© 2026 <strong>Parqueadero Autos Colombia</strong> - Software de Control Operativo - Iteraciones 1 y 2</p>
+      <p>© 2026 <strong>Parqueadero Autos Colombia</strong> - Software de Control Operativo - Iteraciones 1, 2 y 3</p>
       <p class="text-slate-400">Desarrollo Metodológico • Arquitectura StarUML • Base de Datos Normalizada 3FN</p>
     </div>
   </footer>

@@ -269,4 +269,209 @@ deactivate CellAdminCtrl
 deactivate Router
 deactivate UI
 
+newpage
+
+' ============================================================================
+' DIAGRAMA DE SECUENCIA 6: PAGO Y SALIDA DE VEHÍCULO OCASIONAL (ITERACIONES 1 Y 3)
+' ============================================================================
+== SD-06: Cobro y Liquidación de Salida Ocasional (Iteraciones 1 y 3) ==
+
+actor "Operador Caseta" as Op
+participant "Frontend SPA\n(tabExit)" as UI
+participant "API Router\n(apiRoutes.js)" as Router
+participant "accessController\n(accessController.js)" as AccessCtrl
+participant "billingModel\n(billingModel.js)" as BillModel
+participant "accessModel\n(accessModel.js)" as AccessModel
+participant "cellModel\n(cellModel.js)" as CellModel
+database "SQLite Database\n(autos_colombia.db)" as DB
+
+Op -> UI : 1. Selecciona medio de pago "NEQUI", digita ref "NEQ-123" y confirma
+activate UI
+UI -> Router : POST /api/accesos/salida { idRegistro, metodoPago: 'NEQUI', referenciaPago: 'NEQ-123' }
+activate Router
+Router -> AccessCtrl : confirmExit(req, res)
+activate AccessCtrl
+
+AccessCtrl -> AccessModel : registerExit(idRegistro, minutos, total, idUsuario)
+AccessModel -> DB : UPDATE registros_acceso SET estado = 'FINALIZADO', fecha_hora_salida = now(), valor_total = ? WHERE id_registro = ?
+DB --> AccessModel : OK
+
+AccessCtrl -> CellModel : updateCellState(idCelda, 'LIBRE')
+CellModel -> DB : UPDATE celdas SET estado = 'LIBRE' WHERE id_celda = ?
+DB --> CellModel : OK
+
+AccessCtrl -> BillModel : registerPayment(idRegistro, null, monto, 'NEQUI', 'NEQ-123', idUsuario)
+BillModel -> DB : INSERT INTO pagos (numero_comprobante, id_registro, monto_pagado, metodo_pago, referencia_transaccion, id_usuario, estado) VALUES (?, ?, ?, ?, ?, ?, 'APROBADO')
+DB --> BillModel : lastID = 10 (CP-20261122-1001)
+
+AccessCtrl --> Router : 200 OK { success: true, data: { registro, pago } }
+deactivate AccessCtrl
+Router --> UI : 200 OK
+deactivate Router
+
+UI -> UI : showTicketModal(pago)
+UI --> Op : 2. Muestra ticket térmico impreso y celda liberada
+deactivate UI
+
+newpage
+
+' ============================================================================
+' DIAGRAMA DE SECUENCIA 7: CREACIÓN DE MENSUALIDAD Y PAGO INICIAL (ITERACIÓN 3)
+' ============================================================================
+== SD-07: Nueva Suscripción de Abonado y Cobro Inicial (Iteración 3) ==
+
+actor "Administrador" as Admin
+participant "Frontend SPA\n(tabSubscriptions)" as UI
+participant "API Router" as Router
+participant "paymentController\n(paymentController.js)" as PayCtrl
+participant "paymentModel\n(paymentModel.js)" as PayModel
+participant "cellModel" as CellModel
+database "SQLite Database" as DB
+
+Admin -> UI : 1. Diligencia cliente, vehículo, celda "A-02", valor $180.000 y método EFECTIVO
+activate UI
+UI -> Router : POST /api/mensualidades { id_cliente: 1, id_vehiculo: 1, id_celda: 2, valor_mensual: 180000, metodo_pago: 'EFECTIVO' }
+activate Router
+Router -> PayCtrl : createSubscription(req, res)
+activate PayCtrl
+
+PayCtrl -> PayModel : createSubscription(data)
+PayModel -> DB : SELECT * FROM celdas WHERE id_celda = 2 AND estado = 'LIBRE'
+DB --> PayModel : { id_celda: 2, codigo_celda: 'A-02', estado: 'LIBRE' }
+
+PayModel -> DB : INSERT INTO mensualidades (id_cliente, id_vehiculo, id_celda_asignada, fecha_inicio, fecha_fin, valor_mensual, estado) VALUES (?, ?, 2, ?, ?, 180000, 'ACTIVA')
+DB --> PayModel : id_mensualidad = 3
+
+PayModel -> DB : UPDATE celdas SET estado = 'OCUPADA' WHERE id_celda = 2
+DB --> PayModel : OK
+
+PayModel -> DB : INSERT INTO pagos (numero_comprobante, id_mensualidad, monto_pagado, metodo_pago, id_usuario, estado) VALUES ('CP-20261122-8821', 3, 180000, 'EFECTIVO', 1, 'APROBADO')
+DB --> PayModel : id_pago = 11
+
+PayCtrl --> Router : 201 Created { success: true, data: { subscription, payment } }
+deactivate PayCtrl
+Router --> UI : 201 Created
+deactivate Router
+
+UI -> UI : loadSubscriptions() & loadCells()
+UI --> Admin : 2. Mensualidad activa, celda asignada y comprobante generado
+deactivate UI
+
+newpage
+
+' ============================================================================
+' DIAGRAMA DE SECUENCIA 8: RENOVACIÓN DE MENSUALIDAD (ITERACIÓN 3)
+' ============================================================================
+== SD-08: Renovación de Mensualidad Vencida y Registro de Pago (Iteración 3) ==
+
+actor "Administrador / Operador" as User
+participant "Frontend SPA\n(tabSubscriptions)" as UI
+participant "API Router" as Router
+participant "paymentController" as PayCtrl
+participant "paymentModel" as PayModel
+database "SQLite Database" as DB
+
+User -> UI : 1. Clic "Renovar" en mensualidad #2, confirma $90.000 y método "DAVIPLATA"
+activate UI
+UI -> Router : PATCH /api/mensualidades/2/renovar { valor_mensual: 90000, metodo_pago: 'DAVIPLATA', referencia_transaccion: 'DAVI-7788' }
+activate Router
+Router -> PayCtrl : renewSubscription(req, res)
+activate PayCtrl
+
+PayCtrl -> PayModel : renewSubscription(2, data)
+PayModel -> DB : SELECT * FROM mensualidades WHERE id_mensualidad = 2
+DB --> PayModel : { id_mensualidad: 2, estado: 'VENCIDA', fecha_fin: '2026-11-15', ... }
+
+PayModel -> DB : UPDATE mensualidades SET estado = 'ACTIVA', fecha_fin = '2026-12-22' WHERE id_mensualidad = 2
+DB --> PayModel : OK
+
+PayModel -> DB : INSERT INTO pagos (numero_comprobante, id_mensualidad, monto_pagado, metodo_pago, referencia_transaccion, id_usuario, estado) VALUES ('CP-20261122-4412', 2, 90000, 'DAVIPLATA', 'DAVI-7788', 1, 'APROBADO')
+DB --> PayModel : id_pago = 12
+
+PayCtrl --> Router : 200 OK { success: true, message: 'Mensualidad renovada con éxito' }
+deactivate PayCtrl
+Router --> UI : 200 OK
+deactivate Router
+
+UI -> UI : loadSubscriptions()
+UI --> User : 2. Estado cambia a "ACTIVA" (+30 días) y pago registrado
+deactivate UI
+
+newpage
+
+' ============================================================================
+' DIAGRAMA DE SECUENCIA 9: ANULACIÓN DE PAGO POR ADMINISTRADOR (ITERACIÓN 3)
+' ============================================================================
+== SD-09: Anulación de Comprobante de Pago por Auditoría (Iteración 3) ==
+
+actor "Administrador" as Admin
+participant "Frontend SPA\n(tabPayments)" as UI
+participant "API Router" as Router
+participant "paymentController" as PayCtrl
+participant "paymentModel" as PayModel
+database "SQLite Database" as DB
+
+Admin -> UI : 1. Clic "Anular" en pago #5, especifica motivo "Doble cobro" y envía
+activate UI
+UI -> Router : PATCH /api/pagos/5/anular { id_usuario: 1, motivo: 'Doble cobro' }
+activate Router
+Router -> PayCtrl : voidPayment(req, res)
+activate PayCtrl
+
+PayCtrl -> DB : SELECT rol FROM usuarios WHERE id_usuario = 1
+DB --> PayCtrl : { rol: 'ADMIN' }
+
+PayCtrl -> PayModel : voidPayment(5, 1, 'Doble cobro')
+PayModel -> DB : SELECT * FROM pagos WHERE id_pago = 5
+DB --> PayModel : { id_pago: 5, estado: 'APROBADO', monto_pagado: 12000 }
+
+PayModel -> DB : UPDATE pagos SET estado = 'ANULADO', motivo_anulacion = 'Doble cobro', fecha_anulacion = now(), id_usuario_anulacion = 1 WHERE id_pago = 5
+DB --> PayModel : OK
+
+PayCtrl --> Router : 200 OK { success: true, message: 'Pago anulado correctamente' }
+deactivate PayCtrl
+Router --> UI : 200 OK
+deactivate Router
+
+UI -> UI : loadPayments()
+UI --> Admin : 2. Pago aparece con badge "ANULADO" y se descuenta del total recaudado
+deactivate UI
+
+newpage
+
+' ============================================================================
+' DIAGRAMA DE SECUENCIA 10: CIERRE DIARIO DE CAJA Y REPORTES (ITERACIÓN 3)
+' ============================================================================
+== SD-10: Cierre Diario de Caja y Balance de Ingresos (Iteración 3) ==
+
+actor "Administrador" as Admin
+participant "Frontend SPA\n(tabReports)" as UI
+participant "API Router" as Router
+participant "paymentController" as PayCtrl
+participant "paymentModel" as PayModel
+database "SQLite Database" as DB
+
+Admin -> UI : 1. Selecciona fecha "2026-11-22" en Cierre Diario
+activate UI
+UI -> Router : GET /api/reportes/ingresos-dia?fecha=2026-11-22
+activate Router
+Router -> PayCtrl : getDailyIncomeReport(req, res)
+activate PayCtrl
+
+PayCtrl -> PayModel : getDailyIncomeReport('2026-11-22')
+PayModel -> DB : SELECT SUM(monto_pagado) total, COUNT(*) count FROM pagos WHERE date(fecha_hora_pago) = '2026-11-22' AND estado != 'ANULADO'
+DB --> PayModel : { total: 270000, count: 2 }
+
+PayModel -> DB : SELECT metodo_pago, COUNT(*) cantidad, SUM(monto_pagado) total FROM pagos WHERE date(fecha_hora_pago) = '2026-11-22' AND estado != 'ANULADO' GROUP BY metodo_pago
+DB --> PayModel : [ { metodo: 'EFECTIVO', total: 180000 }, { metodo: 'DAVIPLATA', total: 90000 } ]
+
+PayCtrl --> Router : 200 OK { success: true, data: report }
+deactivate PayCtrl
+Router --> UI : 200 OK
+deactivate Router
+
+UI -> UI : renderDailyReport(report)
+UI --> Admin : 2. Muestra Total Recaudado $270.000, desglose por método y lista de transacciones
+deactivate UI
+
 @enduml

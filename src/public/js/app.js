@@ -81,6 +81,18 @@ function switchTab(tabId) {
     loadAdminCells();
     loadCapacityReport();
   }
+  if (tabId === 'tabPayments') {
+    loadPayments();
+  }
+  if (tabId === 'tabSubscriptions') {
+    loadSubscriptions();
+  }
+  if (tabId === 'tabReports') {
+    initReportDates();
+    loadDailyReport();
+    loadMonthlyReport();
+    loadExpiringSubscriptions();
+  }
 }
 
 // Carga global de datos
@@ -1118,4 +1130,766 @@ async function deleteCell(id, codigo) {
     showToast('Error de conexión con el servidor', 'error');
   }
 }
+
+// ========================================================================
+// PESTAÑA 7: GESTIÓN DE PAGOS (ITERACIÓN 3)
+// ========================================================================
+
+async function loadPayments() {
+  try {
+    const params = new URLSearchParams();
+    const fechaIni = document.getElementById('paymentFilterFechaInicio')?.value;
+    const fechaFin = document.getElementById('paymentFilterFechaFin')?.value;
+    const metodo = document.getElementById('paymentFilterMetodo')?.value;
+    const tipo = document.getElementById('paymentFilterTipo')?.value;
+    const estado = document.getElementById('paymentFilterEstado')?.value;
+    const search = document.getElementById('paymentSearchInput')?.value;
+
+    if (fechaIni) params.append('fecha_inicio', fechaIni);
+    if (fechaFin) params.append('fecha_fin', fechaFin);
+    if (metodo && metodo !== 'TODOS') params.append('metodo', metodo);
+    if (tipo && tipo !== 'TODOS') params.append('tipo', tipo);
+    if (estado && estado !== 'TODOS') params.append('estado', estado);
+    if (search && search.trim() !== '') params.append('search', search.trim());
+
+    const res = await fetch(`/api/pagos?${params.toString()}`);
+    const result = await res.json();
+
+    if (!result.success) {
+      showToast(result.message || 'Error al consultar pagos', 'error');
+      return;
+    }
+
+    const payments = result.data || [];
+    const tbody = document.getElementById('paymentsTableBody');
+    if (!tbody) return;
+
+    // Calcular KPIs
+    let totalMonto = 0;
+    let countAcceso = 0;
+    let countMensualidad = 0;
+
+    payments.forEach(p => {
+      if (p.estado !== 'ANULADO') {
+        totalMonto += Number(p.monto_pagado || 0);
+        if (p.tipo_pago === 'MENSUALIDAD') countMensualidad++;
+        else countAcceso++;
+      }
+    });
+
+    const kpiRecaudo = document.getElementById('kpiRecaudoTotal');
+    const kpiTrans = document.getElementById('kpiTransaccionesTotal');
+    const kpiAcc = document.getElementById('kpiPagosAcceso');
+    const kpiMen = document.getElementById('kpiPagosMensualidad');
+
+    if (kpiRecaudo) kpiRecaudo.textContent = `$ ${totalMonto.toLocaleString('es-CO')}`;
+    if (kpiTrans) kpiTrans.textContent = payments.length;
+    if (kpiAcc) kpiAcc.textContent = countAcceso;
+    if (kpiMen) kpiMen.textContent = countMensualidad;
+
+    if (payments.length === 0) {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="10" class="py-8 text-center text-slate-400">
+            <i class="fa-solid fa-receipt text-3xl mb-2 block"></i>
+            No se encontraron comprobantes de pago con los filtros seleccionados
+          </td>
+        </tr>
+      `;
+      return;
+    }
+
+    tbody.innerHTML = payments.map(p => {
+      const fecha = new Date(p.fecha_hora_pago).toLocaleString('es-CO');
+      const isAnulado = p.estado === 'ANULADO';
+
+      const badgeEstado = isAnulado
+        ? '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-700 border border-rose-200">ANULADO</span>'
+        : '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-700 border border-emerald-200">APROBADO</span>';
+
+      const badgeTipo = p.tipo_pago === 'MENSUALIDAD'
+        ? '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-100 text-indigo-700">MENSUALIDAD</span>'
+        : '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-700">ACCESO</span>';
+
+      let metodoIcon = 'fa-money-bill-wave text-emerald-600';
+      if (p.metodo_pago === 'NEQUI') metodoIcon = 'fa-mobile-screen-button text-purple-600';
+      if (p.metodo_pago === 'DAVIPLATA') metodoIcon = 'fa-wallet text-rose-600';
+      if (p.metodo_pago === 'TARJETA') metodoIcon = 'fa-credit-card text-blue-600';
+
+      return `
+        <tr class="hover:bg-slate-50 transition ${isAnulado ? 'opacity-60 bg-slate-50/50' : ''}">
+          <td class="py-3 px-4 font-mono font-bold text-slate-800">${p.numero_comprobante}</td>
+          <td class="py-3 px-4">${badgeTipo}</td>
+          <td class="py-3 px-4 text-slate-600 whitespace-nowrap">${fecha}</td>
+          <td class="py-3 px-4">
+            <span class="font-bold text-slate-900 bg-slate-100 px-1.5 py-0.5 rounded text-[11px] font-mono">${p.placa_vehiculo}</span>
+            <span class="text-[10px] text-slate-400 block">${p.tipo_vehiculo}</span>
+          </td>
+          <td class="py-3 px-4 text-slate-700 font-medium">${p.cliente_nombre || 'Cliente Ocasional'}</td>
+          <td class="py-3 px-4">
+            <span class="inline-flex items-center gap-1.5 font-semibold text-slate-800">
+              <i class="fa-solid ${metodoIcon}"></i> ${p.metodo_pago}
+            </span>
+          </td>
+          <td class="py-3 px-4 font-mono text-[11px] text-slate-500">${p.referencia_transaccion || '--'}</td>
+          <td class="py-3 px-4 text-right font-bold text-slate-800 text-sm">$ ${Number(p.monto_pagado).toLocaleString('es-CO')}</td>
+          <td class="py-3 px-4 text-center">${badgeEstado}</td>
+          <td class="py-3 px-4 text-center">
+            <div class="flex items-center justify-center gap-1.5">
+              <button onclick="showPaymentDetail(${p.id_pago})" title="Ver detalle y comprobante" class="p-1.5 text-blue-600 hover:bg-blue-50 rounded transition">
+                <i class="fa-solid fa-receipt text-sm"></i>
+              </button>
+              ${!isAnulado ? `
+                <button onclick="openVoidModal(${p.id_pago}, '${p.numero_comprobante}')" title="Anular comprobante" class="p-1.5 text-rose-600 hover:bg-rose-50 rounded transition">
+                  <i class="fa-solid fa-ban text-sm"></i>
+                </button>
+              ` : ''}
+            </div>
+          </td>
+        </tr>
+      `;
+    }).join('');
+  } catch (err) {
+    console.error('Error al cargar pagos:', err);
+    showToast('Error de red al consultar historial de pagos', 'error');
+  }
+}
+
+function resetPaymentFilters() {
+  const fIni = document.getElementById('paymentFilterFechaInicio');
+  const fFin = document.getElementById('paymentFilterFechaFin');
+  const fMet = document.getElementById('paymentFilterMetodo');
+  const fTip = document.getElementById('paymentFilterTipo');
+  const fEst = document.getElementById('paymentFilterEstado');
+  const fSea = document.getElementById('paymentSearchInput');
+
+  if (fIni) fIni.value = '';
+  if (fFin) fFin.value = '';
+  if (fMet) fMet.value = 'TODOS';
+  if (fTip) fTip.value = 'TODOS';
+  if (fEst) fEst.value = 'TODOS';
+  if (fSea) fSea.value = '';
+
+  loadPayments();
+}
+
+async function showPaymentDetail(id) {
+  try {
+    const res = await fetch(`/api/pagos/${id}`);
+    const data = await res.json();
+    if (!data.success || !data.data) {
+      showToast('No se pudo cargar el detalle del pago', 'error');
+      return;
+    }
+
+    const p = data.data;
+    document.getElementById('payReceiptComprobante').textContent = p.numero_comprobante;
+    document.getElementById('payReceiptFecha').textContent = new Date(p.fecha_hora_pago).toLocaleString('es-CO');
+    document.getElementById('payReceiptTipoServicio').textContent = p.tipo_pago === 'MENSUALIDAD' ? 'SUSCRIPCIÓN MENSUAL' : 'ACCESO VEHICULAR OCASIONAL';
+    document.getElementById('payReceiptPlaca').textContent = p.placa_vehiculo;
+    document.getElementById('payReceiptCliente').textContent = p.cliente_nombre || 'Cliente Ocasional';
+    document.getElementById('payReceiptMetodo').textContent = p.metodo_pago;
+    document.getElementById('payReceiptOperador').textContent = p.operador_nombre || 'Operador en Turno';
+    document.getElementById('payReceiptTotal').textContent = `$ ${Number(p.monto_pagado).toLocaleString('es-CO')}`;
+
+    const refRow = document.getElementById('payReceiptRefRow');
+    if (p.referencia_transaccion) {
+      refRow.classList.remove('hidden');
+      document.getElementById('payReceiptRef').textContent = p.referencia_transaccion;
+    } else {
+      refRow.classList.add('hidden');
+    }
+
+    const estadoEl = document.getElementById('payReceiptEstado');
+    const anuladoBox = document.getElementById('payReceiptAnuladoBox');
+
+    if (p.estado === 'ANULADO') {
+      estadoEl.textContent = 'ANULADO';
+      estadoEl.className = 'font-bold text-rose-600';
+      anuladoBox.classList.remove('hidden');
+      document.getElementById('payReceiptAnuladoMotivo').textContent = p.motivo_anulacion || 'Sin motivo registrado';
+      document.getElementById('payReceiptAnuladoFecha').textContent = `Anulado por: ${p.anulado_por_nombre || 'Administrador'} el ${p.fecha_anulacion ? new Date(p.fecha_anulacion).toLocaleString('es-CO') : ''}`;
+    } else {
+      estadoEl.textContent = 'APROBADO';
+      estadoEl.className = 'font-bold text-emerald-600';
+      anuladoBox.classList.add('hidden');
+    }
+
+    document.getElementById('paymentDetailModal').classList.remove('hidden');
+  } catch (err) {
+    showToast('Error de conexión al consultar detalle', 'error');
+  }
+}
+
+function closePaymentDetailModal() {
+  document.getElementById('paymentDetailModal')?.classList.add('hidden');
+}
+
+function reprintPaymentReceipt() {
+  const content = document.getElementById('printPaymentReceiptArea');
+  if (!content) return;
+
+  const printWin = window.open('', '_blank', 'width=450,height=600');
+  printWin.document.write(`
+    <html>
+      <head>
+        <title>Comprobante de Pago - Autos Colombia</title>
+        <style>
+          body { font-family: 'Courier New', Courier, monospace; padding: 20px; font-size: 12px; color: #111; }
+          .text-center { text-align: center; }
+          .font-bold { font-weight: bold; }
+          .border-b { border-bottom: 1px dashed #666; padding-bottom: 8px; margin-bottom: 8px; }
+          .flex { display: flex; justify-content: space-between; margin: 4px 0; }
+        </style>
+      </head>
+      <body>
+        ${content.innerHTML}
+        <script>
+          window.onload = function() { window.print(); window.close(); };
+        </script>
+      </body>
+    </html>
+  `);
+  printWin.document.close();
+}
+
+function openVoidModal(id, comprobante) {
+  document.getElementById('voidPaymentId').value = id;
+  document.getElementById('voidComprobanteText').value = comprobante;
+  document.getElementById('voidMotivoField').value = '';
+  document.getElementById('voidPaymentModal').classList.remove('hidden');
+}
+
+function closeVoidModal() {
+  document.getElementById('voidPaymentModal')?.classList.add('hidden');
+}
+
+async function confirmVoidPayment(e) {
+  e.preventDefault();
+  const id = document.getElementById('voidPaymentId').value;
+  const idUsuario = document.getElementById('voidUserIdSelect').value;
+  const motivo = document.getElementById('voidMotivoField').value;
+
+  try {
+    const res = await fetch(`/api/pagos/${id}/anular`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id_usuario: parseInt(idUsuario, 10), motivo })
+    });
+    const data = await res.json();
+    if (data.success) {
+      showToast(data.message || 'Pago anulado exitosamente', 'success');
+      closeVoidModal();
+      loadPayments();
+    } else {
+      showToast(data.message || 'Error al anular pago', 'error');
+    }
+  } catch (err) {
+    showToast('Error de conexión al anular pago', 'error');
+  }
+}
+
+// ========================================================================
+// PESTAÑA 8: GESTIÓN DE MENSUALIDADES (ITERACIÓN 3)
+// ========================================================================
+
+async function loadSubscriptions() {
+  try {
+    const estado = document.getElementById('subFilterEstado')?.value || 'TODOS';
+    const search = document.getElementById('subSearchInput')?.value || '';
+
+    const params = new URLSearchParams();
+    if (estado !== 'TODOS') params.append('estado', estado);
+    if (search.trim() !== '') params.append('search', search.trim());
+
+    const res = await fetch(`/api/mensualidades?${params.toString()}`);
+    const result = await res.json();
+
+    if (!result.success) {
+      showToast('Error al cargar mensualidades', 'error');
+      return;
+    }
+
+    const subscriptions = result.data || [];
+    const tbody = document.getElementById('subscriptionsTableBody');
+    if (!tbody) return;
+
+    // Actualizar KPIs
+    let countActivas = 0;
+    let countPorVencer = 0;
+    let countVencidas = 0;
+
+    subscriptions.forEach(s => {
+      if (s.estado === 'ACTIVA') {
+        countActivas++;
+        if (s.dias_restantes !== null && s.dias_restantes <= 7 && s.dias_restantes >= 0) {
+          countPorVencer++;
+        }
+      } else if (s.estado === 'VENCIDA') {
+        countVencidas++;
+      }
+    });
+
+    const kpiAct = document.getElementById('kpiSubsActivas');
+    const kpiPor = document.getElementById('kpiSubsPorVencer');
+    const kpiVen = document.getElementById('kpiSubsVencidas');
+    const kpiTot = document.getElementById('kpiSubsTotal');
+
+    if (kpiAct) kpiAct.textContent = countActivas;
+    if (kpiPor) kpiPor.textContent = countPorVencer;
+    if (kpiVen) kpiVen.textContent = countVencidas;
+    if (kpiTot) kpiTot.textContent = subscriptions.length;
+
+    if (subscriptions.length === 0) {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="9" class="py-8 text-center text-slate-400">
+            <i class="fa-solid fa-calendar-xmark text-3xl mb-2 block"></i>
+            No se encontraron suscripciones de mensualidad registradas
+          </td>
+        </tr>
+      `;
+      return;
+    }
+
+    tbody.innerHTML = subscriptions.map(s => {
+      let badgeEstado = '';
+      if (s.estado === 'ACTIVA') {
+        badgeEstado = '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-700 border border-emerald-200">ACTIVA</span>';
+      } else if (s.estado === 'VENCIDA') {
+        badgeEstado = '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-700 border border-rose-200">VENCIDA</span>';
+      } else {
+        badgeEstado = '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-200 text-slate-600">CANCELADA</span>';
+      }
+
+      let diasLabel = '';
+      if (s.estado === 'ACTIVA' && s.dias_restantes !== null) {
+        if (s.dias_restantes <= 7) {
+          diasLabel = `<span class="text-amber-600 font-bold block text-[10px]"><i class="fa-solid fa-clock"></i> Vence en ${s.dias_restantes} d</span>`;
+        } else {
+          diasLabel = `<span class="text-slate-400 block text-[10px]">${s.dias_restantes} días vigentes</span>`;
+        }
+      }
+
+      return `
+        <tr class="hover:bg-slate-50 transition">
+          <td class="py-3 px-4 font-mono font-bold text-slate-700">#${s.id_mensualidad}</td>
+          <td class="py-3 px-4">
+            <span class="font-bold text-slate-800 block">${s.cliente_nombre}</span>
+            <span class="text-[10px] text-slate-400">CC: ${s.cliente_documento}</span>
+          </td>
+          <td class="py-3 px-4">
+            <span class="text-slate-700 font-semibold block">${s.cliente_telefono}</span>
+            <span class="text-[10px] text-slate-400 truncate max-w-[150px] block">${s.cliente_email || '--'}</span>
+          </td>
+          <td class="py-3 px-4">
+            <span class="font-bold text-slate-900 bg-slate-100 px-1.5 py-0.5 rounded text-[11px] font-mono">${s.vehiculo_placa}</span>
+            <span class="text-[10px] text-slate-400 block">${s.tipo_vehiculo} • ${s.marca || ''}</span>
+          </td>
+          <td class="py-3 px-4">
+            ${s.codigo_celda 
+              ? `<span class="px-2 py-1 bg-indigo-50 text-indigo-700 rounded font-bold font-mono text-[11px] border border-indigo-200">${s.codigo_celda}</span>`
+              : '<span class="text-slate-400 italic">Sin celda fija</span>'}
+          </td>
+          <td class="py-3 px-4 text-slate-700">
+            <span class="font-semibold block">${s.fecha_inicio} al ${s.fecha_fin}</span>
+            ${diasLabel}
+          </td>
+          <td class="py-3 px-4 text-right font-bold text-slate-800 text-sm">$ ${Number(s.valor_mensual).toLocaleString('es-CO')}</td>
+          <td class="py-3 px-4 text-center">${badgeEstado}</td>
+          <td class="py-3 px-4 text-center">
+            <div class="flex items-center justify-center gap-1.5">
+              <button onclick="showSubDetail(${s.id_mensualidad})" title="Ver ficha y pagos" class="p-1.5 text-blue-600 hover:bg-blue-50 rounded transition">
+                <i class="fa-solid fa-circle-info text-sm"></i>
+              </button>
+              ${s.estado !== 'CANCELADA' ? `
+                <button onclick="openRenewSubModal(${s.id_mensualidad}, '${s.cliente_nombre}', '${s.vehiculo_placa}', ${s.valor_mensual})" title="Renovar suscripción" class="p-1.5 text-emerald-600 hover:bg-emerald-50 rounded transition">
+                  <i class="fa-solid fa-rotate text-sm"></i>
+                </button>
+                <button onclick="cancelSubscription(${s.id_mensualidad})" title="Cancelar suscripción" class="p-1.5 text-rose-600 hover:bg-rose-50 rounded transition">
+                  <i class="fa-solid fa-xmark text-sm"></i>
+                </button>
+              ` : ''}
+            </div>
+          </td>
+        </tr>
+      `;
+    }).join('');
+  } catch (err) {
+    showToast('Error de red al consultar mensualidades', 'error');
+  }
+}
+
+async function openNewSubscriptionModal() {
+  try {
+    const res = await fetch('/api/pagos/formulario-datos');
+    const data = await res.json();
+    if (!data.success) {
+      showToast('Error cargando datos auxiliares', 'error');
+      return;
+    }
+
+    const { clientes, vehiculos, celdas, tarifas } = data.data;
+
+    // Llenar select clientes
+    const selCliente = document.getElementById('subClienteSelect');
+    selCliente.innerHTML = clientes.map(c => `
+      <option value="${c.id_cliente}">${c.nombre_completo} (CC ${c.documento})</option>
+    `).join('');
+
+    // Llenar select vehículos
+    const selVehiculo = document.getElementById('subVehiculoSelect');
+    selVehiculo.innerHTML = vehiculos.map(v => `
+      <option value="${v.id_vehiculo}">${v.placa} - ${v.tipo_vehiculo} (${v.marca || ''})</option>
+    `).join('');
+
+    // Llenar select celdas disponibles
+    const selCelda = document.getElementById('subCeldaSelect');
+    selCelda.innerHTML = '<option value="">-- Sin celda fija asignada --</option>' + celdas.map(c => `
+      <option value="${c.id_celda}">${c.codigo_celda} (${c.tipo_permitido} - ${c.sector})</option>
+    `).join('');
+
+    // Fecha inicio por defecto hoy
+    const hoy = new Date().toISOString().split('T')[0];
+    document.getElementById('subFechaInicioField').value = hoy;
+
+    // Fecha fin por defecto +30 días
+    const d30 = new Date();
+    d30.setDate(d30.getDate() + 30);
+    document.getElementById('subFechaFinField').value = d30.toISOString().split('T')[0];
+
+    // Valor mensual de tarifas (default automóvil)
+    const tAuto = tarifas.find(t => t.tipo_vehiculo === 'AUTOMOVIL');
+    document.getElementById('subValorField').value = tAuto ? Number(tAuto.valor_mensualidad) : 180000;
+
+    document.getElementById('newSubModal').classList.remove('hidden');
+  } catch (err) {
+    showToast('Error al preparar modal de mensualidad', 'error');
+  }
+}
+
+function closeNewSubModal() {
+  document.getElementById('newSubModal')?.classList.add('hidden');
+}
+
+async function saveNewSubscription(e) {
+  e.preventDefault();
+
+  const payload = {
+    id_cliente: parseInt(document.getElementById('subClienteSelect').value, 10),
+    id_vehiculo: parseInt(document.getElementById('subVehiculoSelect').value, 10),
+    id_celda_asignada: document.getElementById('subCeldaSelect').value ? parseInt(document.getElementById('subCeldaSelect').value, 10) : null,
+    fecha_inicio: document.getElementById('subFechaInicioField').value,
+    fecha_fin: document.getElementById('subFechaFinField').value || null,
+    valor_mensual: parseFloat(document.getElementById('subValorField').value),
+    metodo_pago: document.getElementById('subMetodoPagoSelect').value,
+    referencia_transaccion: document.getElementById('subReferenciaField').value || null,
+    id_usuario: 1
+  };
+
+  try {
+    const res = await fetch('/api/mensualidades', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+
+    if (data.success) {
+      showToast(data.message || 'Mensualidad creada y pago registrado', 'success');
+      closeNewSubModal();
+      loadSubscriptions();
+      loadCells();
+    } else {
+      showToast(data.message || 'Error al crear mensualidad', 'error');
+    }
+  } catch (err) {
+    showToast('Error de conexión al crear mensualidad', 'error');
+  }
+}
+
+function openRenewSubModal(id, clientName, vehiclePlate, valorMensual) {
+  document.getElementById('renewSubId').value = id;
+  document.getElementById('renewClientName').textContent = clientName;
+  document.getElementById('renewVehiclePlate').textContent = vehiclePlate;
+  document.getElementById('renewValorField').value = valorMensual || 180000;
+  document.getElementById('renewRefField').value = '';
+  document.getElementById('renewSubModal').classList.remove('hidden');
+}
+
+function closeRenewSubModal() {
+  document.getElementById('renewSubModal')?.classList.add('hidden');
+}
+
+async function confirmRenewSubscription(e) {
+  e.preventDefault();
+  const id = document.getElementById('renewSubId').value;
+  const valor = document.getElementById('renewValorField').value;
+  const metodo = document.getElementById('renewMetodoSelect').value;
+  const ref = document.getElementById('renewRefField').value;
+
+  try {
+    const res = await fetch(`/api/mensualidades/${id}/renovar`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        valor_mensual: parseFloat(valor),
+        metodo_pago: metodo,
+        referencia_transaccion: ref || null,
+        id_usuario: 1
+      })
+    });
+    const data = await res.json();
+    if (data.success) {
+      showToast(data.message || 'Mensualidad renovada con éxito', 'success');
+      closeRenewSubModal();
+      loadSubscriptions();
+    } else {
+      showToast(data.message || 'Error al renovar mensualidad', 'error');
+    }
+  } catch (err) {
+    showToast('Error de red al renovar mensualidad', 'error');
+  }
+}
+
+async function cancelSubscription(id) {
+  if (!confirm(`¿Está seguro de cancelar la mensualidad #${id}? Esta acción liberará la celda asociada.`)) return;
+
+  try {
+    const res = await fetch(`/api/mensualidades/${id}/cancelar`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id_usuario: 1 })
+    });
+    const data = await res.json();
+    if (data.success) {
+      showToast(data.message || 'Mensualidad cancelada y celda liberada', 'success');
+      loadSubscriptions();
+      loadCells();
+    } else {
+      showToast(data.message || 'No se pudo cancelar mensualidad', 'error');
+    }
+  } catch (err) {
+    showToast('Error de conexión', 'error');
+  }
+}
+
+async function showSubDetail(id) {
+  try {
+    const res = await fetch(`/api/mensualidades/${id}`);
+    const data = await res.json();
+    if (!data.success || !data.data) {
+      showToast('Error al consultar datos del abonado', 'error');
+      return;
+    }
+
+    const s = data.data;
+    document.getElementById('dtSubCliente').textContent = s.cliente_nombre;
+    document.getElementById('dtSubDoc').textContent = s.cliente_documento;
+    document.getElementById('dtSubTel').textContent = s.cliente_telefono;
+    document.getElementById('dtSubVehiculo').textContent = `${s.vehiculo_placa} (${s.tipo_vehiculo} ${s.marca || ''})`;
+    document.getElementById('dtSubCelda').textContent = s.codigo_celda ? `${s.codigo_celda} - ${s.celda_sector}` : 'Sin celda fija';
+    document.getElementById('dtSubPeriodo').textContent = `${s.fecha_inicio} al ${s.fecha_fin}`;
+
+    const estadoEl = document.getElementById('dtSubEstado');
+    if (s.estado === 'ACTIVA') {
+      estadoEl.innerHTML = '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-700">ACTIVA</span>';
+      document.getElementById('dtSubDias').textContent = `${s.dias_restantes} días`;
+      document.getElementById('dtSubDias').className = 'font-bold text-sm text-emerald-600';
+    } else if (s.estado === 'VENCIDA') {
+      estadoEl.innerHTML = '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-700">VENCIDA</span>';
+      document.getElementById('dtSubDias').textContent = 'VENCIDA';
+      document.getElementById('dtSubDias').className = 'font-bold text-sm text-rose-600';
+    } else {
+      estadoEl.innerHTML = '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-200 text-slate-600">CANCELADA</span>';
+      document.getElementById('dtSubDias').textContent = 'CANCELADA';
+      document.getElementById('dtSubDias').className = 'font-bold text-sm text-slate-500';
+    }
+
+    // Tabla de comprobantes de pago
+    const pBody = document.getElementById('subDetailPaymentsBody');
+    if (s.pagos && s.pagos.length > 0) {
+      pBody.innerHTML = s.pagos.map(p => `
+        <tr class="hover:bg-slate-50">
+          <td class="py-2 px-3 font-mono font-bold text-slate-800">${p.numero_comprobante}</td>
+          <td class="py-2 px-3 text-slate-600">${new Date(p.fecha_hora_pago).toLocaleDateString('es-CO')}</td>
+          <td class="py-2 px-3 font-semibold text-slate-700">${p.metodo_pago}</td>
+          <td class="py-2 px-3 text-right font-bold text-slate-800">$ ${Number(p.monto_pagado).toLocaleString('es-CO')}</td>
+          <td class="py-2 px-3 text-center">
+            <button onclick="closeSubDetailModal(); showPaymentDetail(${p.id_pago});" class="text-blue-600 hover:text-blue-800 font-bold text-[10px] underline">
+              Ver
+            </button>
+          </td>
+        </tr>
+      `).join('');
+    } else {
+      pBody.innerHTML = '<tr><td colspan="5" class="py-4 text-center text-slate-400">Sin pagos registrados</td></tr>';
+    }
+
+    document.getElementById('subDetailModal').classList.remove('hidden');
+  } catch (err) {
+    showToast('Error consultando detalle de mensualidad', 'error');
+  }
+}
+
+function closeSubDetailModal() {
+  document.getElementById('subDetailModal')?.classList.add('hidden');
+}
+
+// ========================================================================
+// PESTAÑA 9: REPORTES FINANCIEROS Y AUDITORÍA (ITERACIÓN 3)
+// ========================================================================
+
+function initReportDates() {
+  const hoy = new Date().toISOString().split('T')[0];
+  const dDate = document.getElementById('dailyReportDate');
+  if (dDate && !dDate.value) dDate.value = hoy;
+
+  const now = new Date();
+  const mYear = document.getElementById('monthlyReportYear');
+  const mMonth = document.getElementById('monthlyReportMonth');
+  if (mYear) mYear.value = String(now.getFullYear());
+  if (mMonth) mMonth.value = String(now.getMonth() + 1);
+}
+
+async function loadDailyReport() {
+  try {
+    const fecha = document.getElementById('dailyReportDate')?.value || new Date().toISOString().split('T')[0];
+    const res = await fetch(`/api/reportes/ingresos-dia?fecha=${fecha}`);
+    const data = await res.json();
+
+    if (!data.success || !data.data) {
+      showToast('Error cargando reporte diario', 'error');
+      return;
+    }
+
+    const r = data.data;
+    document.getElementById('dailyTotalAmount').textContent = `$ ${Number(r.total_ingresos).toLocaleString('es-CO')}`;
+    document.getElementById('dailyTotalCount').textContent = r.total_transacciones;
+
+    const methodCont = document.getElementById('dailyMethodBreakdown');
+    if (r.desglose_metodos && r.desglose_metodos.length > 0) {
+      methodCont.innerHTML = r.desglose_metodos.map(m => {
+        let icon = 'fa-money-bill text-emerald-600';
+        if (m.metodo_pago === 'NEQUI') icon = 'fa-mobile-screen text-purple-600';
+        if (m.metodo_pago === 'DAVIPLATA') icon = 'fa-wallet text-rose-600';
+        if (m.metodo_pago === 'TARJETA') icon = 'fa-credit-card text-blue-600';
+
+        return `
+          <div class="flex items-center justify-between p-2.5 bg-slate-50 border border-slate-200 rounded-lg text-xs">
+            <span class="flex items-center gap-2 font-bold text-slate-700">
+              <i class="fa-solid ${icon}"></i> ${m.metodo_pago}
+            </span>
+            <div class="text-right">
+              <span class="font-bold text-slate-900">$ ${Number(m.total).toLocaleString('es-CO')}</span>
+              <span class="text-[10px] text-slate-400 block">${m.cantidad} transacciones</span>
+            </div>
+          </div>
+        `;
+      }).join('');
+    } else {
+      methodCont.innerHTML = '<p class="text-slate-400 text-xs italic text-center py-4">No hay ingresos registrados en esta fecha</p>';
+    }
+  } catch (err) {
+    showToast('Error al consultar reporte diario', 'error');
+  }
+}
+
+async function loadMonthlyReport() {
+  try {
+    const year = document.getElementById('monthlyReportYear')?.value || '2026';
+    const month = document.getElementById('monthlyReportMonth')?.value || '11';
+
+    const res = await fetch(`/api/reportes/ingresos-mes?year=${year}&month=${month}`);
+    const data = await res.json();
+
+    if (!data.success || !data.data) {
+      showToast('Error cargando balance mensual', 'error');
+      return;
+    }
+
+    const r = data.data;
+    document.getElementById('monthlyTotalAmount').textContent = `$ ${Number(r.total_ingresos).toLocaleString('es-CO')}`;
+    document.getElementById('monthlyTotalCount').textContent = r.total_transacciones;
+
+    // Participación por método
+    const mCont = document.getElementById('monthlyMethodsContainer');
+    if (r.desglose_metodos && r.desglose_metodos.length > 0) {
+      mCont.innerHTML = r.desglose_metodos.map(m => `
+        <div class="bg-white p-2.5 rounded-lg border border-slate-200 text-center">
+          <span class="text-[10px] text-slate-500 font-bold block">${m.metodo_pago}</span>
+          <span class="font-bold text-slate-800 text-xs block mt-0.5">$ ${Number(m.total).toLocaleString('es-CO')}</span>
+          <span class="text-[9px] text-slate-400">${m.cantidad} ops</span>
+        </div>
+      `).join('');
+    } else {
+      mCont.innerHTML = '<div class="col-span-4 text-center text-slate-400 text-xs py-2">Sin operaciones en el mes</div>';
+    }
+
+    // Tabla día por día
+    const tBody = document.getElementById('monthlyTableBody');
+    if (r.desglose_diario && r.desglose_diario.length > 0) {
+      tBody.innerHTML = r.desglose_diario.map(d => `
+        <tr class="hover:bg-slate-50">
+          <td class="py-2 px-4 font-mono font-bold text-slate-700">${d.fecha}</td>
+          <td class="py-2 px-4 text-center font-bold text-slate-800">Día ${d.dia}</td>
+          <td class="py-2 px-4 text-center font-semibold text-blue-700">${d.transacciones} ops</td>
+          <td class="py-2 px-4 text-right font-bold text-emerald-700 text-sm">$ ${Number(d.total).toLocaleString('es-CO')}</td>
+        </tr>
+      `).join('');
+    } else {
+      tBody.innerHTML = '<tr><td colspan="4" class="py-6 text-center text-slate-400">No se registraron cobros en el mes seleccionado</td></tr>';
+    }
+  } catch (err) {
+    showToast('Error cargando reporte mensual', 'error');
+  }
+}
+
+async function loadExpiringSubscriptions() {
+  try {
+    const dias = document.getElementById('expiringDaysSelect')?.value || '7';
+    const res = await fetch(`/api/mensualidades/proximas-a-vencer?dias=${dias}`);
+    const data = await res.json();
+
+    if (!data.success) {
+      showToast('Error cargando alertas de vencimiento', 'error');
+      return;
+    }
+
+    const list = data.data || [];
+    const container = document.getElementById('expiringSubsContainer');
+    if (!container) return;
+
+    if (list.length === 0) {
+      container.innerHTML = `
+        <div class="p-6 text-center text-slate-400 border border-dashed border-slate-200 rounded-lg">
+          <i class="fa-solid fa-circle-check text-emerald-500 text-2xl mb-1 block"></i>
+          <p class="text-xs font-semibold text-slate-600">Al día: No hay mensualidades próximas a vencer en los próximos ${dias} días.</p>
+        </div>
+      `;
+      return;
+    }
+
+    container.innerHTML = list.map(s => `
+      <div class="flex items-center justify-between p-3 bg-amber-50/70 border border-amber-200 rounded-lg text-xs">
+        <div>
+          <span class="font-bold text-slate-800 block">${s.cliente_nombre}</span>
+          <span class="text-[10px] text-slate-500 font-mono">Placa: ${s.vehiculo_placa} • Celda: ${s.codigo_celda || 'N/A'} • Tel: ${s.cliente_telefono}</span>
+        </div>
+        <div class="text-right flex items-center gap-2">
+          <div>
+            <span class="text-amber-700 font-bold block">${s.dias_restantes <= 0 ? '¡VENCE HOY!' : `Vence en ${s.dias_restantes} d`}</span>
+            <span class="text-[10px] text-slate-400">${s.fecha_fin}</span>
+          </div>
+          <button onclick="openRenewSubModal(${s.id_mensualidad}, '${s.cliente_nombre}', '${s.vehiculo_placa}', ${s.valor_mensual})" class="px-2.5 py-1 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded text-[11px] shadow">
+            Renovar
+          </button>
+        </div>
+      </div>
+    `).join('');
+  } catch (err) {
+    showToast('Error cargando alertas de vencimiento', 'error');
+  }
+}
+
 

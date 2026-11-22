@@ -1,0 +1,69 @@
+@startuml AutosColombia_CasosDeUso_Iteracion3
+left to right direction
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+
+skinparam actor {
+    BackgroundColor #EFF6FF
+    BorderColor #1E3A8A
+    FontColor #1E293B
+}
+
+skinparam usecase {
+    BackgroundColor #F8FAFC
+    BorderColor #2563EB
+    ArrowColor #1E3A8A
+    FontColor #0F172A
+}
+
+actor "Operador Caseta" as Op
+actor "Administrador" as Admin
+actor "Cliente Abonado" as Cliente
+
+rectangle "Módulo de Gestión de Pagos y Finanzas (Iteración 3)" {
+    usecase "CU-IT3-01\nRegistrar Pago de Salida" as CU_PagoSalida
+    usecase "CU-IT3-02\nRegistrar Pago de Mensualidad" as CU_PagoMensualidad
+    usecase "CU-IT3-03\nRenovar Mensualidad" as CU_RenovarMensualidad
+    usecase "CU-IT3-04\nConsultar Historial de Pagos" as CU_HistorialPagos
+    usecase "CU-IT3-05\nVer Detalle y Reimprimir Comprobante" as CU_DetalleComprobante
+    usecase "CU-IT3-06\nAnular Pago Registrado" as CU_AnularPago
+    usecase "CU-IT3-07\nListar y Gestionar Mensualidades" as CU_ListarMensualidades
+    usecase "CU-IT3-08\nCancelar Mensualidad Activa" as CU_CancelarMensualidad
+    usecase "CU-IT3-09\nGenerar Reporte Diario de Ingresos" as CU_ReporteDiario
+    usecase "CU-IT3-10\nGenerar Balance Mensual" as CU_ReporteMensual
+    usecase "CU-IT3-11\nConsultar Alertas de Vencimiento" as CU_AlertasVencimiento
+}
+
+' Relaciones Operador
+Op --> CU_PagoSalida
+Op --> CU_HistorialPagos
+Op --> CU_DetalleComprobante
+Op --> CU_RenovarMensualidad
+
+' Relaciones Administrador (Hereda permisos y tiene los propios)
+Admin --> CU_PagoSalida
+Admin --> CU_PagoMensualidad
+Admin --> CU_RenovarMensualidad
+Admin --> CU_HistorialPagos
+Admin --> CU_DetalleComprobante
+Admin --> CU_AnularPago
+Admin --> CU_ListarMensualidades
+Admin --> CU_CancelarMensualidad
+Admin --> CU_ReporteDiario
+Admin --> CU_ReporteMensual
+Admin --> CU_AlertasVencimiento
+
+' Relaciones Cliente Abonado
+Cliente --> CU_PagoMensualidad : "Realiza pago"
+Cliente --> CU_RenovarMensualidad : "Solicita renovación"
+
+' Inclusiones y extensiones
+CU_PagoSalida ..> CU_DetalleComprobante : <<include>>
+CU_PagoMensualidad ..> CU_DetalleComprobante : <<include>>
+CU_RenovarMensualidad ..> CU_DetalleComprobante : <<include>>
+CU_AnularPago ..> CU_HistorialPagos : <<extend>>
+CU_CancelarMensualidad ..> CU_ListarMensualidades : <<extend>>
+
+@enduml
